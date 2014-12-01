@@ -4,6 +4,7 @@ var mongoose = require('mongoose'),
 var ProjectSchema = new Schema({
 	name: String,
 	desc: String,
+	moneyNeeded: Number,
 	owner: {type: Schema.Types.ObjectId, ref: 'Organization'},
 	joinedIndividual: [{type: Schema.Types.ObjectId, ref: 'Individual'}],
 	watchedIndividual: [{type: Schema.Types.ObjectId, ref: 'Individual'}],

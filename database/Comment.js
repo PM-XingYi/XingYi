@@ -4,6 +4,7 @@ var mongoose = require('mongoose'),
 var CommentSchema = new Schema({
 	user: {type: Schema.Types.ObjectId, ref: 'Individual'},
 	project: {type: Schema.Types.ObjectId, ref: 'Project'},
+	date: Date,
 	comment: String,
 	approved: Boolean
 });

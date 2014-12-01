@@ -4,7 +4,9 @@ var mongoose = require('mongoose'),
 var DonationSchema = new Schema({
 	user: {type: Schema.Types.ObjectId, ref: 'Individual'},
 	project: {type: Schema.Types.ObjectId, ref: 'Project'},
+	date: Date,
 	amount: Number,
+	remark: String,
 	anonymous: Boolean
 });
 
