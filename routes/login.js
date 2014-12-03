@@ -21,7 +21,7 @@ router.post('/superuser', passport.authenticate('local', {
 
 router.get('/logout', function(req, res) {
   req.logout();
-  res.redirect('/');
+  res.redirect('/login.html');
 });
 
 module.exports = router;
