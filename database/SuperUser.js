@@ -2,8 +2,6 @@ var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 
 var SuperUserSchema = new Schema({
-	username: String,
-	password: String,
 	commentExamine: [{
 		comment: {type: Schema.Types.ObjectId, ref: 'Comment'},
 		approve: Boolean,

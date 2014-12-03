@@ -2,9 +2,6 @@ var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 
 var IndividualSchema = new Schema({
-	username: String,
-	password: String,
-	email: String,
 	mobile: String,
 	joinedProject: [{type: Schema.Types.ObjectId, ref: 'Project'}],
 	watchedProject: [{type: Schema.Types.ObjectId, ref: 'Project'}],
