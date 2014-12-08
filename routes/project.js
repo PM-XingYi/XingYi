@@ -1,9 +1,21 @@
 var express = require('express'),
 	router = express.Router(),
 	passport = require('passport'),
-	User = require('./database/User'),
-	Project = require('./database/Project');
+	go = require('../globalObjects');
 
+router.param(function(name, fn){
+  if (fn instanceof RegExp) {
+    return function(req, res, next, val){
+      var captures;
+      if (captures = fn.exec(String(val))) {
+        req.params[name] = captures;
+        next();
+      } else {
+        next('route');
+      }
+    }
+  }
+});
 router.param('id', /^\d+$/);
 
 /*

@@ -1,5 +1,6 @@
 var express = require('express'),
-	router = express.Router();
+	router = express.Router(),
+	passport = require('passport');
 
 router.post('/individual', passport.authenticate('local', {
 	successRedirect: '/individual/home',

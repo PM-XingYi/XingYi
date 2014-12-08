@@ -1,8 +1,7 @@
 var express = require('express'),
 	router = express.Router(),
 	passport = require('passport'),
-	User = require('./database/User'),
-	SuperUser = require('./database/SuperUser');
+	go = require('../globalObjects');
 
 router.get('/home', passport.authenticate('local'), function(req, res) {
 	res.sendFile('');

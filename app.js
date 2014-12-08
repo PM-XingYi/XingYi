@@ -5,6 +5,7 @@ var express = require('express'),
 	cookieParser = require('cookie-parser'),
 	bodyParser = require('body-parser'),
 	expressSession = require('express-session'),
+	passport = require('passport'),
 	LocalStrategy = require('passport-local').Strategy;
 
 var index = require('./routes/index'),
@@ -15,7 +16,7 @@ var index = require('./routes/index'),
 	superuser = require('./routes/superuser'),
 	project = require('./routes/project');
 
-var User = require('./database/User');
+var go = require('./globalObjects');
 
 var app = express();
 
@@ -38,13 +39,13 @@ passport.serializeUser(function(user, done) {
 	done(null, user.id);
 });
 passport.deserializeUser(function(id, done) {
-	User.findById(id, function(err, user) {
+	go.database.User.findById(id, function(err, user) {
 		done(err, user);
 	});
 });
 passport.use(new LocalStrategy(
 	function(username, password, done) {
-		User.findOne({username: username}, function (err, user) {
+		go.database.User.findOne({username: username}, function (err, user) {
 			if (err) { return done(err); }
 			if (!user) {
 				return done(null, false, { message: 'Incorrect username.' });
@@ -96,5 +97,11 @@ app.use(function(err, req, res, next) {
 	});
 });
 
+
+go.database.connect(function(msg) {
+	console.log(msg);
+}, function(err) { 
+	console.log(err);
+});
 
 module.exports = app;

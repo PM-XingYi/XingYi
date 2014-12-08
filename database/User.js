@@ -14,6 +14,6 @@ UserSchema.methods.validPassword = function(password) {
     return (md5(password) === this.password);
 };
 
-var User  = mongoose.model('User', User);
+var User  = mongoose.model('User', UserSchema);
 
 module.exports = User;

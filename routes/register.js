@@ -1,8 +1,6 @@
 var express = require('express'),
 	router = express.Router(),
-	User = require('./database/User'),
-	Individual = require('./database/Individual'),
-	Organization = require('./database/Organization');
+	go = require('../globalObjects');
 
 /*
  * register an individual user

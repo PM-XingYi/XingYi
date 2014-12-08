@@ -1,9 +1,21 @@
 var express = require('express'),
 	router = express.Router(),
 	passport = require('passport'),
-	User = require('./database/User'),
-	Individual = require('./database/Individual');
+	go = require('../globalObjects');
 
+router.param(function(name, fn){
+  if (fn instanceof RegExp) {
+    return function(req, res, next, val){
+      var captures;
+      if (captures = fn.exec(String(val))) {
+        req.params[name] = captures;
+        next();
+      } else {
+        next('route');
+      }
+    }
+  }
+});
 router.param('id', /^\d+$/);
 
 router.get('/home', passport.authenticate('local'), function(req, res) {
@@ -14,7 +26,7 @@ router.get('/home', passport.authenticate('local'), function(req, res) {
  * get user PRIVATE profile
  */
 router.get('/profile', passport.authenticate('local'), function(req, res) {
-	User.findOne({username: req.user.username}, function (err, user) {
+	go.database.User.findOne({username: req.user.username}, function (err, user) {
 		if (err) {
 			res.send({
 				success: false,
@@ -22,7 +34,7 @@ router.get('/profile', passport.authenticate('local'), function(req, res) {
 			});
 		}
 		var answer = JSON.parse(JSON.stringify(user));
-		Individual.findById(user.detail, function (err, individual) {
+		go.database.Individual.findById(user.detail, function (err, individual) {
 			if (err) {
 				res.send({
 					success: false,
@@ -41,15 +53,15 @@ router.get('/profile', passport.authenticate('local'), function(req, res) {
  * req.body.key is in []
  */
 var keySet = ['mobile'];
-router.post('/profile/edit', passport.authenticate('local'), function(req, res) {
-	User.findOne({username: req.user.username}, function (err, user) {
+router.post('/profile/edit', passport.authenticate('local'), function (req, res) {
+	go.database.User.findOne({username: req.user.username}, function (err, user) {
 		if (user.userType !== 'individual') {
 			res.send({
 				success: false,
 				message: "not an individual user"
 			});
 		}
-		Individual.findById(user.detail, function (err, individual) {
+		go.database.Individual.findById(user.detail, function (err, individual) {
 			if (err) {
 				res.send({
 					success: false,
@@ -79,7 +91,7 @@ router.post('/profile/edit', passport.authenticate('local'), function(req, res) 
 				message: "illegal key"
 			});
 		});
-	}
+	});
 });
 
 /*
