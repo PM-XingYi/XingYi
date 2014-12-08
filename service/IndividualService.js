@@ -1,5 +1,6 @@
-var IndividualService = function () {
+var go = require('../globalObjects');
 
+var IndividualService = function () {
 }
 
 /*
@@ -18,8 +19,31 @@ IndividualService.prototype.register = function (username, password, email, mobi
  * @param {String} username
  * @return {Individual} user
  */
-IndividualService.prototype.getUser = function (username) {
-
+IndividualService.prototype.getUser = function (username, callback) {
+	go.database.User.findOne({username: username}, function (err, user) {
+		if (err) {
+			callback({
+				success: false,
+				message: "internal error"
+			});
+		} else {
+			var answer = JSON.parse(JSON.stringify(user));
+			go.database.Individual.findById(user.detail, function (err, individual) {
+				if (err) {
+					callback({
+						success: false,
+						message: "internal error"
+					});
+				} else {
+					answer.detail = individual;
+					callback({
+						success: true,
+						message: answer
+					});
+				}
+			});
+		}
+	});
 };
 
 

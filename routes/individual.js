@@ -1,7 +1,7 @@
 var express = require('express'),
 	router = express.Router(),
 	passport = require('passport'),
-	go = require('../globalObjects');
+	IndividualService = require('../service/IndividualService');
 
 router.param(function(name, fn){
   if (fn instanceof RegExp) {
@@ -26,24 +26,8 @@ router.get('/home', passport.authenticate('local'), function(req, res) {
  * get user PRIVATE profile
  */
 router.get('/profile', passport.authenticate('local'), function(req, res) {
-	go.database.User.findOne({username: req.user.username}, function (err, user) {
-		if (err) {
-			res.send({
-				success: false,
-				message: "internal error"
-			});
-		}
-		var answer = JSON.parse(JSON.stringify(user));
-		go.database.Individual.findById(user.detail, function (err, individual) {
-			if (err) {
-				res.send({
-					success: false,
-					message: "internal error"
-				});
-			}
-			answer.detail = individual;
-			res.send(answer);
-		});
+	IndividualService.getUser(req.user.username, function (answer) {
+		res.send(answer);
 	});
 });
 
