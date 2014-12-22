@@ -1,3 +1,4 @@
+var go = require('../globalObjects');
 var SuperUserService = function () {
 
 }
@@ -10,7 +11,11 @@ var SuperUserService = function () {
  * @return {Boolean} success
  */
 SuperUserService.prototype.examineProject = function (projectID, approve) {
-
+	go.database.Project.findByIdAndUpdate(projectID, {$set: {approved: approve}},  
+		callback({
+			success: true,
+			message: "change the aprroved state successfully"
+		}));
 }
 
 /*
@@ -21,5 +26,9 @@ SuperUserService.prototype.examineProject = function (projectID, approve) {
  * @return {Boolean} success
  */
 SuperUserService.prototype.examineComment = function (commentID, approve) {
-
+	go.database.Comment.findByIdAndUpdate(commentID, {$set: {approved: approve}},  
+		callback({
+			success: true,
+			message: "change the aprroved state successfully"
+		}));
 }
