@@ -1,3 +1,4 @@
+var go = require('../globalObjects');
 var OrganizationService = function () {
 
 }
@@ -13,7 +14,30 @@ var OrganizationService = function () {
  * @return {Boolean} success
  */
 OrganizationService.prototype.register = function (username, password, email, phone, orgName, orgNumber) {
-
+	//check if user exists
+	go.database.User.findOne({username: username}, function(err, user){
+		if(user !== null){
+			callback({
+				success:false,
+				message: "user already exists"
+			});
+		} else{
+			var newUser = new User(username, password, email,"Organization", phone, orgName,orgNumber);
+			go.database.User.insertOne({user: newUser}, function(err, result){
+				if(err){
+					callback({
+						success: false,
+						message: "internal error"
+					});
+				}else{
+					callback({
+						success: true,
+						message: result
+					});
+				}
+			});
+		}
+	});
 }
 /*
  * return user info by username
@@ -21,6 +45,31 @@ OrganizationService.prototype.register = function (username, password, email, ph
  * @return {Individual} user
  */
 OrganizationService.prototype.getUser = function (username) {
+
+	go.database.User.findOne({username: username}, function (err, user) {
+		if (err) {
+			callback({
+				success: false,
+				message: "internal error"
+			});
+		} else {
+			var answer = JSON.parse(JSON.stringify(user));
+			go.database.Organization.findById(user.detail, function (err, organization) {
+				if (err) {
+					callback({
+						success: false,
+						message: "internal error"
+					});
+				} else {
+					answer.detail = organization;
+					callback({
+						success: true,
+						message: answer
+					});
+				}
+			});
+		}
+	});
 
 }
 
@@ -36,6 +85,31 @@ OrganizationService.prototype.getUser = function (username) {
  * @return {Boolean} success
  */
 OrganizationService.prototype.publishProject = function (username, projectInfo) {
+	go.database.User.findOne({username: username}, function(err, user){
+		if(err){
+			callback({
+				success: false,
+				message: "internal error"
+			});
+		}else {
+			go.database.Project.insert({name:projectInfo.name, desc:projectInfo.desc, moneyNeeded: projectInfo.moneyNeeded, owner: user.detail}. function(err, result){
+				if(err){
+					callback({
+						success: false,
+						message:"internal error"
+					});
+				}else {
+					callback({
+						success: true,
+						message: "publish successfully"
+					});
+				}
+			});
+			
+		}
+	});
+
+
 
 }
 /*
@@ -50,8 +124,38 @@ OrganizationService.prototype.publishProject = function (username, projectInfo) 
  * @return {Boolean} success
  */
 OrganizationService.prototype.addMilestone = function (username, projectID, milestone) {
-
+	// organization user can only add milestones from it's own page, 
+	//so don't check the owner of the projectID is this organization
+	
+	go.database.Project.findById(projectID, function(err, project){
+		if(err){
+			callback({
+				success: false,
+				message: "internal error"
+			});
+		} else {
+			go.database.Project.update({project: project},{"$addToSet":{mileStone: {
+				date: milestone.date,
+				title: milestone.title,
+				desc: milestone.desc
+			}}}, function(err, result){
+				if(err){
+					callback({
+						success: false,
+						message: "internal error"
+					});
+							
+				} else {
+					callback({
+						success: true,
+						message:" add milestone successfully"
+					});
+				}
+			});
+		}
+	});
 }
+
 /*
  * add expenditure for a project
  * @param {String} username
@@ -64,5 +168,31 @@ OrganizationService.prototype.addMilestone = function (username, projectID, mile
  * @return {Boolean} success
  */
 OrganizationService.prototype.addExpenditure = function (username, projectID, expenditure) {
-
+	go.database.Project.findById(projectID, function(err, project){
+		if(err){
+			callback({
+				success: false,
+				message: "internal error"
+			});
+		} else {
+			go.database.Project.update({project: project},{"$addToSet":{expenditure: {
+				date: expenditure.date,
+				expense: expenditure.expense,
+				usage: expenditure.usage
+			}}}, function(err, result){
+				if(err){
+					callback({
+						success: false,
+						message: "internal error"
+					});
+							
+				} else {
+					callback({
+						success: true,
+						message:" add milestone successfully"
+					});
+				}
+			});
+		}
+	});
 }

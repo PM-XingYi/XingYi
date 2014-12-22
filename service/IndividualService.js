@@ -20,7 +20,7 @@ IndividualService.prototype.register = function (username, password, email, mobi
 				message: "user already exists"
 			});
 		} else{
-			var newUser = new User(username, password, email, mobile);
+			var newUser = new User(username, password, email,"Individual". mobile);
 			go.database.User.insertOne({user: newUser}, function(err, result){
 				if(err){
 					callback({

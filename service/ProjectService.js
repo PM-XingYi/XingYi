@@ -1,3 +1,4 @@
+var go = require('../globalObjects');
 var ProjectService = function () {
 
 }
@@ -7,7 +8,7 @@ var ProjectService = function () {
  * @return {Array of Project}
  */
 ProjectService.prototype.allProject = function () {
-
+	go.database.Project.find()
 }
 
 /*
