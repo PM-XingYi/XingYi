@@ -85,6 +85,7 @@ OrganizationService.prototype.getUser = function (username) {
  * @return {Boolean} success
  */
 OrganizationService.prototype.publishProject = function (username, projectInfo) {
+	var id = new mongoose.Schema.ObjectId() ;
 	go.database.User.findOne({username: username}, function(err, user){
 		if(err){
 			callback({
@@ -92,17 +93,27 @@ OrganizationService.prototype.publishProject = function (username, projectInfo) 
 				message: "internal error"
 			});
 		}else {
-			go.database.Project.insert({name:projectInfo.name, desc:projectInfo.desc, moneyNeeded: projectInfo.moneyNeeded, owner: user.detail}. function(err, result){
+			go.database.Project.insert({_id: id, name:projectInfo.name, desc:projectInfo.desc, moneyNeeded: projectInfo.moneyNeeded, owner: user.detail}. function(err, result){
 				if(err){
 					callback({
 						success: false,
 						message:"internal error"
 					});
 				}else {
-					callback({
-						success: true,
-						message: "publish successfully"
+					go.database.Organization.update({_id:user.detail},{"$addToSet",{"project": id}}, function(err, result){
+						if(err){
+							callback({
+								success: false,
+								message:"internal error"
+							});
+						}else {
+							callback({
+								success: true,
+								message: "publish successfully"
+							});
+						}
 					});
+			
 				}
 			});
 			

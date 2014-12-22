@@ -346,7 +346,8 @@ IndividualService.prototype.donateProject = function (username, projectID, donat
 				message: "internal error"
 			});
 		}else{
-			go.database.Donation.insertOne({user: user, project: projectID, date: donateInfo.date, 
+			var id = new mongoose.Schema.ObjectId() ;
+			go.database.Donation.insertOne({_id:id, user: user, project: projectID, date: donateInfo.date, 
 				amount: donateInfo.amount, remark:donateInfo.remark, anonymous:donateInfo.anonymous}, function(err, result){
 				if(err){
 					callback({
@@ -355,7 +356,19 @@ IndividualService.prototype.donateProject = function (username, projectID, donat
 					});
 				}else{
 					if(result === 1){
-						
+						go.database.User.update({_id: user.detail},{"$addToSet",{"donation": id}}, function(err, result){
+							if(err){
+								callback({
+									success: false,
+									message: "internal error"
+								});
+							}else {
+								callback({
+									success: true,
+									message: "donate successfully"
+								})
+							}
+						});						
 					}
 				}					
 			});
@@ -415,7 +428,41 @@ IndividualService.prototype.getDonateProjectList = function (username) {
  * @return {Boolean} success
  */
 IndividualService.prototype.commentProject = function (username, projectID, commentInfo) {
-
+	go.database.User.findOne({username: username}, function(err, user)){
+		if(err){
+			callback({
+				success: false,
+				message: "internal error"
+			});
+		}else{
+			var id = new mongoose.Schame.ObjectId() ;
+			go.database.Donation.insertOne({_id:id, user: user, project: projectID, date: commentInfo.date, 
+				comment: commentInfo.comment}, function(err, result){
+				if(err){
+					callback({
+						success: false,
+						message: "internal error"
+					});
+				}else{
+					if(result === 1){
+						go.database.User.update({_id: user.detail},{"$addToSet",{"comment": id}}, function(err, result){
+							if(err){
+								callback({
+									success: false,
+									message: "internal error"
+								});
+							}else {
+								callback({
+									success: true,
+									message: "comment successfully"
+								})
+							}
+						});						
+					}
+				}					
+			});
+		}
+	}
 };
 /*
  * get user's comment list
