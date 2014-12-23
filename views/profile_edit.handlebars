@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset=utf-8>
+	<title>行益网-Profile Edit</title>
+	<link rel="stylesheet" type="text/css" href="css/general.css">
+	<script type="text/javascript" src="js/jquery-1.11.1.js"></script>
+	<script type="text/javascript" src="js/general.js"></script>
+	<script type="text/javascript" src="js/interface.js"></script>
+</head>
+<body>
+	
+	<!-- the header, including logo, search input, login and register entries -->
+	<header>
+		<div class="wrapper" id="header-wrapper">
+			<div id="logo">
+				<div id="logo-img">
+					<img src="img/logo.png">
+				</div>
+				<div id="logo-name">
+					<img src="img/name.png">
+				</div>
+			</div>
+			<!-- the search input, login and register entries -->
+			<div id="entry">
+				<div id="search">
+					<input id="search-box" type="search">
+					<img id="search-icon" src="img/search.png" placeholder="搜索..." autocomplete="off">
+				</div>
+				<a id="login-entry">登录</a>
+				<a id="register-entry">注册</a>
+			</div>
+		</div>
+	</header>
+
+	<!-- the container -->
+	<div id="content">
+		<div class="wrapper" id="profile-edit-wrapper">
+			<section class="container">
+				<h1 class="section-title">
+					个人信息
+				</h1>
+				<section class="form-container">
+					<div class="form-row">
+						<label>用户名</label>
+						<b>Sheer</b>
+					</div>
+					<div class="form-row">
+						<label>身份</label>
+						<b>普通用户</b>
+					</div>
+					<div class="form-row">
+						<label>性别</label>
+						<b>
+							<label class="inline-radio">
+								<input type="radio" name="gender" value="男">男
+							</label>
+							<label class="inline-radio">
+								<input type="radio" name="gender" value="女" checked>女
+							</label>
+							<label class="inline-radio">
+								<input type="radio" name="gender" value="未知">未知
+							</label>
+						</b>
+					</div>
+					<div class="form-row">
+						<label>昵称</label>
+						<input type="text" id="nickname" value="林楠楠">
+					</div>
+					<div class="form-row">
+						<label>手机号</label>
+						<input type="text" id="number" value="18817362313">
+					</div>
+					<div class="form-row">
+						<label>邮箱</label>
+						<input type="text" id="email" value="sheer.linnan@outlook.com">
+					</div>
+					<div class="form-row">
+						<label></label>
+						<b>
+							<button class="rounded-button" id="save">保存</button>
+							<button class="rounded-button" id="cancel">取消</button>
+						</b>
+					</div>
+				</section>
+			</section>
+		</div>
+	</div>
+
+	<!-- the footer -->
+	<footer>
+		<div class="wrapper">
+			<h1 class="section-title">
+				关于我们
+			</h1>
+			<section id="author-gallery">
+				<img src="img/p1.gif">
+				<img src="img/p2.gif">
+				<img src="img/p3.gif">
+				<img src="img/p4.gif">
+				<img src="img/p5.gif">
+				<img src="img/p6.gif">
+				<img src="img/p7.gif">
+			</section>
+			
+			<section id="site-info">
+				<ul class="nav">
+					<li>
+						<h1>A</h1>
+						<b>TEL</b>
+						<i>188-1736-2313</i>
+					</li>
+					<li>
+						<h1>B</h1>
+						<b>MAIL</b>
+						<a href="mailto:sheer.linnan@outlook.com"><i>sheer.linnan@outlook.com</i></a>
+					</li>
+					<li>
+						<h1>C</h1>
+						<b>&copy;2014</b>
+						<i>行益网 版权所有</i>
+					</li>
+				</ul>
+			</section>
+		</div>
+	</footer>
+
+</body>
+</html>
