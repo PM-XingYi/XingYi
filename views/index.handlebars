@@ -71,17 +71,18 @@
 					更多
 				</a>
 				<div class="collection">
+					{{#each recent}}
 					<article>
 						<section class="project-image">
-							<img src="img/pj1.png">
+							<img src="img/pj_{{id}}.png">
 						</section>
 						<section class="project-info">
 							<section class="project-title relative">
-								我们的自由天空
+								{{name}}
 							</section>
 							<section class="project-progress">
 								<span class="project-progress-flag">已完成</span>
-								<span class="project-progress-complete">0.6</span>
+								<span class="project-progress-complete">{{ratio}}</span>
 								<div class="progress-bar">
 									<div class="progress-done"></div>
 									<div class="progress-undone"></div>
@@ -89,132 +90,7 @@
 							</section>
 						</section>
 					</article>
-					<article>
-						<section class="project-image">
-							<img src="img/pj2.png">
-						</section>
-						<section class="project-info">
-							<section class="project-title relative">
-								我们的自由天空
-							</section>
-							<section class="project-progress">
-								<span class="project-progress-flag">已完成</span>
-								<span class="project-progress-complete">0.43</span>
-								<div class="progress-bar">
-									<div class="progress-done"></div>
-									<div class="progress-undone"></div>
-								</div>
-							</section>
-						</section>
-					</article>
-					<article>
-						<section class="project-image">
-							<img src="img/pj3.png">
-						</section>
-						<section class="project-info">
-							<section class="project-title relative">
-								我们的自由天空
-							</section>
-							<section class="project-progress">
-								<span class="project-progress-flag">已完成</span>
-								<span class="project-progress-complete">0.1</span>
-								<div class="progress-bar">
-									<div class="progress-done"></div>
-									<div class="progress-undone"></div>
-								</div>
-							</section>
-						</section>
-					</article>
-					<article>
-						<section class="project-image">
-							<img src="img/pj4.png">
-						</section>
-						<section class="project-info">
-							<section class="project-title relative">
-								我们的自由天空
-							</section>
-							<section class="project-progress">
-								<span class="project-progress-flag">已完成</span>
-								<span class="project-progress-complete">0.39</span>
-								<div class="progress-bar">
-									<div class="progress-done"></div>
-									<div class="progress-undone"></div>
-								</div>
-							</section>
-						</section>
-					</article>
-					<article>
-						<section class="project-image">
-							<img src="img/pj5.png">
-						</section>
-						<section class="project-info">
-							<section class="project-title relative">
-								我们的自由天空
-							</section>
-							<section class="project-progress">
-								<span class="project-progress-flag">已完成</span>
-								<span class="project-progress-complete">1</span>
-								<div class="progress-bar">
-									<div class="progress-done"></div>
-									<div class="progress-undone"></div>
-								</div>
-							</section>
-						</section>
-					</article>
-					<article>
-						<section class="project-image">
-							<img src="img/pj6.png">
-						</section>
-						<section class="project-info">
-							<section class="project-title relative">
-								我们的自由天空
-							</section>
-							<section class="project-progress">
-								<span class="project-progress-flag">已完成</span>
-								<span class="project-progress-complete">0.89</span>
-								<div class="progress-bar">
-									<div class="progress-done"></div>
-									<div class="progress-undone"></div>
-								</div>
-							</section>
-						</section>
-					</article>
-					<article>
-						<section class="project-image">
-							<img src="img/pj7.png">
-						</section>
-						<section class="project-info">
-							<section class="project-title relative">
-								我们的自由天空
-							</section>
-							<section class="project-progress">
-								<span class="project-progress-flag">已完成</span>
-								<span class="project-progress-complete">0.92</span>
-								<div class="progress-bar">
-									<div class="progress-done"></div>
-									<div class="progress-undone"></div>
-								</div>
-							</section>
-						</section>
-					</article>
-					<article>
-						<section class="project-image">
-							<img src="img/pj2.png">
-						</section>
-						<section class="project-info">
-							<section class="project-title relative">
-								我们的自由天空
-							</section>
-							<section class="project-progress">
-								<span class="project-progress-flag">已完成</span>
-								<span class="project-progress-complete">0.26</span>
-								<div class="progress-bar">
-									<div class="progress-done"></div>
-									<div class="progress-undone"></div>
-								</div>
-							</section>
-						</section>
-					</article>
+					{{/each}}
 				</div>
 				<div class="dispel"></div><!-- This one is used to dispel the effect of float -->
 			</div>

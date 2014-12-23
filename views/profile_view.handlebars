@@ -43,27 +43,25 @@
 				<section class="form-container">
 					<div class="form-row">
 						<label>用户名</label>
-						<b>Sheer</b>
+						<b>{{username}}</b>
 					</div>
 					<div class="form-row">
 						<label>身份</label>
-						<b>普通用户</b>
-					</div>
-					<div class="form-row">
-						<label>性别</label>
-						<b>女</b>
-					</div>
-					<div class="form-row">
-						<label>昵称</label>
-						<b>林楠楠</b>
-					</div>
-					<div class="form-row">
-						<label>手机号</label>
-						<b>18817362313</b>
+						<b>
+							{{#ifEq userType "individual"}}
+							个人用户
+							{{else}}
+							慈善机构
+							{{/ifEq}}
+						</b>
 					</div>
 					<div class="form-row">
 						<label>邮箱</label>
-						<b>sheer.linnan@outlook.com</b>
+						<b>{{email}}</b>
+					</div>
+					<div class="form-row">
+						<label>手机号</label>
+						<b>{{detail.mobile}}</b>
 					</div>
 					<div class="form-row">
 						<label></label>
