@@ -46,6 +46,52 @@ IndividualService.prototype.getUser = function (username, callback) {
 	});
 };
 
+/*
+ * update user info
+ * @param {Individual} newUserInfo
+ * @return {Boolean} success
+ */
+IndividualService.prototype.updateUser = function (newUserInfo, callback) {
+	go.database.User.findOne({username: newUserInfo.username}, function (err, user) {
+		if (user.userType !== 'individual') {
+			callback({
+				success: false,
+				message: "not an individual user"
+			});
+		}
+		go.database.Individual.findById(user.detail, function (err, individual) {
+			if (err) {
+				callback({
+					success: false,
+					message: "internal error"
+				});
+			}
+			for (var i = 0; i < keySet.length; ++i) {
+				if (keySet[i] === req.body.key) {
+					individual[keySet[i]] = req.body.value;
+					individual.save(function (err) {
+						if (err) {
+							callback({
+								success: false,
+								message: "update fail"
+							});
+						}
+						callback({
+							success: true,
+							message: "success"
+						});
+					});
+					return;
+				}
+			}
+			callback({
+				success: false,
+				message: "illegal key"
+			});
+		});
+	});
+}
+
 
 /*
  * add project to user's watch list

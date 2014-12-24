@@ -5,6 +5,7 @@ var express = require('express'),
 	cookieParser = require('cookie-parser'),
 	bodyParser = require('body-parser'),
 	expressSession = require('express-session'),
+	exphbs  = require('express-handlebars'),
 	passport = require('passport'),
 	LocalStrategy = require('passport-local').Strategy;
 
@@ -22,7 +23,18 @@ var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+var hbs = exphbs.create({
+	helpers: {
+		ifEq: function(v1, v2, options) {
+			if(v1 === v2) {
+				return options.fn(this);
+			}
+			return options.inverse(this);
+		}
+	}
+});
+app.engine('handlebars', hbs.engine);
+app.set('view engine', 'handlebars');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));

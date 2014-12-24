@@ -23,58 +23,32 @@ router.get('/home', passport.authenticate('local'), function(req, res) {
 });
 
 /*
- * get user PRIVATE profile
+ * PAGE: user PRIVATE profile
  */
 router.get('/profile', passport.authenticate('local'), function(req, res) {
 	IndividualService.getUser(req.user.username, function (answer) {
-		res.send(answer);
+		if (answer.success) {
+			res.render('profile_edit', answer);
+		}
+		else {
+			res.status(500).end();
+		}
 	});
 });
-
+/*
+ * get all donation of current user
+ */
+router.get('/donate/all', passport.authenticate('local'), function(req, res) {
+});
 
 /*
  * modify user profile
  * req.body.key is in []
  */
-var keySet = ['mobile'];
+var keySet = ['mobile', 'email'];
 router.post('/profile/edit', passport.authenticate('local'), function (req, res) {
-	go.database.User.findOne({username: req.user.username}, function (err, user) {
-		if (user.userType !== 'individual') {
-			res.send({
-				success: false,
-				message: "not an individual user"
-			});
-		}
-		go.database.Individual.findById(user.detail, function (err, individual) {
-			if (err) {
-				res.send({
-					success: false,
-					message: "internal error"
-				});
-			}
-			for (var i = 0; i < keySet.length; ++i) {
-				if (keySet[i] === req.body.key) {
-					individual[keySet[i]] = req.body.value;
-					individual.save(function (err) {
-						if (err) {
-							res.send({
-								success: false,
-								message: "update fail"
-							});
-						}
-						res.send({
-							success: true,
-							message: "success"
-						});
-					});
-					return;
-				}
-			}
-			res.send({
-				success: false,
-				message: "illegal key"
-			});
-		});
+	IndividualService.updateUser(req.user, function(answer) {
+		res.send(answer);
 	});
 });
 
@@ -82,24 +56,33 @@ router.post('/profile/edit', passport.authenticate('local'), function (req, res)
  * join a project
  */
 router.post('/project/join/:id', passport.authenticate('local'), function(req, res) {
+	IndividualService.joinProject(req.user.username, req.params.id, function(answer) {
+		res.send(answer);
+	});
 });
-
 /*
  * unjoin a project
  */
 router.post('/project/unjoin/:id', passport.authenticate('local'), function(req, res) {
+	IndividualService.cancelJoinProject(req.user.username, req.params.id, function(answer) {
+		res.send(answer);
+	});
 });
-
 /*
  * watch a project
  */
 router.post('/project/watch/:id', passport.authenticate('local'), function(req, res) {
+	IndividualService.watchProject(req.user.username, req.params.id, function(answer) {
+		res.send(answer);
+	});
 });
-
 /*
  * unwatch a project
  */
 router.post('/project/unwatch/:id', passport.authenticate('local'), function(req, res) {
+	IndividualService.cancelWatchProject(req.user.username, req.params.id, function(answer) {
+		res.send(answer);
+	});
 });
 
 /*
@@ -107,13 +90,6 @@ router.post('/project/unwatch/:id', passport.authenticate('local'), function(req
  */
 router.post('/comment', passport.authenticate('local'), function(req, res) {
 });
-
-/*
- * get all donation of current user
- */
-router.get('/donate/all', passport.authenticate('local'), function(req, res) {
-});
-
 /*
  * donate to a project
  */
