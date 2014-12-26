@@ -25,41 +25,12 @@ IndividualService.register = function (username, password, email, mobile,callbac
 				message: "user already exists"
 			});
 		} else{
-			console.log("there");
-			var id = new mongoose.Schema.ObjectId() ;
-			var newIndividual = new go.database.Individual(id,mobile);
-			var newUser = new User(username, password, email, id);
-			go.database.Individual.save(function(err,newIndividual, numberAffected){
-				if(err){
-					callback({
-						success: false,
-						message: "internal error"
-					});
-				}else if(numberAffected == 1){
-					callback({
-						success: false,
-						message: "insert individual failed"
-					});
-				}else{
-					go.database.User.save(function(err, newUser, numberAffected){
-						if(err){
-							callback({
-								success: false,
-								message: "internal error"
-							});
-						}else if(numberAffected == 1){
-							callback({
-								success: false,
-								message: "insert user failed"
-							});
-						}else{
-							callback({
-								success: true,
-								message: "register successfully"
-							});
-						}
-					});
-				};
+			var ind = new go.database.Individual({mobile: mobile});
+			ind.save(function (err, ind) {
+				if (err) {
+					console.log(err);
+				}
+				console.log("id =", ind._id);
 			});
 		}
 	});
