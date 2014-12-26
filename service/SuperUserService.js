@@ -23,3 +23,10 @@ SuperUserService.prototype.examineProject = function (projectID, approve) {
 SuperUserService.prototype.examineComment = function (commentID, approve) {
 
 }
+
+/*
+ * get unchecked, passed, failed comments
+ */
+SuperUserService.prototype.getAllComment = function (commentID, approve) {
+
+}

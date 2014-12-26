@@ -2,11 +2,12 @@
 <html lang="zh">
 <head>
 	<meta charset=utf-8>
-	<title>行益网-Profile View</title>
+	<title>行益网-Search Result</title>
 	<link rel="stylesheet" type="text/css" href="css/general.css">
 	<script type="text/javascript" src="js/jquery-1.11.1.js"></script>
 	<script type="text/javascript" src="js/general.js"></script>
 	<script type="text/javascript" src="js/interface.js"></script>
+	<script type="text/javascript" src="js/pager.js"></script>
 </head>
 <body>
 	
@@ -27,50 +28,54 @@
 					<input id="search-box" type="search">
 					<img id="search-icon" src="img/search.png" placeholder="搜索..." autocomplete="off">
 				</div>
-				<a id="login-entry">登录</a>
-				<a id="register-entry">注册</a>
+				<label>您好，<a id="user-entry">Sheer</a></label>
+				<a id="dashboard-entry">Dashboard</a>
+				<a id="logout-entry">登出</a>
 			</div>
 		</div>
 	</header>
 
 	<!-- the container -->
 	<div id="content">
-		<div class="wrapper" id="profile-edit-wrapper">
+		<div class="wrapper" id="search-result-wrapper">
 			<section class="container">
 				<h1 class="section-title">
-					个人信息
+					搜索结果
 				</h1>
-				<section class="form-container">
-					<div class="form-row">
-						<label>用户名</label>
-						<b>Sheer</b>
+				<section class="show-result">
+					 找到{{total}}条符合“{{keyword}}”搜索条件的项目
+				</section>
+				<section class="show">
+					<div class="collection">
+						{{#each project}}
+						<article>
+							<section class="project-image">
+								<img src="img/pj{{id}}.png">
+							</section>
+							<section class="project-info">
+								<section class="project-title relative">
+									{{name}}
+								</section>
+								{{#ifEq ratio -1}}
+								{{else}}
+								<section class="project-progress">
+									<span class="project-progress-flag">已完成</span>
+									<span class="project-progress-complete">{{ratio}}</span>
+									<div class="progress-bar">
+										<div class="progress-done"></div>
+										<div class="progress-undone"></div>
+									</div>
+								</section>
+								{{/ifEq}}
+							</section>
+						</article>
+						{{/each}}
 					</div>
-					<div class="form-row">
-						<label>身份</label>
-						<b>普通用户</b>
-					</div>
-					<div class="form-row">
-						<label>性别</label>
-						<b>女</b>
-					</div>
-					<div class="form-row">
-						<label>昵称</label>
-						<b>林楠楠</b>
-					</div>
-					<div class="form-row">
-						<label>手机号</label>
-						<b>18817362313</b>
-					</div>
-					<div class="form-row">
-						<label>邮箱</label>
-						<b>sheer.linnan@outlook.com</b>
-					</div>
-					<div class="form-row">
-						<label></label>
-						<b>
-							<button class="rounded-button" id="edit">编辑</button>
-						</b>
-					</div>
+					<div class="dispel"></div><!-- This one is used to dispel the effect of float -->
+				</section>
+				<section class="page_navigation">
+					<input type='hidden' class='current_page' />
+					<input type='hidden' class='show_per_page' value='8' />
 				</section>
 			</section>
 		</div>
