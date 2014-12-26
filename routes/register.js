@@ -8,10 +8,12 @@ var express = require('express'),
  * register an individual user
  */
 router.post('/individual', function (req, res) {
+	console.log(IndividualService.register);
 	IndividualService.register(req.body.username,
 								req.body.password,
 								req.body.email,
 								req.body.mobile, function(result){
+		console.log(result);
 		res.send(result);
 	});
 });

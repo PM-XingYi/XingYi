@@ -1,7 +1,8 @@
-var go = require('../globalObjects');
+var go = require('../globalObjects'),
+	mongoose = require('mongoose');
 
 var IndividualService = function () {
-}
+};
 
 /*
  * register an individual user
@@ -11,15 +12,20 @@ var IndividualService = function () {
  * @param {String} mobile
  * @return {Boolean} success
  */
-IndividualService.prototype.register = function (username, password, email, mobile,callback) {
+IndividualService.register = function (username, password, email, mobile,callback) {
+	console.log("begin");
 	//check if user exists
 	go.database.User.findOne({username: username}, function(err, user){
+		if (err) {
+			console.log("err");
+		}
 		if(user !== null){
 			callback({
 				success:false,
 				message: "user already exists"
 			});
 		} else{
+			console.log("there");
 			var id = new mongoose.Schema.ObjectId() ;
 			var newIndividual = new go.database.Individual(id,mobile);
 			var newUser = new User(username, password, email, id);
@@ -35,7 +41,7 @@ IndividualService.prototype.register = function (username, password, email, mobi
 						message: "insert individual failed"
 					});
 				}else{
-					go.database.User.save(function(err, newUser, numberAffected)){
+					go.database.User.save(function(err, newUser, numberAffected){
 						if(err){
 							callback({
 								success: false,
@@ -48,24 +54,23 @@ IndividualService.prototype.register = function (username, password, email, mobi
 							});
 						}else{
 							callback({
-								success：true,
+								success: true,
 								message: "register successfully"
 							});
 						}
-				}
-				});
+					});
+				};
 			});
 		}
-	);
+	});
 };
-
 
 /*
  * Return user info by username
  * @param {String} username
  * @return {Individual} user
  */
-IndividualService.prototype.getUser = function (username, callback) {
+IndividualService.getUser = function (username, callback) {
 	go.database.User.findOne({username: username}, function (err, user) {
 		if (err) {
 			callback({
@@ -97,7 +102,7 @@ IndividualService.prototype.getUser = function (username, callback) {
  * @param {Individual} newUserInfo
  * @return {Boolean} success
  */
-IndividualService.prototype.updateUser = function (newUserInfo, callback) {
+IndividualService.updateUser = function (newUserInfo, callback) {
 	go.database.User.findOne({username: newUserInfo.username}, function (err, user) {
 		if (user.userType !== 'individual') {
 			callback({
@@ -136,7 +141,7 @@ IndividualService.prototype.updateUser = function (newUserInfo, callback) {
 			});
 		});
 	});
-}
+};
 
 
 /*
@@ -145,7 +150,7 @@ IndividualService.prototype.updateUser = function (newUserInfo, callback) {
  * @param {ObjectId} project id
  * @return {Boolean} success
  */
-IndividualService.prototype.watchProject = function (username, projectID, callback) {
+IndividualService.watchProject = function (username, projectID, callback) {
 	// check if userType is "individual"
 	go.database.User.findOne({username: username},function(err, user){
 		if(err){
@@ -187,7 +192,7 @@ IndividualService.prototype.watchProject = function (username, projectID, callba
 							}
 						});
 					}
-				);
+				});
 			}
 		}
 	});
@@ -198,7 +203,7 @@ IndividualService.prototype.watchProject = function (username, projectID, callba
  * @param {ObjectId} project id
  * @return {Boolean} success
  */
-IndividualService.prototype.cancelWatchProject = function (username, projectID) {
+IndividualService.cancelWatchProject = function (username, projectID) {
 	go.database.User.findOne({username: username}, function(err, user){
 		if(err){
 			callback({
@@ -236,7 +241,7 @@ IndividualService.prototype.cancelWatchProject = function (username, projectID) 
  * @param {String} username
  * @return {Array of Project} project list
  */
-IndividualService.prototype.getWatchProjectList = function (username) {
+IndividualService.getWatchProjectList = function (username) {
 	go.database.User.findOne({username: username}, function(err, user){
 		if(err){
 			callback({
@@ -278,7 +283,7 @@ IndividualService.prototype.getWatchProjectList = function (username) {
  * @param {ObjectId} project id
  * @return {Boolean} success
  */
-IndividualService.prototype.joinProject = function (username, projectID) {
+IndividualService.joinProject = function (username, projectID) {
 	// check if userType is "individual"
 	go.database.User.findOne({username: username},function(err, user){
 		if(err){
@@ -331,7 +336,7 @@ IndividualService.prototype.joinProject = function (username, projectID) {
  * @param {ObjectId} project id
  * @return {Boolean} success
  */
-IndividualService.prototype.cancelJoinProject = function (username, projectID) {
+IndividualService.cancelJoinProject = function (username, projectID) {
 	go.database.User.findOne({username: username}, function(err, user){
 		if(err){
 			callback({
@@ -369,7 +374,7 @@ IndividualService.prototype.cancelJoinProject = function (username, projectID) {
  * @param {String} username
  * @return {Array of Project} project list
  */
-IndividualService.prototype.getJoinProjectList = function (username) {
+IndividualService.getJoinProjectList = function (username) {
 	go.database.User.findOne({username: username}, function(err, user){
 		if(err){
 			callback({
@@ -417,7 +422,7 @@ IndividualService.prototype.getJoinProjectList = function (username) {
  * } donation info
  * @return {Boolean} success
  */
-IndividualService.prototype.donateProject = function (username, projectID, donateInfo) {
+IndividualService.donateProject = function (username, projectID, donateInfo) {
 	go.database.User.findOne({username: username}, function(err, user) {
 		if(err){
 			callback({
@@ -466,7 +471,7 @@ IndividualService.prototype.donateProject = function (username, projectID, donat
  * @param {String} username
  * @return {Array of Donation} donation list
  */
-IndividualService.prototype.getDonateProjectList = function (username) {
+IndividualService.getDonateProjectList = function (username) {
 	go.database.User.findOne({username: username}, function(err, user){
 		if(err){
 			callback({
@@ -512,7 +517,7 @@ IndividualService.prototype.getDonateProjectList = function (username) {
  * } comment info
  * @return {Boolean} success
  */
-IndividualService.prototype.commentProject = function (username, projectID, commentInfo) {
+IndividualService.commentProject = function (username, projectID, commentInfo) {
 	go.database.User.findOne({username: username}, function(err, user){
 		if(err){
 			callback({
@@ -560,7 +565,7 @@ IndividualService.prototype.commentProject = function (username, projectID, comm
  * @param {String} username
  * @return {Array of Comment} comment list
  */
-IndividualService.prototype.getCommentProjectList = function (username) {
+IndividualService.getCommentProjectList = function (username) {
 	go.database.User.findOne({username: username}, function(err, user){
 		if(err){
 			callback({
@@ -594,3 +599,5 @@ IndividualService.prototype.getCommentProjectList = function (username) {
 		}
 	});
 };
+
+module.exports = IndividualService;

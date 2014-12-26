@@ -115,14 +115,20 @@ OrganizationService.prototype.publishProject = function (username, projectInfo) 
 				message: "internal error"
 			});
 		}else {
-			go.database.Project.insert({_id: id, name:projectInfo.name, desc:projectInfo.desc, moneyNeeded: projectInfo.moneyNeeded, owner: user.detail}. function(err, result){
+			go.database.Project.insert({_id: id, name:projectInfo.name, desc:projectInfo.desc, moneyNeeded: projectInfo.moneyNeeded, owner: user.detail}, function(err, result){
 				if(err){
 					callback({
 						success: false,
 						message:"internal error"
 					});
 				}else {
-					go.database.Organization.update({_id:user.detail},{"$addToSet",{"project": id}}, function(err, result){
+					go.database.Organization.update({
+						_id:user.detail
+					},{
+						$addToSet: {
+							"project": id
+						}
+					}, function(err, result){
 						if(err){
 							callback({
 								success: false,
@@ -138,13 +144,10 @@ OrganizationService.prototype.publishProject = function (username, projectInfo) 
 			
 				}
 			});
-			
 		}
 	});
-
-
-
 }
+
 /*
  * add milestone for a project
  * @param {String} username
@@ -167,11 +170,17 @@ OrganizationService.prototype.addMilestone = function (username, projectID, mile
 				message: "internal error"
 			});
 		} else {
-			go.database.Project.update({project: project},{"$addToSet":{mileStone: {
-				date: milestone.date,
-				title: milestone.title,
-				desc: milestone.desc
-			}}}, function(err, result){
+			go.database.Project.update({
+				project: project
+			},{
+				$addToSet: {
+					mileStone: {
+						date: milestone.date,
+						title: milestone.title,
+						desc: milestone.desc
+					}
+				}
+			}, function(err, result){
 				if(err){
 					callback({
 						success: false,
@@ -208,11 +217,17 @@ OrganizationService.prototype.addExpenditure = function (username, projectID, ex
 				message: "internal error"
 			});
 		} else {
-			go.database.Project.update({project: project},{"$addToSet":{expenditure: {
-				date: expenditure.date,
-				expense: expenditure.expense,
-				usage: expenditure.usage
-			}}}, function(err, result){
+			go.database.Project.update({
+				project: project
+			},{
+				$addToSet: {
+					expenditure: {
+						date: expenditure.date,
+						expense: expenditure.expense,
+						usage: expenditure.usage
+					}
+				}
+			}, function(err, result){
 				if(err){
 					callback({
 						success: false,
