@@ -21,7 +21,7 @@ var DatabaseConnector = function (dbUrl) {
 	return db;
 }
 
-DatabaseService.connect = function(succ, fail) {
+DatabaseService.prototype.connect = function(succ, fail) {
 	mongoose.connect(this.dbUrl, function(e) {
 		if (e){
 			fail(e.message);

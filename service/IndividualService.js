@@ -1,5 +1,6 @@
 var go = require('../globalObjects'),
-	mongoose = require('mongoose');
+	mongoose = require('mongoose'),
+	MD5 = require('MD5');
 
 var IndividualService = function () {
 };
@@ -12,8 +13,7 @@ var IndividualService = function () {
  * @param {String} mobile
  * @return {Boolean} success
  */
-IndividualService.register = function (username, password, email, mobile,callback) {
-	console.log("begin");
+IndividualService.register = function (username, password, email, mobile, callback) {
 	//check if user exists
 	go.database.User.findOne({username: username}, function(err, user){
 		if (err) {
@@ -21,7 +21,7 @@ IndividualService.register = function (username, password, email, mobile,callbac
 		}
 		if(user !== null){
 			callback({
-				success:false,
+				success: false,
 				message: "user already exists"
 			});
 		} else{
@@ -30,7 +30,23 @@ IndividualService.register = function (username, password, email, mobile,callbac
 				if (err) {
 					console.log(err);
 				}
-				console.log("id =", ind._id);
+				var user = new go.database.User({
+					username: username,
+					password: MD5(password),
+					emal: email,
+					userType: "individual",
+					detail: ind._id
+				});
+				user.save(function (err) {
+					if (err) {
+						console.log(err);
+					}
+					else {
+						callback({
+							success: true
+						});
+					}
+				});
 			});
 		}
 	});
