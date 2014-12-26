@@ -11,7 +11,7 @@ var IndividualService = function () {
  * @param {String} mobile
  * @return {Boolean} success
  */
-IndividualService.prototype.register = function (username, password, email, mobile) {
+IndividualService.prototype.register = function (username, password, email, mobile,callback) {
 	//check if user exists
 	go.database.User.findOne({username: username}, function(err, user){
 		if(user !== null){
@@ -20,22 +20,43 @@ IndividualService.prototype.register = function (username, password, email, mobi
 				message: "user already exists"
 			});
 		} else{
-			var newUser = new User(username, password, email,"Individual". mobile);
-			go.database.User.insertOne({user: newUser}, function(err, result){
+			var id = new mongoose.Schema.ObjectId() ;
+			var newIndividual = new go.database.Individual(id,mobile);
+			var newUser = new User(username, password, email, id);
+			go.database.Individual.save(function(err,newIndividual, numberAffected){
 				if(err){
 					callback({
 						success: false,
 						message: "internal error"
 					});
-				}else{
+				}else if(numberAffected == 1){
 					callback({
-						success: true,
-						message: result
+						success: false,
+						message: "insert individual failed"
 					});
+				}else{
+					go.database.User.save(function(err, newUser, numberAffected)){
+						if(err){
+							callback({
+								success: false,
+								message: "internal error"
+							});
+						}else if(numberAffected == 1){
+							callback({
+								success: false,
+								message: "insert user failed"
+							});
+						}else{
+							callback({
+								success：true,
+								message: "register successfully"
+							});
+						}
 				}
+				});
 			});
 		}
-	});
+	);
 };
 
 
@@ -124,7 +145,7 @@ IndividualService.prototype.updateUser = function (newUserInfo, callback) {
  * @param {ObjectId} project id
  * @return {Boolean} success
  */
-IndividualService.prototype.watchProject = function (username, projectID) {
+IndividualService.prototype.watchProject = function (username, projectID, callback) {
 	// check if userType is "individual"
 	go.database.User.findOne({username: username},function(err, user){
 		if(err){
@@ -166,7 +187,7 @@ IndividualService.prototype.watchProject = function (username, projectID) {
 							}
 						});
 					}
-				});
+				);
 			}
 		}
 	});

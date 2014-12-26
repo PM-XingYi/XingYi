@@ -13,7 +13,7 @@ var OrganizationService = function () {
  * @param {String} organization number
  * @return {Boolean} success
  */
-OrganizationService.prototype.register = function (username, password, email, phone, orgName, orgNumber) {
+OrganizationService.prototype.register = function (username, password, email, phone, orgName, orgNumber, callback) {
 	//check if user exists
 	go.database.User.findOne({username: username}, function(err, user){
 		if(user !== null){
@@ -22,17 +22,39 @@ OrganizationService.prototype.register = function (username, password, email, ph
 				message: "user already exists"
 			});
 		} else{
-			var newUser = new User(username, password, email,"Organization", phone, orgName,orgNumber);
-			go.database.User.insertOne({user: newUser}, function(err, result){
+			var id = mongoose.Schema.ObjectId(id,phone, orgName,orgNumber);
+			var newOrganization = new go.database.Organization();
+			var newUser = new go.database.User(username, password, email,id);
+			go.database.Organization.save(function(err,newOrganization, numberAffected){
 				if(err){
 					callback({
 						success: false,
 						message: "internal error"
 					});
+				}else if(numberAffected == 1){
+						go.database.User.save(function(err,newUser, numberAffected){
+							if(err){
+								callback({
+									success: false,
+									message: "internal error"
+								});
+							}else if(numberAffected == 1){
+								callback({
+									success: true,
+									message: "register successfully"
+								});	
+							}else{
+								callback({
+									success: false,
+									message: "insert user failed"
+								});		
+							}
+						}
+					);
 				}else{
 					callback({
-						success: true,
-						message: result
+						success: false,
+						message: "insert organization failed"
 					});
 				}
 			});
