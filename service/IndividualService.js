@@ -146,7 +146,13 @@ IndividualService.prototype.watchProject = function (username, projectID) {
 							message: "internal error"
 						});
 					}else{
-						go.database.Individual.update({individual: individual},{"$addToSet":{"watchedProject":projectID}},function(err, result){
+						go.database.Individual.update({
+							individual: individual
+						},{
+							$addToSet: {
+								"watchedProject":projectID
+							}
+						},function(err, result){
 							if(err){
 								callback({
 									success: false,
@@ -273,7 +279,13 @@ IndividualService.prototype.joinProject = function (username, projectID) {
 							message: "internal error"
 						});
 					}else{
-						go.database.Individual.update({individual: individual},{"$addToSet":{"joinedProject":projectID}},function(err, result){
+						go.database.Individual.update({
+							individual: individual
+						},{
+							$addToSet: {
+								"joinedProject":projectID
+							}
+						},function(err, result){
 							if(err){
 								callback({
 									success: false,
@@ -385,7 +397,7 @@ IndividualService.prototype.getJoinProjectList = function (username) {
  * @return {Boolean} success
  */
 IndividualService.prototype.donateProject = function (username, projectID, donateInfo) {
-	go.database.User.findOne({username: username}, function(err, user)){
+	go.database.User.findOne({username: username}, function(err, user) {
 		if(err){
 			callback({
 				success: false,
@@ -402,7 +414,13 @@ IndividualService.prototype.donateProject = function (username, projectID, donat
 					});
 				}else{
 					if(result === 1){
-						go.database.User.update({_id: user.detail},{"$addToSet",{"donation": id}}, function(err, result){
+						go.database.User.update({
+							_id: user.detail
+						},{
+							$addToSet: {
+								"donation": id
+							}
+						}, function(err, result){
 							if(err){
 								callback({
 									success: false,
@@ -419,7 +437,7 @@ IndividualService.prototype.donateProject = function (username, projectID, donat
 				}					
 			});
 		}
-	}
+	});
 	
 };
 /*
@@ -474,7 +492,7 @@ IndividualService.prototype.getDonateProjectList = function (username) {
  * @return {Boolean} success
  */
 IndividualService.prototype.commentProject = function (username, projectID, commentInfo) {
-	go.database.User.findOne({username: username}, function(err, user)){
+	go.database.User.findOne({username: username}, function(err, user){
 		if(err){
 			callback({
 				success: false,
@@ -491,7 +509,13 @@ IndividualService.prototype.commentProject = function (username, projectID, comm
 					});
 				}else{
 					if(result === 1){
-						go.database.User.update({_id: user.detail},{"$addToSet",{"comment": id}}, function(err, result){
+						go.database.User.update({
+							_id: user.detail
+						},{
+							$addToSet: {
+								"comment": id
+							}
+						}, function(err, result){
 							if(err){
 								callback({
 									success: false,
@@ -508,7 +532,7 @@ IndividualService.prototype.commentProject = function (username, projectID, comm
 				}					
 			});
 		}
-	}
+	});
 };
 /*
  * get user's comment list

@@ -18,6 +18,7 @@
     "passport": "*",
     "mongoose": "*",
     "passport-local": "*",
-    "MD5": "*"
+    "MD5": "*",
+    "express-handlebars": "*"
   }
 }
