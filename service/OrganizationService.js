@@ -244,3 +244,5 @@ OrganizationService.prototype.addExpenditure = function (username, projectID, ex
 		}
 	});
 }
+
+module.exports = OrganizationService;

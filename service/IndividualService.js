@@ -165,38 +165,28 @@ IndividualService.watchProject = function (username, projectID, callback) {
 					message: "not an individual user"
 				});
 			}else{
-				go.database.Individual.findById(user.detail, function(err, individual){
+				go.database.Individual.findByIdAndUpdate(user.detail, 
+				{$addToSet:
+					{watchedProject: projectID}
+				},
+				function(err, numberAffected){
 					if(err){
 						callback({
 							success: false,
-							message: "internal error"
+							message: "watch failed"
 						});
 					}else{
-						go.database.Individual.update({
-							individual: individual
-						},{
-							$addToSet: {
-								"watchedProject":projectID
-							}
-						},function(err, result){
-							if(err){
-								callback({
-									success: false,
-									message: "internal error or already joined"
-								});
-							}else{
-								callback({
-									success: true,
-									message: result
-								});
-							}
+						callback({
+							success: false,
+							message: "watch successfully"
 						});
 					}
 				});
 			}
 		}
 	});
-};
+}
+
 /*
  * delete project from user's watch list
  * @param {String} username
@@ -211,31 +201,28 @@ IndividualService.cancelWatchProject = function (username, projectID) {
 				message: "internal error"
 			});
 		}else {
-			go.database.Individual.findById(user.detail, function(err, individual){
-				if(err){
-					callback({
-						success: false,
-						message: "internal error"
-					});
-				}else {
-					go.database.Individual.update({individual: individual}, {"$pull":{"watchedProject":projectID}}, function(err, result){
-						if(err){
-							callback({
-								success: false,
-								message: "internal error"
-							});
-						}else{
-							callback({
-								success: true,
-								message: result
-							});
-						}
-					});
-				}
+			go.database.Individual.findByIdAndUpdate(user.detail, 
+				{$pull:
+					{watchedProject: projectID}
+				},
+				function(err, numberAffected){
+					if(err){
+						callback({
+							success: false,
+							message: "cancel watch failed"
+						});
+					}else{
+						callback({
+							success: true,
+							message: "cancel watch successfully"
+						});
+					}
 			});
 		}
 	});
-};
+}
+
+			
 /*
  * get user's watch list
  * @param {String} username
@@ -256,7 +243,7 @@ IndividualService.getWatchProjectList = function (username) {
 						message: "internal error"
 					});
 				}else{
-					go.database.Individual.find({individual: individual}, {"watchedProject": 1}, function(err, watchedProject){
+					go.database.Individual.find({individual: individual}, {watchedProject: 1}, function(err, watchedProject){
 						if(err){
 							callback({
 							success: false,
@@ -600,4 +587,6 @@ IndividualService.getCommentProjectList = function (username) {
 	});
 };
 
+
 module.exports = IndividualService;
+
