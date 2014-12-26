@@ -1,4 +1,5 @@
-var go = require('../globalObjects');
+var go = require('../globalObjects'),
+	MD5 = require('MD5');
 var OrganizationService = function () {
 
 }
@@ -13,50 +14,44 @@ var OrganizationService = function () {
  * @param {String} organization number
  * @return {Boolean} success
  */
-OrganizationService.prototype.register = function (username, password, email, phone, orgName, orgNumber, callback) {
+OrganizationService.register = function (username, password, email, phone, orgName, orgNumber, callback) {
 	//check if user exists
 	go.database.User.findOne({username: username}, function(err, user){
+		if(err){
+			console.log(err);
+		}
 		if(user !== null){
 			callback({
 				success:false,
 				message: "user already exists"
 			});
 		} else{
-			var id = mongoose.Schema.ObjectId(id,phone, orgName,orgNumber);
-			var newOrganization = new go.database.Organization();
-			var newUser = new go.database.User(username, password, email,id);
-			go.database.Organization.save(function(err,newOrganization, numberAffected){
+			var organization = new go.database.Organization({
+				phone: phone,
+				instituteName: orgName,
+				instituteNumber: orgNumber
+			});
+			organization.save(function(err, organization){
 				if(err){
-					callback({
-						success: false,
-						message: "internal error"
-					});
-				}else if(numberAffected == 1){
-						go.database.User.save(function(err,newUser, numberAffected){
-							if(err){
-								callback({
-									success: false,
-									message: "internal error"
-								});
-							}else if(numberAffected == 1){
-								callback({
-									success: true,
-									message: "register successfully"
-								});	
-							}else{
-								callback({
-									success: false,
-									message: "insert user failed"
-								});		
-							}
-						}
-					);
-				}else{
-					callback({
-						success: false,
-						message: "insert organization failed"
-					});
+					console.log(err);
 				}
+				var user = new go.database.User({
+					username: username,
+					password: MD5(password),
+					email: email,
+					userType: "organization",
+					detail: organization._id
+				});
+				user.save(function (err) {
+					if (err) {
+						console.log(err);
+					}
+					else {
+						callback({
+							success: true
+						});
+					}
+				});
 			});
 		}
 	});
@@ -66,8 +61,7 @@ OrganizationService.prototype.register = function (username, password, email, ph
  * @param {String} username
  * @return {Individual} user
  */
-OrganizationService.prototype.getUser = function (username) {
-
+OrganizationService.getUser = function (username) {
 	go.database.User.findOne({username: username}, function (err, user) {
 		if (err) {
 			callback({
@@ -84,6 +78,7 @@ OrganizationService.prototype.getUser = function (username) {
 					});
 				} else {
 					answer.detail = organization;
+					console.log(answer);
 					callback({
 						success: true,
 						message: answer
@@ -92,7 +87,6 @@ OrganizationService.prototype.getUser = function (username) {
 			});
 		}
 	});
-
 }
 
 
@@ -106,8 +100,7 @@ OrganizationService.prototype.getUser = function (username) {
  * } project info
  * @return {Boolean} success
  */
-OrganizationService.prototype.publishProject = function (username, projectInfo) {
-	var id = new mongoose.Schema.ObjectId() ;
+OrganizationService.publishProject = function (username, projectInfo) {
 	go.database.User.findOne({username: username}, function(err, user){
 		if(err){
 			callback({
@@ -115,34 +108,40 @@ OrganizationService.prototype.publishProject = function (username, projectInfo) 
 				message: "internal error"
 			});
 		}else {
-			go.database.Project.insert({_id: id, name:projectInfo.name, desc:projectInfo.desc, moneyNeeded: projectInfo.moneyNeeded, owner: user.detail}, function(err, result){
+			var project = new go.database.Project({
+				name:projectInfo.name, 
+				desc:projectInfo.desc, 
+				moneyNeeded: projectInfo.moneyNeeded,
+				 owner: user.detail
+			});
+			go.database.Project.save(function(err, project){
 				if(err){
 					callback({
 						success: false,
 						message:"internal error"
 					});
-				}else {
-					go.database.Organization.update({
-						_id:user.detail
-					},{
-						$addToSet: {
-							"project": id
-						}
-					}, function(err, result){
-						if(err){
-							callback({
-								success: false,
-								message:"internal error"
-							});
-						}else {
-							callback({
-								success: true,
-								message: "publish successfully"
-							});
-						}
-					});
-			
 				}
+				go.database.Organization.findByIdAndUpdate(
+				{
+					_id:user.detail
+				},{
+					$addToSet: 
+					{
+						project: project._id
+					}
+				},function(err, result){
+					if(err){
+						callback({
+							success: false,
+							message:"internal error"
+						});
+					}else{
+						callback({
+							success: true,
+							message: "publish successfully"
+						});
+					}
+				});										
 			});
 		}
 	});
@@ -159,43 +158,35 @@ OrganizationService.prototype.publishProject = function (username, projectInfo) 
  * } milestone
  * @return {Boolean} success
  */
-OrganizationService.prototype.addMilestone = function (username, projectID, milestone) {
+OrganizationService.addMilestone = function (username, projectID, milestone) {
 	// organization user can only add milestones from it's own page, 
 	//so don't check the owner of the projectID is this organization
-	
-	go.database.Project.findById(projectID, function(err, project){
-		if(err){
-			callback({
-				success: false,
-				message: "internal error"
-			});
-		} else {
-			go.database.Project.update({
-				project: project
-			},{
-				$addToSet: {
-					mileStone: {
-						date: milestone.date,
-						title: milestone.title,
-						desc: milestone.desc
-					}
+	go.database.Project.findByIdAndUpdate(
+		{
+			_id:projectID
+		},{
+			$addToSet: 
+			{
+				mileStone:{
+					date: milestone.date,
+					title: milestone.title,
+					desc: milestone.desc
 				}
-			}, function(err, result){
-				if(err){
-					callback({
-						success: false,
-						message: "internal error"
-					});
-							
-				} else {
-					callback({
-						success: true,
-						message:" add milestone successfully"
-					});
-				}
-			});
-		}
-	});
+			}
+		},
+		function(err, result){
+			if(err){
+				callback({
+					success: false,
+					message:"internal error"
+				});
+			}else{
+				callback({
+					success: true,
+					message: "add milestone successfully"
+				});
+			}
+	});			
 }
 
 /*
@@ -209,40 +200,33 @@ OrganizationService.prototype.addMilestone = function (username, projectID, mile
  * } expenditure
  * @return {Boolean} success
  */
-OrganizationService.prototype.addExpenditure = function (username, projectID, expenditure) {
-	go.database.Project.findById(projectID, function(err, project){
-		if(err){
-			callback({
-				success: false,
-				message: "internal error"
-			});
-		} else {
-			go.database.Project.update({
-				project: project
-			},{
-				$addToSet: {
-					expenditure: {
-						date: expenditure.date,
-						expense: expenditure.expense,
-						usage: expenditure.usage
-					}
+OrganizationService.addExpenditure = function (username, projectID, expenditure) {
+	go.database.Project.findByIdAndUpdate(
+		{
+			_id:projectID
+		},{
+			$addToSet: 
+			{
+				expenditure:{
+					date: expenditure.date,
+					expense: expenditure.expense,
+					usage: expenditure.usage
 				}
-			}, function(err, result){
-				if(err){
-					callback({
-						success: false,
-						message: "internal error"
-					});
-							
-				} else {
-					callback({
-						success: true,
-						message:" add milestone successfully"
-					});
-				}
-			});
-		}
-	});
+			}
+		},
+		function(err, result){
+			if(err){
+				callback({
+					success: false,
+					message:"internal error"
+				});
+			}else{
+				callback({
+					success: true,
+					message: "add expenditure successfully"
+				});
+			}
+	});				
 }
 
 module.exports = OrganizationService;

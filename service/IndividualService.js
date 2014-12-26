@@ -23,7 +23,8 @@ IndividualService.register = function (username, password, email, mobile, callba
 			callback({
 				success: false,
 				message: "user already exists"
-			});
+			});			
+
 		} else{
 			var ind = new go.database.Individual({mobile: mobile});
 			ind.save(function (err, ind) {
@@ -33,7 +34,7 @@ IndividualService.register = function (username, password, email, mobile, callba
 				var user = new go.database.User({
 					username: username,
 					password: MD5(password),
-					emal: email,
+					email: email,
 					userType: "individual",
 					detail: ind._id
 				});
@@ -48,7 +49,7 @@ IndividualService.register = function (username, password, email, mobile, callba
 					}
 				});
 			});
-		}
+		}		
 	});
 };
 
@@ -74,6 +75,7 @@ IndividualService.getUser = function (username, callback) {
 					});
 				} else {
 					answer.detail = individual;
+					console.log(answer);
 					callback({
 						success: true,
 						message: answer
@@ -146,30 +148,38 @@ IndividualService.watchProject = function (username, projectID, callback) {
 				message: "internal error"
 			});
 		}else {
-			if(user.userType !== "individual"){
+			console.log(user);
+			if(user !== null){
+				if(user.userType !== "individual"){
+					callback({
+						success: false,
+						message: "not an individual user"
+					});
+				}else{
+					go.database.Individual.findByIdAndUpdate(user.detail, 
+					{
+						$addToSet:
+						{watchedProject: projectID}
+					},function(err, result){
+						if(err){
+							callback({
+								success: false,
+								message: "watch failed"
+							});
+						}else{
+							callback({
+								success: true,
+								message: "watch successfully"
+							});
+						}
+					});
+				}
+			}else{
 				callback({
 					success: false,
-					message: "not an individual user"
+					message: "user doesn't exist"
 				});
-			}else{
-				go.database.Individual.findByIdAndUpdate(user.detail, 
-				{$addToSet:
-					{watchedProject: projectID}
-				},
-				function(err, numberAffected){
-					if(err){
-						callback({
-							success: false,
-							message: "watch failed"
-						});
-					}else{
-						callback({
-							success: false,
-							message: "watch successfully"
-						});
-					}
-				});
-			}
+			}			
 		}
 	});
 }
@@ -189,10 +199,11 @@ IndividualService.cancelWatchProject = function (username, projectID) {
 			});
 		}else {
 			go.database.Individual.findByIdAndUpdate(user.detail, 
-				{$pull:
+				{
+					$pull:
 					{watchedProject: projectID}
 				},
-				function(err, numberAffected){
+				function(err, result){
 					if(err){
 						callback({
 							success: false,
@@ -214,39 +225,22 @@ IndividualService.cancelWatchProject = function (username, projectID) {
  * get user's watch list
  * @param {String} username
  * @return {Array of Project} project list
+ * seem exist problem!!!!!!!!!!!!!!!
  */
 IndividualService.getWatchProjectList = function (username) {
-	go.database.User.findOne({username: username}, function(err, user){
-		if(err){
+	go.database.User.findOne({username: username},function(err, user){
+		go.database.Individual.findById({_id: user.detail}).populate('watchedProject').exec(function(err, individual){
+			if(err){
+				callback({
+					success: false
+				});
+			}
+			console.log(individual.watchedProject);
 			callback({
-				success: false,
-				message: "internal error"
+				success: true,
+				message: individual.watchedProject
 			});
-		}else {
-			go.database.Individual.findById(user.detail, function(err, individual){
-				if(err){
-					callback({
-						success: false,
-						message: "internal error"
-					});
-				}else{
-					go.database.Individual.find({individual: individual}, {watchedProject: 1}, function(err, watchedProject){
-						if(err){
-							callback({
-							success: false,
-							message: "internal error"
-							});
-						}else{
-							var answer = JSON.parse(JSON.stringify(watchedProject));
-							callback({
-								success: true,
-								message: answer
-							});
-						}
-					});
-				}
-			});
-		}
+		});
 	});
 };
 
@@ -266,41 +260,38 @@ IndividualService.joinProject = function (username, projectID) {
 				message: "internal error"
 			});
 		}else {
-			if(user.userType !== "individual"){
+			console.log(user);
+			if(user !== null){
+				if(user.userType !== "individual"){
+					callback({
+						success: false,
+						message: "not an individual user"
+					});
+				}else{
+					go.database.Individual.findByIdAndUpdate(user.detail, 
+					{
+						$addToSet:
+						{joinedProject: projectID}
+					},function(err, result){
+						if(err){
+							callback({
+								success: false,
+								message: "join failed"
+							});
+						}else{
+							callback({
+								success: true,
+								message: "join successfully"
+							});
+						}
+					});
+				}
+			}else{
 				callback({
 					success: false,
-					message: "not an individual user"
+					message: "user doesn't exist"
 				});
-			}else{
-				go.database.Individual.findById(user.detail, function(err, individual){
-					if(err){
-						callback({
-							success: false,
-							message: "internal error"
-						});
-					}else{
-						go.database.Individual.update({
-							individual: individual
-						},{
-							$addToSet: {
-								"joinedProject":projectID
-							}
-						},function(err, result){
-							if(err){
-								callback({
-									success: false,
-									message: "internal error or already joined"
-								});
-							}else{
-								callback({
-									success: true,
-									message: result
-								});
-							}
-						});
-					}
-				});
-			}
+			}			
 		}
 	});
 };
@@ -318,27 +309,23 @@ IndividualService.cancelJoinProject = function (username, projectID) {
 				message: "internal error"
 			});
 		}else {
-			go.database.Individual.findById(user.detail, function(err, individual){
-				if(err){
-					callback({
-						success: false,
-						message: "internal error"
-					});
-				}else {
-					go.database.Individual.update({individual: individual}, {"$pull":{"joinedProject":projectID}}, function(err, result){
-						if(err){
-							callback({
-								success: false,
-								message: "internal error"
-							});
-						}else{
-							callback({
-								success: true,
-								message: result
-							});
-						}
-					});
-				}
+			go.database.Individual.findByIdAndUpdate(user.detail, 
+				{
+					$pull:
+					{joinedProject: projectID}
+				},
+				function(err, result){
+					if(err){
+						callback({
+							success: false,
+							message: "cancel join failed"
+						});
+					}else{
+						callback({
+							success: true,
+							message: "cancel join successfully"
+						});
+					}
 			});
 		}
 	});
@@ -349,37 +336,19 @@ IndividualService.cancelJoinProject = function (username, projectID) {
  * @return {Array of Project} project list
  */
 IndividualService.getJoinProjectList = function (username) {
-	go.database.User.findOne({username: username}, function(err, user){
-		if(err){
+	go.database.User.findOne({username: username},function(err, user){
+		go.database.Individual.findById({_id: user.detail}).populate('joinedProject').exec(function(err, individual){
+			if(err){
+				callback({
+					success: false
+				});
+			}
+			console.log(individual.joinedProject);
 			callback({
-				success: false,
-				message: "internal error"
+				success: true,
+				message: individual.joinedProject
 			});
-		}else {
-			go.database.Individual.findById(user.detail, function(err, individual){
-				if(err){
-					callback({
-						success: false,
-						message: "internal error"
-					});
-				}else{
-					go.database.Individual.find({individual: individual}, {"joinedProject": 1}, function(err, joinedProject){
-						if(err){
-							callback({
-							success: false,
-							message: "internal error"
-							});
-						}else{
-							var answer = JSON.parse(JSON.stringify(joinedProject));
-							callback({
-								success: true,
-								message: answer
-							});
-						}
-					});
-				}
-			});
-		}
+		});
 	});
 };
 
@@ -404,41 +373,53 @@ IndividualService.donateProject = function (username, projectID, donateInfo) {
 				message: "internal error"
 			});
 		}else{
-			var id = new mongoose.Schema.ObjectId() ;
-			go.database.Donation.insertOne({_id:id, user: user, project: projectID, date: donateInfo.date, 
-				amount: donateInfo.amount, remark:donateInfo.remark, anonymous:donateInfo.anonymous}, function(err, result){
+			var donation = go.database.Donation(
+				{
+					user: user._id,
+					project: projectID, 
+					date: donateInfo.date, 
+					amount: donateInfo.amount, 
+					remark:donateInfo.remark, 
+					anonymous:donateInfo.anonymous
+				});
+			donation.save(function(err,donation){
 				if(err){
 					callback({
 						success: false,
 						message: "internal error"
 					});
-				}else{
-					if(result === 1){
-						go.database.User.update({
-							_id: user.detail
-						},{
-							$addToSet: {
-								"donation": id
-							}
-						}, function(err, result){
-							if(err){
-								callback({
-									success: false,
-									message: "internal error"
-								});
-							}else {
-								callback({
-									success: true,
-									message: "donate successfully"
-								})
-							}
-						});						
-					}
-				}					
+				}
+				go.database.Project.findByIdAndUpdate({_id: projectID},
+					{
+						$addToSet:
+						{donation: donation._id}
+					}, function(err,result){
+						if(err){
+							callback({
+								success: false,
+								message: "internal error"
+							});
+						}						
+				});
+				go.database.Individual.findByIdAndUpdate({_id: user.detail},
+					{
+						$addToSet:
+						{donation: donation._id}
+					}, function(err,result){
+						if(err){
+							callback({
+								success: false,
+								message: "internal error"
+							});
+						}
+						callback({
+							success: true,
+							message: "donate successfully"
+						});					
+				});
 			});
 		}
-	});
-	
+	});			
 };
 /*
  * get user's donation list
@@ -446,37 +427,19 @@ IndividualService.donateProject = function (username, projectID, donateInfo) {
  * @return {Array of Donation} donation list
  */
 IndividualService.getDonateProjectList = function (username) {
-	go.database.User.findOne({username: username}, function(err, user){
-		if(err){
+	go.database.User.findOne({username: username},function(err, user){
+		go.database.Individual.findById({_id: user.detail}).populate('donation').exec(function(err, individual){
+			if(err){
+				callback({
+					success: false
+				});
+			}
+			console.log(individual.donation);
 			callback({
-				success: false,
-				message: "internal error"
+				success: true,
+				message: individual.donation
 			});
-		}else {
-			go.database.Individual.findById(user.detail, function(err, individual){
-				if(err){
-					callback({
-						success: false,
-						message: "internal error"
-					});
-				}else{
-					go.database.Individual.find({individual: individual}, {"donation": 1}, function(err, donation){
-						if(err){
-							callback({
-							success: false,
-							message: "internal error"
-							});
-						}else{
-							var answer = JSON.parse(JSON.stringify(donation));
-							callback({
-								success: true,
-								message: answer
-							});
-						}
-					});
-				}
-			});
-		}
+		});
 	});
 };
 
@@ -492,47 +455,58 @@ IndividualService.getDonateProjectList = function (username) {
  * @return {Boolean} success
  */
 IndividualService.commentProject = function (username, projectID, commentInfo) {
-	go.database.User.findOne({username: username}, function(err, user){
+	go.database.User.findOne({username: username}, function(err, user) {
 		if(err){
 			callback({
 				success: false,
 				message: "internal error"
 			});
 		}else{
-			var id = new mongoose.Schame.ObjectId() ;
-			go.database.Donation.insertOne({_id:id, user: user, project: projectID, date: commentInfo.date, 
-				comment: commentInfo.comment}, function(err, result){
+			var comment = go.database.Comment(
+				{
+					user: user._id,
+					project: projectID, 
+					date: commentInfo.date, 
+					comment: commentInfo.comment, 
+				});
+			comment.save(function(err,comment){
 				if(err){
 					callback({
 						success: false,
 						message: "internal error"
 					});
-				}else{
-					if(result === 1){
-						go.database.User.update({
-							_id: user.detail
-						},{
-							$addToSet: {
-								"comment": id
-							}
-						}, function(err, result){
-							if(err){
-								callback({
-									success: false,
-									message: "internal error"
-								});
-							}else {
-								callback({
-									success: true,
-									message: "comment successfully"
-								})
-							}
-						});						
-					}
-				}					
+				}
+				go.database.Project.findByIdAndUpdate({_id: projectID},
+					{
+						$addToSet:
+						{comment: comment._id}
+					}, function(err,result){
+						if(err){
+							callback({
+								success: false,
+								message: "internal error"
+							});
+						}						
+				});
+				go.database.Individual.findByIdAndUpdate({_id: user.detail},
+					{
+						$addToSet:
+						{comment: comment._id}
+					}, function(err,result){
+						if(err){
+							callback({
+								success: false,
+								message: "internal error"
+							});
+						}
+						callback({
+							success: true,
+							message: "comment successfully"
+						});					
+				});
 			});
 		}
-	});
+	});	
 };
 /*
  * get user's comment list
@@ -540,37 +514,19 @@ IndividualService.commentProject = function (username, projectID, commentInfo) {
  * @return {Array of Comment} comment list
  */
 IndividualService.getCommentProjectList = function (username) {
-	go.database.User.findOne({username: username}, function(err, user){
-		if(err){
+	go.database.User.findOne({username: username},function(err, user){
+		go.database.Individual.findById({_id: user.detail}).populate('comment').exec(function(err, individual){
+			if(err){
+				callback({
+					success: false
+				});
+			}
+			console.log(individual.comment);
 			callback({
-				success: false,
-				message: "internal error"
+				success: true,
+				message: individual.comment
 			});
-		}else {
-			go.database.Individual.findById(user.detail, function(err, individual){
-				if(err){
-					callback({
-						success: false,
-						message: "internal error"
-					});
-				}else{
-					go.database.Individual.find({individual: individual}, {"comment": 1}, function(err, comment){
-						if(err){
-							callback({
-							success: false,
-							message: "internal error"
-							});
-						}else{
-							var answer = JSON.parse(JSON.stringify(comment));
-							callback({
-								success: true,
-								message: answer
-							});
-						}
-					});
-				}
-			});
-		}
+		});
 	});
 };
 
