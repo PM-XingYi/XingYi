@@ -41,17 +41,11 @@ ProjectService.searchProject = function (keyword) {
  * @return {Array of Project}
  */
 ProjectService.latestProject = function (n) {
-	go.database.Project.find().sort({"_id": -1}).pretty().toArray(function(err,projects){
-		if(err){
-			callback({
-				success: false,
-				message: "internal error"
-			});
-		}else{
-			callback({
-				success: true,
-				message: projects
-			});
-		}
+	go.database.Project.find().sort({"_id": -1}).all(function(projects){
+		callback({
+			success: true,
+			message: projects
+		});
+
 	});
 }
