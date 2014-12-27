@@ -16,7 +16,7 @@ var OrganizationService = function () {
  */
 OrganizationService.register = function (username, password, email, phone, orgName, orgNumber, callback) {
 	//check if user exists
-	go.database.User.findOne({username: username}, function(err, user){
+/*	go.database.User.findOne({username: username}, function(err, user){
 		if(err){
 			console.log(err);
 		}
@@ -54,6 +54,186 @@ OrganizationService.register = function (username, password, email, phone, orgNa
 				});
 			});
 		}
+	});
+	go.database.User.findOne({username: "\"test02\""}, function(err, user){
+		if(err){
+			callback({
+				success: false,
+				message: "internal error"
+			});
+		}else {
+			var project = new go.database.Project({
+				name:"pj04", 
+				desc:"desc", 
+				moneyNeeded: 800,
+				owner: user.detail
+			});
+			project.save(function(err, project){
+				if(err){
+					callback({
+						success: false,
+						message:"internal error"
+					});
+				}
+				go.database.Organization.findByIdAndUpdate(
+				{
+					_id:user.detail
+				},{
+					$addToSet: 
+					{
+						project: project._id
+					}
+				},function(err, result){
+					if(err){
+						callback({
+							success: false,
+							message:"internal error"
+						});
+					}else{
+						callback({
+							success: true,
+							message: result
+						});
+					}
+				});										
+			});
+		}
+	});
+	go.database.Project.findByIdAndUpdate(
+		{
+			_id:"549ee621675f76a00bf5496a"
+		},{
+			$addToSet: 
+			{
+				mileStone:{
+					date: Date.now,
+					title: "test addMilestone",
+					desc: "desc"
+				}
+			}
+		},
+		function(err, result){
+			if(err){
+				callback({
+					success: false,
+					message:"internal error"
+				});
+			}else{
+				console.log(result);
+				callback({
+					success: true,
+					message: result
+				});
+			}
+	});
+	go.database.User.findOne({username: "\"test01\""},function(err, user){
+		if(err){
+			callback({
+				success: false,
+				message: "internal error"
+			});
+		}else {
+			console.log(user);
+			if(user !== null){
+				if(user.userType !== "individual"){
+					callback({
+						success: false,
+						message: "not an individual user"
+					});
+				}else{
+					go.database.Individual.findByIdAndUpdate(user.detail, 
+					{
+						$addToSet:
+						{joinedProject: 
+							{projectID: "549ee621675f76a00bf5496a",
+								status: "wait"}
+						}
+					},function(err, result){
+						if(err){
+							callback({
+								success: false,
+								message: "join failed"
+							});
+						}else{
+							callback({
+								success: true,
+								message: result
+							});
+						}
+					});
+				}
+			}else{
+				callback({
+					success: false,
+					message: "user doesn't exist"
+				});
+			}			
+		}
+	});
+
+	go.database.User.findOne({username: "\"test01\""}, function(err, user){
+		if(err){
+			callback({
+				success: false,
+				message: "internal error"
+			});
+		}
+		//console.log(user);
+		go.database.Individual.findById({_id: user.detail},function(err, docs){
+				if(err){
+					callback({
+						success: false,
+						message: "internal error"
+					});
+				}
+				console.log(docs.joinedProject.length);
+				for(var i = 0;i< docs.joinedProject.length; i++){
+					console.log(docs.joinedProject[i]);
+					if(docs.joinedProject[i]._id.equals("549ee8e6fe6dc9f01ac9d62d")){
+						console.log("match!!!!!!!!!!");
+						docs.joinedProject[i].status = "pass";
+						break;
+					}
+				}
+				docs.save(function(err, docs){
+					if(err){
+						callback({
+							success: false,
+							message: "sava error"
+						});
+					}
+					console.log(docs);
+					go.database.Project.findByIdAndUpdate("549ee8e6fe6dc9f01ac9d62d", {
+							$addToSet:
+							{joinedIndividual: docs._id}
+						},function(err, project){
+							if(err){
+								callback({
+									success: false,
+									message: "internal error"
+								});
+							}
+							callback({
+								success: true,
+								message: project
+							});
+					});
+				});			
+		});
+	});*/
+	go.database.User.findOne({username: "\"test01\""},function(err, user){
+		go.database.Individual.findById({_id: user.detail}).populate('joinedProject.project').exec(function(err, individual){
+			if(err){
+				callback({
+					success: false
+				});
+			}
+			console.log(individual);
+			callback({
+				success: true,
+				message: individual
+			});
+		});
 	});
 }
 /*
@@ -112,9 +292,9 @@ OrganizationService.publishProject = function (username, projectInfo, callback) 
 				name:projectInfo.name, 
 				desc:projectInfo.desc, 
 				moneyNeeded: projectInfo.moneyNeeded,
-				 owner: user.detail
+				owner: user.detail
 			});
-			go.database.Project.save(function(err, project){
+			project.save(function(err, project){
 				if(err){
 					callback({
 						success: false,
@@ -161,7 +341,6 @@ OrganizationService.publishProject = function (username, projectInfo, callback) 
 OrganizationService.addMilestone = function (username, projectID, milestone, callback) {
 	// organization user can only add milestones from it's own page, 
 	//so don't check the owner of the projectID is this organization
-	var startDay = new Date().Format("yyyy-MM-dd HH:mm:ss");
 	go.database.Project.findByIdAndUpdate(
 		{
 			_id:projectID
@@ -169,7 +348,6 @@ OrganizationService.addMilestone = function (username, projectID, milestone, cal
 			$addToSet: 
 			{
 				mileStone:{
-					startDay:startDay,
 					date: milestone.date,
 					title: milestone.title,
 					desc: milestone.desc
@@ -237,8 +415,60 @@ OrganizationService.addExpenditure = function (username, projectID, expenditure,
  * @param {Boolean} approved
  * @return {Boolean} success
  */
-OrganizationService.examineCandidate = function (username, approved, callback) {
-
+OrganizationService.examineCandidate = function (username, projectID, approved, callback) {
+	go.database.User.findOne({username: username}, function(err, user){
+		if(err){
+			callback({
+				success: false,
+				message: "internal error"
+			});
+		}
+		go.database.Individual.findById({_id: user.detail},function(err, docs){
+				if(err){
+					callback({
+						success: false,
+						message: "internal error"
+					});
+				}
+				for(var i = 0;i< docs.joinedProject.length; i++){
+					if(docs.joinedProject[i]._id === projectID){
+						docs.joinedProject[i].status = approved;
+						break;
+					}
+				}
+				docs.save(function(err, docs){
+					if(err){
+						callback({
+							success: false,
+							message: "sava error"
+						});
+					}
+					if(approved === "pass"){
+						go.database.Project.findByIdAndUpdate(projectID, {
+							$addToSet:
+							{joinedIndividual: docs._id}
+						},function(err, project){
+							if(err){
+								callback({
+									success: false,
+									message: "internal error"
+								});
+							}
+							callback({
+								success: true,
+								message: "examineCandidate successfully"
+							});
+						});
+					}else{
+						callback({
+							success: true,
+							message: "examineCandidate successfully"
+						});
+					}
+					
+				});			
+		});
+	});
 }
 
 module.exports = OrganizationService;

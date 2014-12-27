@@ -5,7 +5,8 @@ var IndividualSchema = new Schema({
 	mobile: String,
 	joinedProject: [{
 		project:{type: Schema.Types.ObjectId, ref: 'Project'},
-		status: String
+		status: String,
+		joinReason: String
 	}],
 	watchedProject: [{type: Schema.Types.ObjectId, ref: 'Project'}],
 	comment: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
