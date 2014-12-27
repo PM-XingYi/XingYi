@@ -4,7 +4,7 @@ var express = require('express'),
 	go = require('../globalObjects');
 
 router.get('/home', passport.authenticate('local'), function(req, res) {
-	res.sendFile('');
+	res.render('dashboard_organization');
 });
 
 /*

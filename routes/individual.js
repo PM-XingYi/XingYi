@@ -19,7 +19,7 @@ router.param(function(name, fn){
 router.param('id', /^\d+$/);
 
 router.get('/home', passport.authenticate('local'), function(req, res) {
-	res.sendFile('');
+	res.render('dashboard_individual');
 });
 
 /*
