@@ -357,7 +357,7 @@ IndividualService.prototype.donateProject = function (username, projectID, donat
 					});
 				}else{
 					if(result === 1){
-						go.database.User.update({_id: user.detail},{"$addToSet":{"donation": id}}, function(err, result){
+						go.database.User.update({_id: user.detail},{"$addToSet",{"donation": id}}, function(err, result){
 							if(err){
 								callback({
 									success: false,

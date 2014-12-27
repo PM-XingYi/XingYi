@@ -14,7 +14,7 @@ describe('DatabaseService', function() {
 });
 
 
-
+console.log("ab");
 describe('IndividualService', function() {
     describe('#register()', function() {
         it('return fail if user exists', function() {
