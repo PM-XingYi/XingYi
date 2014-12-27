@@ -4,6 +4,8 @@ var mongoose = require('mongoose'),
 var ProjectSchema = new Schema({
 	name: String,
 	desc: String,
+	longDesc: String,
+	notice: String,
 	moneyNeeded: Number,
 	moneyRaised: Number,
 	owner: {type: Schema.Types.ObjectId, ref: 'Organization'},
@@ -11,6 +13,7 @@ var ProjectSchema = new Schema({
 	comment: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
 	donation: [{type: Schema.Types.ObjectId, ref: 'Donation'}],
 	mileStone: [{
+		startDay:{type: Date, default: Date.now},
 		date: Date,
 		title: String,
 		desc: String

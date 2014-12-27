@@ -16,6 +16,7 @@ var OrganizationService = function () {
  */
 OrganizationService.register = function (username, password, email, phone, orgName, orgNumber, callback) {
 	//check if user exists
+/*	
 	go.database.User.findOne({username: username}, function(err, user){
 		if(err){
 			console.log(err);
@@ -55,13 +56,56 @@ OrganizationService.register = function (username, password, email, phone, orgNa
 			});
 		}
 	});
+go.database.Project.find({},function(err, docs){
+		if(err){
+			callback({
+				success: false,
+				message: "internal error"
+			});
+		}
+		console.log(docs);
+		callback({
+			success: true,
+			message: docs
+		});
+	});*/
+	console.log(Date.now);
+	go.database.Project.findByIDAndUpdate(
+		{
+			_id:"549d813f78bf2cdc22a84875"
+		},{
+			$addToSet: 
+			{
+				mileStone:{
+					date: "2014-12-27",
+					title: "create project02",
+					desc: "desc"
+				}
+			}
+		},
+		function(err, result){
+			if(err){
+				callback({
+					success: false,
+					message:"internal error"
+				});
+			}else{
+				console.log(result);
+				callback({
+					success: true,
+					message: "add milestone successfully"
+				});
+			}
+	});		
+
+
 }
 /*
  * return user info by username
  * @param {String} username
  * @return {Individual} user
  */
-OrganizationService.getUser = function (username) {
+OrganizationService.getUser = function (username, callback) {
 	go.database.User.findOne({username: username}, function (err, user) {
 		if (err) {
 			callback({
@@ -100,7 +144,7 @@ OrganizationService.getUser = function (username) {
  * } project info
  * @return {Boolean} success
  */
-OrganizationService.publishProject = function (username, projectInfo) {
+OrganizationService.publishProject = function (username, projectInfo, callback) {
 	go.database.User.findOne({username: username}, function(err, user){
 		if(err){
 			callback({
@@ -158,9 +202,10 @@ OrganizationService.publishProject = function (username, projectInfo) {
  * } milestone
  * @return {Boolean} success
  */
-OrganizationService.addMilestone = function (username, projectID, milestone) {
+OrganizationService.addMilestone = function (username, projectID, milestone, callback) {
 	// organization user can only add milestones from it's own page, 
 	//so don't check the owner of the projectID is this organization
+	var startDay = new Date().Format("yyyy-MM-dd HH:mm:ss");
 	go.database.Project.findByIdAndUpdate(
 		{
 			_id:projectID
@@ -168,6 +213,7 @@ OrganizationService.addMilestone = function (username, projectID, milestone) {
 			$addToSet: 
 			{
 				mileStone:{
+					startDay:startDay,
 					date: milestone.date,
 					title: milestone.title,
 					desc: milestone.desc
@@ -200,7 +246,7 @@ OrganizationService.addMilestone = function (username, projectID, milestone) {
  * } expenditure
  * @return {Boolean} success
  */
-OrganizationService.addExpenditure = function (username, projectID, expenditure) {
+OrganizationService.addExpenditure = function (username, projectID, expenditure, callback) {
 	go.database.Project.findByIdAndUpdate(
 		{
 			_id:projectID

@@ -3,7 +3,10 @@ var mongoose = require('mongoose'),
 
 var IndividualSchema = new Schema({
 	mobile: String,
-	joinedProject: [{type: Schema.Types.ObjectId, ref: 'Project'}],
+	joinedProject: [{
+		project:{type: Schema.Types.ObjectId, ref: 'Project'},
+		status: String
+	}],
 	watchedProject: [{type: Schema.Types.ObjectId, ref: 'Project'}],
 	comment: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
 	donation: [{type: Schema.Types.ObjectId, ref: 'Donation'}]

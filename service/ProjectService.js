@@ -7,7 +7,7 @@ var ProjectService = function () {
  * return all available projects
  * @return {Array of Project}
  */
-ProjectService.allPassedProject = function () {
+ProjectService.allPassedProject = function (callback) {
 	go.database.Project.find({approved: "pass"},function(err, docs){
 		if(err){
 			callback({
@@ -23,7 +23,7 @@ ProjectService.allPassedProject = function () {
 	});
 }
 
-ProjectService.allFailedProject = function () {
+ProjectService.allFailedProject = function (callback) {
 	go.database.Project.find({approved: "fail"},function(err, docs){
 		if(err){
 			callback({
@@ -39,7 +39,7 @@ ProjectService.allFailedProject = function () {
 	});
 }
 
-ProjectService.allUncheckedProject = function () {
+ProjectService.allUncheckedProject = function (callback) {
 	go.database.Project.find({approved: "uncheck"},function(err, docs){
 		if(err){
 			callback({
@@ -55,7 +55,7 @@ ProjectService.allUncheckedProject = function () {
 	});
 }
 
-ProjectService.searchProject = function (keyword) {
+ProjectService.searchProject = function (keyword, callback) {
 	var regexStr = '/'+keyword+'/';
 	go.database.Project.find(
 		{
@@ -85,7 +85,7 @@ ProjectService.searchProject = function (keyword) {
  * @return {Array of Project}
  * exist problems!!!!!!!!!!!!!
  */
-ProjectService.latestProject = function (n) {
+ProjectService.latestProject = function (n, callback) {
 	go.database.Project.find({},
 		{$sort: 
 			{_id: -1}
@@ -103,3 +103,4 @@ ProjectService.latestProject = function (n) {
 	});
 	
 }
+module.exports = ProjectService;

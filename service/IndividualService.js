@@ -190,7 +190,7 @@ IndividualService.watchProject = function (username, projectID, callback) {
  * @param {ObjectId} project id
  * @return {Boolean} success
  */
-IndividualService.cancelWatchProject = function (username, projectID) {
+IndividualService.cancelWatchProject = function (username, projectID, callback) {
 	go.database.User.findOne({username: username}, function(err, user){
 		if(err){
 			callback({
@@ -227,7 +227,7 @@ IndividualService.cancelWatchProject = function (username, projectID) {
  * @return {Array of Project} project list
  * seem exist problem!!!!!!!!!!!!!!!
  */
-IndividualService.getWatchProjectList = function (username) {
+IndividualService.getWatchProjectList = function (username, callback) {
 	go.database.User.findOne({username: username},function(err, user){
 		go.database.Individual.findById({_id: user.detail}).populate('watchedProject').exec(function(err, individual){
 			if(err){
@@ -251,7 +251,7 @@ IndividualService.getWatchProjectList = function (username) {
  * @param {ObjectId} project id
  * @return {Boolean} success
  */
-IndividualService.joinProject = function (username, projectID) {
+IndividualService.joinProject = function (username, projectID, callback) {
 	// check if userType is "individual"
 	go.database.User.findOne({username: username},function(err, user){
 		if(err){
@@ -271,7 +271,10 @@ IndividualService.joinProject = function (username, projectID) {
 					go.database.Individual.findByIdAndUpdate(user.detail, 
 					{
 						$addToSet:
-						{joinedProject: projectID}
+						{joinedProject: 
+							{projectID: projectID,
+								status: "wait"}
+						}
 					},function(err, result){
 						if(err){
 							callback({
@@ -301,7 +304,7 @@ IndividualService.joinProject = function (username, projectID) {
  * @param {ObjectId} project id
  * @return {Boolean} success
  */
-IndividualService.cancelJoinProject = function (username, projectID) {
+IndividualService.cancelJoinProject = function (username, projectID, callback) {
 	go.database.User.findOne({username: username}, function(err, user){
 		if(err){
 			callback({
@@ -335,7 +338,7 @@ IndividualService.cancelJoinProject = function (username, projectID) {
  * @param {String} username
  * @return {Array of Project} project list
  */
-IndividualService.getJoinProjectList = function (username) {
+IndividualService.getJoinProjectList = function (username, callback) {
 	go.database.User.findOne({username: username},function(err, user){
 		go.database.Individual.findById({_id: user.detail}).populate('joinedProject').exec(function(err, individual){
 			if(err){
@@ -365,7 +368,7 @@ IndividualService.getJoinProjectList = function (username) {
  * } donation info
  * @return {Boolean} success
  */
-IndividualService.donateProject = function (username, projectID, donateInfo) {
+IndividualService.donateProject = function (username, projectID, donateInfo, callback) {
 	go.database.User.findOne({username: username}, function(err, user) {
 		if(err){
 			callback({
@@ -426,7 +429,7 @@ IndividualService.donateProject = function (username, projectID, donateInfo) {
  * @param {String} username
  * @return {Array of Donation} donation list
  */
-IndividualService.getDonateProjectList = function (username) {
+IndividualService.getDonateProjectList = function (username, callback) {
 	go.database.User.findOne({username: username},function(err, user){
 		go.database.Individual.findById({_id: user.detail}).populate('donation').exec(function(err, individual){
 			if(err){
@@ -454,7 +457,7 @@ IndividualService.getDonateProjectList = function (username) {
  * } comment info
  * @return {Boolean} success
  */
-IndividualService.commentProject = function (username, projectID, commentInfo) {
+IndividualService.commentProject = function (username, projectID, commentInfo, callback) {
 	go.database.User.findOne({username: username}, function(err, user) {
 		if(err){
 			callback({
@@ -513,7 +516,7 @@ IndividualService.commentProject = function (username, projectID, commentInfo) {
  * @param {String} username
  * @return {Array of Comment} comment list
  */
-IndividualService.getCommentProjectList = function (username) {
+IndividualService.getCommentProjectList = function (username, callback) {
 	go.database.User.findOne({username: username},function(err, user){
 		go.database.Individual.findById({_id: user.detail}).populate('comment').exec(function(err, individual){
 			if(err){
