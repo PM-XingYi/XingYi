@@ -16,7 +16,6 @@ var OrganizationService = function () {
  */
 OrganizationService.register = function (username, password, email, phone, orgName, orgNumber, callback) {
 	//check if user exists
-/*	
 	go.database.User.findOne({username: username}, function(err, user){
 		if(err){
 			console.log(err);
@@ -56,49 +55,6 @@ OrganizationService.register = function (username, password, email, phone, orgNa
 			});
 		}
 	});
-go.database.Project.find({},function(err, docs){
-		if(err){
-			callback({
-				success: false,
-				message: "internal error"
-			});
-		}
-		console.log(docs);
-		callback({
-			success: true,
-			message: docs
-		});
-	});*/
-	console.log(Date.now);
-	go.database.Project.findByIDAndUpdate(
-		{
-			_id:"549d813f78bf2cdc22a84875"
-		},{
-			$addToSet: 
-			{
-				mileStone:{
-					date: "2014-12-27",
-					title: "create project02",
-					desc: "desc"
-				}
-			}
-		},
-		function(err, result){
-			if(err){
-				callback({
-					success: false,
-					message:"internal error"
-				});
-			}else{
-				console.log(result);
-				callback({
-					success: true,
-					message: "add milestone successfully"
-				});
-			}
-	});		
-
-
 }
 /*
  * return user info by username
