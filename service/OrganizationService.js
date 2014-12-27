@@ -231,4 +231,14 @@ OrganizationService.addExpenditure = function (username, projectID, expenditure,
 	});				
 }
 
+/*
+ * examine applied individual
+ * @param {String} username
+ * @param {Boolean} approved
+ * @return {Boolean} success
+ */
+OrganizationService.examineCandidate = function (username, approved, callback) {
+
+}
+
 module.exports = OrganizationService;
