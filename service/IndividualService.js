@@ -251,7 +251,7 @@ IndividualService.getWatchProjectList = function (username, callback) {
  * @param {ObjectId} project id
  * @return {Boolean} success
  */
-IndividualService.joinProject = function (username, projectID, callback) {
+IndividualService.joinProject = function (username, projectID, joinReason, callback) {
 	// check if userType is "individual"
 	go.database.User.findOne({username: username},function(err, user){
 		if(err){
@@ -273,7 +273,8 @@ IndividualService.joinProject = function (username, projectID, callback) {
 						$addToSet:
 						{joinedProject: 
 							{projectID: projectID,
-								status: "wait"}
+							 status: "wait",
+							 joinReason: joinReason}
 						}
 					},function(err, result){
 						if(err){
@@ -355,7 +356,41 @@ IndividualService.getJoinProjectList = function (username, callback) {
 	});
 };
 
+/*
+ * get user's join unchecked list
+ * @param {String} username
+ * @return {Array of Project} project list
+ */
+IndividualService.getJoinUncheckProjectList = function (username, callback) {
+	go.database.User.findOne({username: username},function(err, user){
+		go.database.Individual.findById(user.detail, function(err,individual)){
+			if(err){
+				callback({
+					success: false,
 
+				});
+			}
+			var projects = [" "," "];
+			for(var i = 0;i < individual.joinedProject.length;i++){
+				if(individual.joinedProject[i].status === "wait"){
+					projects.add(individual.joinedProject.)
+				}
+			}
+		}
+		go.database.Individual.findById({_id: user.detail}).populate('joinedProject').exec(function(err, individual){
+			if(err){
+				callback({
+					success: false
+				});
+			}
+			console.log(individual.joinedProject);
+			callback({
+				success: true,
+				message: individual.joinedProject
+			});
+		});
+	});
+};
 /*
  * add project to user's donation list
  * @param {String} username

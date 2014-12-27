@@ -88,7 +88,7 @@ ProjectService.searchProject = function (keyword, callback) {
 ProjectService.latestProject = function (n, callback) {
 	go.database.Project.find({},
 		{$sort: 
-			{_id: -1}
+			{name: -1}
 		},function(err, projects){
 			if(err){
 				callback({
