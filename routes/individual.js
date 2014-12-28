@@ -1,7 +1,8 @@
 var express = require('express'),
 	router = express.Router(),
 	passport = require('passport'),
-	IndividualService = require('../service/IndividualService');
+	IndividualService = require('../service/IndividualService'),
+	ProjectService = require('../service/ProjectService');
 
 router.param(function(name, fn){
   if (fn instanceof RegExp) {
@@ -19,7 +20,7 @@ router.param(function(name, fn){
 router.param('id', /^\d+$/);
 
 router.get('/home', passport.authenticate('local'), function(req, res) {
-	res.render('dashboard_individual');
+	res.render('individual_dashboard');
 });
 
 /*
@@ -28,19 +29,12 @@ router.get('/home', passport.authenticate('local'), function(req, res) {
 router.get('/profile', passport.authenticate('local'), function(req, res) {
 	IndividualService.getUser(req.user.username, function (answer) {
 		if (answer.success) {
-			res.render('profile_edit', answer);
-		}
-		else {
-			res.status(500).end();
+			res.render('individual_profile', {
+				user: answer.message
+			});
 		}
 	});
 });
-/*
- * get all donation of current user
- */
-router.get('/donate/all', passport.authenticate('local'), function(req, res) {
-});
-
 /*
  * modify user profile
  * req.body.key is in []
@@ -51,6 +45,37 @@ router.post('/profile/edit', passport.authenticate('local'), function (req, res)
 		res.send(answer);
 	});
 });
+
+router.get('/project/join', passport.authenticate('local'), function (req, res) {
+	IndividualService.getJoinProjectList(req.user.username, function (result) {
+		if (result.success) {
+			res.render('individual_join', {
+				project: result.message
+			});
+		}
+	});
+});
+router.get('/project/watch', passport.authenticate('local'), function (req, res) {
+	IndividualService.getWatchProjectList(req.user.username, function (result) {
+		if (result.success) {
+			res.render('individual_watch', {
+				project: result.message
+			});
+		}
+	});
+});
+
+/*
+ * get donation page
+ */
+router.get('/donate/:id', passport.authenticate('local'), function(req, res) {
+	ProjectService.getProjectById(req.body.project, function (result) {
+		if (result.success) {
+			res.render('individual_donate', result.message);
+		}
+	});
+});
+
 
 /*
  * join a project
@@ -89,11 +114,17 @@ router.post('/project/unwatch/:id', passport.authenticate('local'), function(req
  * add a comment to a project
  */
 router.post('/comment', passport.authenticate('local'), function(req, res) {
+	IndividualService.commentProject(req.user.username, req.body, function (result) {
+		res.send(result);
+	});
 });
 /*
  * donate to a project
  */
 router.post('/donate', passport.authenticate('local'), function(req, res) {
+	IndividualService.donateProject(req.user.username, req.body, function (result) {
+		res.send(result);
+	});
 });
 
 module.exports = router;

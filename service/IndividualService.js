@@ -369,8 +369,8 @@ IndividualService.getJoinProjectList = function (username, callback) {
 /*
  * add project to user's donation list
  * @param {String} username
- * @param {ObjectId} project id
  * @param {
+ *   @param {ObjectId} project
  *   @param {Date} date
  *   @param {Number} amount
  *   @param {String} remark
@@ -378,7 +378,7 @@ IndividualService.getJoinProjectList = function (username, callback) {
  * } donation info
  * @return {Boolean} success
  */
-IndividualService.donateProject = function (username, projectID, donateInfo, callback) {
+IndividualService.donateProject = function (username, donateInfo, callback) {
 	go.database.User.findOne({username: username}, function(err, user) {
 		if(err){
 			callback({
@@ -389,7 +389,7 @@ IndividualService.donateProject = function (username, projectID, donateInfo, cal
 			var donation = go.database.Donation(
 				{
 					user: user._id,
-					project: projectID, 
+					project: donateInfo.project, 
 					date: donateInfo.date, 
 					amount: donateInfo.amount, 
 					remark:donateInfo.remark, 
@@ -402,7 +402,7 @@ IndividualService.donateProject = function (username, projectID, donateInfo, cal
 						message: "internal error"
 					});
 				}
-				go.database.Project.findByIdAndUpdate({_id: projectID},
+				go.database.Project.findByIdAndUpdate({_id: donateInfo.project},
 					{
 						$addToSet:
 						{donation: donation._id}
@@ -464,14 +464,14 @@ IndividualService.getDonateProjectList = function (username, callback) {
 /*
  * add comment for user to project
  * @param {String} username
- * @param {ObjectId} project id
  * @param {
+ *   @param {ObjectId} project id
  *   @param {Date} date
  *   @param {String} comment
  * } comment info
  * @return {Boolean} success
  */
-IndividualService.commentProject = function (username, projectID, commentInfo, callback) {
+IndividualService.commentProject = function (username, commentInfo, callback) {
 	go.database.User.findOne({username: username}, function(err, user) {
 		if(err){
 			callback({
@@ -482,7 +482,7 @@ IndividualService.commentProject = function (username, projectID, commentInfo, c
 			var comment = go.database.Comment(
 				{
 					user: user._id,
-					project: projectID, 
+					project: commentInfo.project, 
 					date: commentInfo.date, 
 					comment: commentInfo.comment, 
 				});
@@ -493,7 +493,7 @@ IndividualService.commentProject = function (username, projectID, commentInfo, c
 						message: "internal error"
 					});
 				}
-				go.database.Project.findByIdAndUpdate({_id: projectID},
+				go.database.Project.findByIdAndUpdate({_id: commentInfo.project},
 					{
 						$addToSet:
 						{comment: comment._id}
