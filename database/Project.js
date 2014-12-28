@@ -9,11 +9,7 @@ var ProjectSchema = new Schema({
 	moneyNeeded: Number,
 	moneyRaised: Number,
 	owner: {type: Schema.Types.ObjectId, ref: 'Organization'},
-	joinedIndividual: [
-					individual:{type: Schema.Types.ObjectId, ref: 'Individual'},
-					status: String
-					joinReason: String
-				],
+	joinedIndividual: [{type: Schema.Types.ObjectId, ref: 'Application'}],
 	comment: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
 	donation: [{type: Schema.Types.ObjectId, ref: 'Donation'}],
 	mileStone: [{

@@ -28,7 +28,7 @@ router.get('/all', function (req, res) {
 			total: project.length,
 			project: project
 		};
-		res.render('view_all_no_login', ans);
+		res.render('project_all', ans);
 	});
 });
 
