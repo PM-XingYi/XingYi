@@ -23,7 +23,8 @@ var ProjectSchema = new Schema({
 		expense: Number,
 		usage: String
 	}],
-	approved: Number
+	approved: Number,
+	remark: String
 });
 
 var Project  = mongoose.model('Project', ProjectSchema);

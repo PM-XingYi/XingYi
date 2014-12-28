@@ -13,9 +13,9 @@ router.get('/home', passport.authenticate('local'), function(req, res) {
  * get all project including unavailable ones
  */
 router.get('/examProject', passport.authenticate('local'), function(req, res) {
-	ProjectService.allUncheckedProject(function (unchecked) {
-		ProjectService.allPassedProject(function (passed) {
-			ProjectService.allFailedProject(function (failed) {
+	ProjectService.getAllProjectByStatus(2, function (unchecked) {
+		ProjectService.getAllProjectByStatus(1, function (passed) {
+			ProjectService.getAllProjectByStatus(3, function (failed) {
 				if (unchecked.success && passed.success && failed.success) {
 					var ans = {
 						uncheckedNum: unchecked.message.length,
@@ -45,12 +45,22 @@ router.post('/examProject', passport.authenticate('local'), function(req, res) {
  * get all comment including unavailable ones
  */
 router.get('/examComment', passport.authenticate('local'), function(req, res) {
-	SuperUserService.getAllComment(function (result) {
-		if (result.success) {
-			var ans = result.message;
-			ans.uncheckedNum = ans.unchecked.length;
-			res.render('superuser_comment', ans);
-		}
+	ProjectService.getAllCommentByStatus(2, function (unchecked) {
+		ProjectService.getAllCommentByStatus(1, function (passed) {
+			ProjectService.getAllCommentByStatus(3, function (failed) {
+				if (unchecked.success && passed.success && failed.success) {
+					var ans = {
+						uncheckedNum: unchecked.message.length,
+						uncheckedProject: unchecked.message,
+						passedNum: passed.message.length,
+						passedProject: passed.message,
+						failedNum: failed.message.length,
+						failedProject: failed.message
+					};
+					res.render('superuser_comment', ans);
+				}
+			});
+		});
 	});
 });
 
