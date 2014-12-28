@@ -16,9 +16,13 @@ ProjectService.allPassedProject = function (callback) {
 			});
 		}
 		console.log(docs);
+		var answer = [];
+		if(docs.length > 0){
+			answer = docs;
+		}
 		callback({
 			success: true,
-			message: docs
+			message: answer
 		});
 	});
 }
@@ -32,9 +36,13 @@ ProjectService.allFailedProject = function (callback) {
 			});
 		}
 		console.log(docs);
+		var answer = [];
+		if(docs.length > 0){
+			answer = docs;
+		}
 		callback({
 			success: true,
-			message: docs
+			message: answer
 		});
 	});
 }
@@ -48,9 +56,13 @@ ProjectService.allUncheckedProject = function (callback) {
 			});
 		}
 		console.log(docs);
+		var answer = [];
+		if(docs.length > 0){
+			answer = docs;
+		}
 		callback({
 			success: true,
-			message: docs
+			message: answer
 		});
 	});
 }
@@ -72,9 +84,13 @@ ProjectService.searchProject = function (keyword, callback) {
 				});
 			}
 			console.log(docs);
+			var answer = [];
+			if(docs.length > 0){
+				answer = docs;
+			}
 			callback({
 				success: true,
-				message: docs
+				message: answer
 			});
 	});
 }
@@ -96,9 +112,13 @@ ProjectService.latestProject = function (n, callback) {
 					message: "internal error"
 				});
 			}
+			var answer = [];
+			if(projects.length > 0){
+				answer = projects;
+			}
 			callback({
 				success: true,
-				message: projects
+				message: answer
 			});			
 	});
 	

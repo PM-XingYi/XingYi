@@ -16,7 +16,7 @@ var OrganizationService = function () {
  */
 OrganizationService.register = function (username, password, email, phone, orgName, orgNumber, callback) {
 	//check if user exists
-/*	go.database.User.findOne({username: username}, function(err, user){
+	go.database.User.findOne({username: username}, function(err, user){
 		if(err){
 			console.log(err);
 		}
@@ -54,186 +54,6 @@ OrganizationService.register = function (username, password, email, phone, orgNa
 				});
 			});
 		}
-	});
-	go.database.User.findOne({username: "\"test02\""}, function(err, user){
-		if(err){
-			callback({
-				success: false,
-				message: "internal error"
-			});
-		}else {
-			var project = new go.database.Project({
-				name:"pj04", 
-				desc:"desc", 
-				moneyNeeded: 800,
-				owner: user.detail
-			});
-			project.save(function(err, project){
-				if(err){
-					callback({
-						success: false,
-						message:"internal error"
-					});
-				}
-				go.database.Organization.findByIdAndUpdate(
-				{
-					_id:user.detail
-				},{
-					$addToSet: 
-					{
-						project: project._id
-					}
-				},function(err, result){
-					if(err){
-						callback({
-							success: false,
-							message:"internal error"
-						});
-					}else{
-						callback({
-							success: true,
-							message: result
-						});
-					}
-				});										
-			});
-		}
-	});
-	go.database.Project.findByIdAndUpdate(
-		{
-			_id:"549ee621675f76a00bf5496a"
-		},{
-			$addToSet: 
-			{
-				mileStone:{
-					date: Date.now,
-					title: "test addMilestone",
-					desc: "desc"
-				}
-			}
-		},
-		function(err, result){
-			if(err){
-				callback({
-					success: false,
-					message:"internal error"
-				});
-			}else{
-				console.log(result);
-				callback({
-					success: true,
-					message: result
-				});
-			}
-	});
-	go.database.User.findOne({username: "\"test01\""},function(err, user){
-		if(err){
-			callback({
-				success: false,
-				message: "internal error"
-			});
-		}else {
-			console.log(user);
-			if(user !== null){
-				if(user.userType !== "individual"){
-					callback({
-						success: false,
-						message: "not an individual user"
-					});
-				}else{
-					go.database.Individual.findByIdAndUpdate(user.detail, 
-					{
-						$addToSet:
-						{joinedProject: 
-							{projectID: "549ee621675f76a00bf5496a",
-								status: "wait"}
-						}
-					},function(err, result){
-						if(err){
-							callback({
-								success: false,
-								message: "join failed"
-							});
-						}else{
-							callback({
-								success: true,
-								message: result
-							});
-						}
-					});
-				}
-			}else{
-				callback({
-					success: false,
-					message: "user doesn't exist"
-				});
-			}			
-		}
-	});
-
-	go.database.User.findOne({username: "\"test01\""}, function(err, user){
-		if(err){
-			callback({
-				success: false,
-				message: "internal error"
-			});
-		}
-		//console.log(user);
-		go.database.Individual.findById({_id: user.detail},function(err, docs){
-				if(err){
-					callback({
-						success: false,
-						message: "internal error"
-					});
-				}
-				console.log(docs.joinedProject.length);
-				for(var i = 0;i< docs.joinedProject.length; i++){
-					console.log(docs.joinedProject[i]);
-					if(docs.joinedProject[i]._id.equals("549ee8e6fe6dc9f01ac9d62d")){
-						console.log("match!!!!!!!!!!");
-						docs.joinedProject[i].status = "pass";
-						break;
-					}
-				}
-				docs.save(function(err, docs){
-					if(err){
-						callback({
-							success: false,
-							message: "sava error"
-						});
-					}
-					console.log(docs);
-					go.database.Project.findByIdAndUpdate("549ee8e6fe6dc9f01ac9d62d", {
-							$addToSet:
-							{joinedIndividual: docs._id}
-						},function(err, project){
-							if(err){
-								callback({
-									success: false,
-									message: "internal error"
-								});
-							}
-							callback({
-								success: true,
-								message: project
-							});
-					});
-				});			
-		});
-	});*/
-	go.database.User.findOne({username: "\"test01\""},function(err, user){
-		go.database.Individual.findById({_id: user.detail}).populate('joinedProject.project').exec(function(err, individual){
-			if(err){
-				callback({
-					success: false
-				});
-			}
-			console.log(individual);
-			callback({
-				success: true,
-				message: individual
-			});
-		});
 	});
 }
 /*
@@ -470,5 +290,14 @@ OrganizationService.examineCandidate = function (username, projectID, approved, 
 		});
 	});
 }
+
+/*
+ * get unchecked individual list
+ * @param {String} username
+ * @return {Array of Individual} project list
+ */
+OrganizationService.getUncheckCandidateList = function (username, callback) {
+	
+};
 
 module.exports = OrganizationService;

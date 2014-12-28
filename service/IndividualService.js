@@ -340,57 +340,32 @@ IndividualService.cancelJoinProject = function (username, projectID, callback) {
  * @return {Array of Project} project list
  */
 IndividualService.getJoinProjectList = function (username, callback) {
-	go.database.User.findOne({username: username},function(err, user){
-		go.database.Individual.findById({_id: user.detail}).populate('joinedProject').exec(function(err, individual){
+	go.database.User.findOne({username: username}, function(err, user){
+		go.database.Individual.findById({_id: user.detail}, function(err, individual){
 			if(err){
 				callback({
 					success: false
 				});
 			}
-			console.log(individual.joinedProject);
-			callback({
-				success: true,
-				message: individual.joinedProject
-			});
-		});
-	});
-};
-
-/*
- * get user's join unchecked list
- * @param {String} username
- * @return {Array of Project} project list
- */
-IndividualService.getJoinUncheckProjectList = function (username, callback) {
-	go.database.User.findOne({username: username},function(err, user){
-		go.database.Individual.findById(user.detail, function(err,individual)){
-			if(err){
-				callback({
-					success: false,
-
-				});
-			}
-			var projects = [" "," "];
-			for(var i = 0;i < individual.joinedProject.length;i++){
-				if(individual.joinedProject[i].status === "wait"){
-					projects.add(individual.joinedProject.)
+			//add error controller
+			var opts = [{ path: 'joinedProject._id', moddel:'Project' }];
+			go.database.Individual.populate(individual, opts, function (err, individual) {
+			    console.log(user);
+			    console.log(individual.joinedProject);
+				var answer = [];
+				if(individual.joinedProject.length > 0){
+					answer = individual.joinedProject;
 				}
-			}
-		}
-		go.database.Individual.findById({_id: user.detail}).populate('joinedProject').exec(function(err, individual){
-			if(err){
 				callback({
-					success: false
+					success: true,
+					message: answer
 				});
-			}
-			console.log(individual.joinedProject);
-			callback({
-				success: true,
-				message: individual.joinedProject
-			});
+			});			
 		});
 	});
 };
+
+
 /*
  * add project to user's donation list
  * @param {String} username
@@ -473,9 +448,13 @@ IndividualService.getDonateProjectList = function (username, callback) {
 				});
 			}
 			console.log(individual.donation);
+			var answer = [];
+			if(individual.donation.length > 0){
+				answer = individual.donation;
+			}
 			callback({
 				success: true,
-				message: individual.donation
+				message: answer
 			});
 		});
 	});
@@ -560,9 +539,13 @@ IndividualService.getCommentProjectList = function (username, callback) {
 				});
 			}
 			console.log(individual.comment);
+			var answer = [];
+			if(individual.comment.length > 0){
+				answer = individual.comment;
+			}
 			callback({
 				success: true,
-				message: individual.comment
+				message: answer
 			});
 		});
 	});
