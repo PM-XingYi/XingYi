@@ -10,7 +10,7 @@ var SuperUserService = function () {
  * @param {Boolean} approve
  * @return {Boolean} success
  */
-SuperUserService.examineProject = function (projectID, approve) {
+SuperUserService.examineProject = function (projectID, approve,callback) {
 	go.database.Project.findByIdAndUpdate(projectID, 
 		{
 			$set:
@@ -36,7 +36,7 @@ SuperUserService.examineProject = function (projectID, approve) {
  * @param {Boolean} approve
  * @return {Boolean} success
  */
-SuperUserService.examineComment = function (commentID, approve) {
+SuperUserService.examineComment = function (commentID, approve,callback) {
 	go.database.Comment.findByIdAndUpdate(commentID, 
 		{
 			$set:
@@ -58,8 +58,8 @@ SuperUserService.examineComment = function (commentID, approve) {
 /*
  * get unchecked, passed, failed comments
  */
-SuperUserService.getAllComment = function (commentID, approve) {
-	go.database.Comment.find({},function(err, docs){
+SuperUserService.getAllCommentByStatus = function (approve, callback) {
+	go.database.Comment.find({approved: approve},function(err, docs){
 		if(err){
 			callback({
 				success: false,
@@ -67,9 +67,16 @@ SuperUserService.getAllComment = function (commentID, approve) {
 			});
 		}
 		console.log(docs);
+		var answer = [];
+		if(docs  === null || docs  === undefined){
+			answer = "cannot find it";
+		}else{
+			answer = docs;
+		}
+		console.log(answer);
 		callback({
 			success: true,
-			message: docs
+			message: answer
 		});
 	});
 }
