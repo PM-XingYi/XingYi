@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
 	<meta charset=utf-8>
-	<title>行益网-Profile View</title>
+	<title>行益网-Profile Edit</title>
 	<link rel="stylesheet" type="text/css" href="css/general.css">
 	<script type="text/javascript" src="js/jquery-1.11.1.js"></script>
 	<script type="text/javascript" src="js/general.js"></script>
@@ -35,7 +35,7 @@
 
 	<!-- the container -->
 	<div id="content">
-		<div class="wrapper" id="profile-edit-wrapper">
+		<div class="wrapper profile-edit-wrapper" id="organization-profile">
 			<section class="container">
 				<h1 class="section-title">
 					个人信息
@@ -43,30 +43,37 @@
 				<section class="form-container">
 					<div class="form-row">
 						<label>用户名</label>
-						<b>{{username}}</b>
+						<b>{{organization.username}}</b>
 					</div>
 					<div class="form-row">
 						<label>身份</label>
-						<b>
-							{{#ifEq userType "individual"}}
-							个人用户
-							{{else}}
-							慈善机构
-							{{/ifEq}}
-						</b>
+						<b>机构用户</b>
+					</div>
+					<div class="form-row">
+						<label>机构名称</label>
+						<b>{{organization.detail.orgName}}</b>
+					</div>
+					<div class="form-row">
+						<label>机构号码</label>
+						<b>{{organization.detail.orgNum}}</b>
+					</div>
+					<div class="form-row">
+						<label>电话</label>
+						<input type="text" id="number" value="{{organization.detail.phone}}">
 					</div>
 					<div class="form-row">
 						<label>邮箱</label>
-						<b>{{email}}</b>
+						<input type="text" id="email" value="{{organization.email}}">
 					</div>
 					<div class="form-row">
-						<label>手机号</label>
-						<b>{{detail.mobile}}</b>
+						<label>组织介绍</label>
+						<textarea id="intro">{{organization.detail.desc}}</textarea>
 					</div>
 					<div class="form-row">
 						<label></label>
 						<b>
-							<button class="rounded-button" id="edit">编辑</button>
+							<button class="rounded-button" id="save">保存</button>
+							<button class="rounded-button" id="cancel">取消</button>
 						</b>
 					</div>
 				</section>
