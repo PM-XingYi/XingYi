@@ -11,6 +11,7 @@ var DatabaseService = function (dbUrl) {
 	this.Project = require('../database/Project');
 	this.Comment = require('../database/Comment');
 	this.Donation = require('../database/Donation');
+	this.Application = require('../database/Application');
 }
 	mongoose.connect('mongodb://localhost/test');
 

@@ -113,9 +113,9 @@ ProjectService.latestProject = function (n, callback) {
 				});
 			}
 			var answer = [];
-			if(projects.length > 0){
-				answer = projects;
-			}
+			// if(projects.length > 0){
+			// 	answer = projects;
+			// }
 			callback({
 				success: true,
 				message: answer
