@@ -38,7 +38,11 @@ SuperUserService.examineProject = function (projectID, approve, remark, callback
  * @param {Boolean} approve
  * @return {Boolean} success
  */
+<<<<<<< HEAD
 SuperUserService.examineComment = function (commentID, approve, remark, callback) {
+=======
+SuperUserService.examineComment = function (commentID, approve,callback) {
+>>>>>>> develop_fix_backend
 	go.database.Comment.findByIdAndUpdate(commentID, 
 		{
 			$set: {
@@ -67,6 +71,7 @@ SuperUserService.examineComment = function (commentID, approve, remark, callback
  *	 @param {Array of Comment} failed
  * }
  */
+<<<<<<< HEAD
 SuperUserService.getAllComment = function (callback) {
 	// go.database.Comment.find({},function(err, docs){
 	// 	if(err){
@@ -81,4 +86,27 @@ SuperUserService.getAllComment = function (callback) {
 	// 		message: docs
 	// 	});
 	// });
+=======
+SuperUserService.getAllCommentByStatus = function (approve, callback) {
+	go.database.Comment.find({approved: approve},function(err, docs){
+		if(err){
+			callback({
+				success: false,
+				message: "internal error"
+			});
+		}
+		console.log(docs);
+		var answer = [];
+		if(docs  === null || docs  === undefined){
+			answer = "cannot find it";
+		}else{
+			answer = docs;
+		}
+		console.log(answer);
+		callback({
+			success: true,
+			message: answer
+		});
+	});
+>>>>>>> develop_fix_backend
 }

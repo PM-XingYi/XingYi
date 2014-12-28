@@ -239,72 +239,118 @@ OrganizationService.addExpenditure = function (username, projectID, expenditure,
 /*
  * examine applied individual
  * @param {String} username
- * @param {Boolean} approved
+ * @param {Boolean} approved  approved type is Number!!not boolean!!
  * @return {Boolean} success
  */
-OrganizationService.examineCandidate = function (username, projectID, approved, callback) {
-	go.database.User.findOne({username: username}, function(err, user){
+OrganizationService.examineApplication = function (applicationID, approved, callback) {
+	go.database.Application.findByIdAndUpdate(applicationID,{
+		$set:
+		{status: approved}
+	},function(err,docs){
 		if(err){
 			callback({
 				success: false,
 				message: "internal error"
 			});
 		}
-		go.database.Individual.findById({_id: user.detail},function(err, docs){
+		callback({
+			success: true,
+			message: "true"
+		});
+	});	
+}
+
+
+/*I cannot put userinfo with application info
+ * so they are kept in two array, 
+ * eg. application[a](stored in answer[a])'s corresponding user info is stored in answer[2a+1]
+ *
+ */
+OrganizationService.getUncheckedApplicationForProject = function(projectID, callback){
+	go.database.Application.find({project: projectID, status:2}).populate('user').exec(function(err, applications){
+		if(err){
+			console.log(err);
+			callback({
+				success: false,
+				message: "internal error"
+			});
+		}
+		var answer = [];
+		if(applications === null || applications === undefined){
+			console.log(applications);
+		}else{
+			answer = applications;
+			var ids = [];
+			for(var i = 0;i<applications.length;i++){
+				console.log(applications[i].user._id);
+				ids.push(applications[i].user._id);
+			}
+			go.database.User.find({detail: {$in: ids}}).populate('detail').exec(function(err, users){
 				if(err){
+					console.log(err);
 					callback({
 						success: false,
 						message: "internal error"
 					});
 				}
-				for(var i = 0;i< docs.joinedProject.length; i++){
-					if(docs.joinedProject[i]._id === projectID){
-						docs.joinedProject[i].status = approved;
-						break;
-					}
+				
+				if(users === null || users === undefined){
+					console.log(users);
+				}else{
+					answer.push(users);
 				}
-				docs.save(function(err, docs){
-					if(err){
-						callback({
-							success: false,
-							message: "sava error"
-						});
-					}
-					if(approved === "pass"){
-						go.database.Project.findByIdAndUpdate(projectID, {
-							$addToSet:
-							{joinedIndividual: docs._id}
-						},function(err, project){
-							if(err){
-								callback({
-									success: false,
-									message: "internal error"
-								});
-							}
-							callback({
-								success: true,
-								message: "examineCandidate successfully"
-							});
-						});
-					}else{
-						callback({
-							success: true,
-							message: "examineCandidate successfully"
-						});
-					}
-					
-				});			
-		});
+				console.log(answer);
+				callback({
+					success:true,
+					message:answer
+				});
+			});
+		}	
 	});
 }
 
-/*
- * get unchecked individual list
- * @param {String} username
- * @return {Array of Individual} project list
- */
-OrganizationService.getUncheckCandidateList = function (username, callback) {
-	
-};
+
+OrganizationService.getVolunteerForProject = function(projectID, callback){
+	go.database.Application.find({project: projectID, status:1}).populate('user').exec(function(err, applications){
+		if(err){
+			console.log(err);
+			callback({
+				success: false,
+				message: "internal error"
+			});
+		}
+		var answer = [];
+		if(applications === null || applications === undefined){
+			console.log(applications);
+		}else{
+			answer = applications;
+			var ids = [];
+			for(var i = 0;i<applications.length;i++){
+				console.log(applications[i].user._id);
+				ids.push(applications[i].user._id);
+			}
+			go.database.User.find({detail: {$in: ids}}).populate('detail').exec(function(err, users){
+				if(err){
+					console.log(err);
+					callback({
+						success: false,
+						message: "internal error"
+					});
+				}				
+				if(users === null || users === undefined){
+					console.log(users);
+				}else{
+					answer.push(users);
+				}
+				console.log(answer);
+				callback({
+					success:true,
+					message:answer
+				});
+			});
+		}	
+	});
+}
+
 
 module.exports = OrganizationService;
