@@ -8,7 +8,7 @@ var ProjectSchema = new Schema({
 	notice: String,
 	moneyNeeded: Number,
 	moneyRaised: Number,
-	owner: {type: Schema.Types.ObjectId, ref: 'Organization'},
+	owner: {type: Schema.Types.ObjectId, ref: 'User'},
 	joinedIndividual: [{type: Schema.Types.ObjectId, ref: 'Application'}],
 	comment: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
 	donation: [{type: Schema.Types.ObjectId, ref: 'Donation'}],
@@ -23,7 +23,7 @@ var ProjectSchema = new Schema({
 		expense: Number,
 		usage: String
 	}],
-	approved: String
+	approved: Number
 });
 
 var Project  = mongoose.model('Project', ProjectSchema);

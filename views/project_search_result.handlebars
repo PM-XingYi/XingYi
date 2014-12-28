@@ -3,11 +3,11 @@
 <head>
 	<meta charset=utf-8>
 	<title>行益网-Search Result</title>
-	<link rel="stylesheet" type="text/css" href="css/general.css">
-	<script type="text/javascript" src="js/jquery-1.11.1.js"></script>
-	<script type="text/javascript" src="js/general.js"></script>
-	<script type="text/javascript" src="js/interface.js"></script>
-	<script type="text/javascript" src="js/pager.js"></script>
+	<link rel="stylesheet" type="text/css" href="/css/general.css">
+	<script type="text/javascript" src="/js/jquery-1.11.1.js"></script>
+	<script type="text/javascript" src="/js/general.js"></script>
+	<script type="text/javascript" src="/js/interface.js"></script>
+	<script type="text/javascript" src="/js/pager.js"></script>
 </head>
 <body>
 	
@@ -16,10 +16,10 @@
 		<div class="wrapper" id="header-wrapper">
 			<div id="logo">
 				<div id="logo-img">
-					<img src="img/logo.png">
+					<img src="/img/logo.png">
 				</div>
 				<div id="logo-name">
-					<img src="img/name.png">
+					<img src="/img/name.png">
 				</div>
 			</div>
 			<!-- the search input, login and register entries -->
@@ -49,8 +49,9 @@
 					<div class="collection">
 						{{#each project}}
 						<article>
+							<div class="for-id">{{_id}}</div>
 							<section class="project-image">
-								<img src="img/pj{{id}}.png">
+								<img src="/img/pj_{{_id}}.png">
 							</section>
 							<section class="project-info">
 								<section class="project-title relative">
@@ -88,13 +89,13 @@
 				关于我们
 			</h1>
 			<section id="author-gallery">
-				<img src="img/p1.gif">
-				<img src="img/p2.gif">
-				<img src="img/p3.gif">
-				<img src="img/p4.gif">
-				<img src="img/p5.gif">
-				<img src="img/p6.gif">
-				<img src="img/p7.gif">
+				<img src="/img/p1.gif">
+				<img src="/img/p2.gif">
+				<img src="/img/p3.gif">
+				<img src="/img/p4.gif">
+				<img src="/img/p5.gif">
+				<img src="/img/p6.gif">
+				<img src="/img/p7.gif">
 			</section>
 			
 			<section id="site-info">

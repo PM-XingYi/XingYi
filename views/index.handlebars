@@ -25,7 +25,7 @@
 			<div id="entry">
 				<div id="search">
 					<input id="search-box" type="search">
-					<img id="search-icon" src="img/search.png" placeholder="搜索..." autocomplete="off">
+					<img id="search-icon" src="/img/search.png" placeholder="搜索..." autocomplete="off">
 				</div>
 				<a id="login-entry">登录</a>
 				<a id="register-entry">注册</a>
@@ -73,6 +73,7 @@
 				<div class="collection">
 					{{#each latest}}
 					<article>
+						<div class="for-id">{{_id}}</div>
 						<section class="project-image">
 							<img src="/img/pj_{{_id}}.png">
 						</section>

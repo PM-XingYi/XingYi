@@ -24,10 +24,30 @@ router.param('id', /^\d+$/);
  */
 router.get('/all', function (req, res) {
 	ProjectService.allPassedProject(function(project) {
+		project = [{
+			_id: "ididid",
+			name: "miaowu",
+			moneyRaised: 10,
+			moneyNeeded: 100
+		}, {
+			_id: "dididi",
+			name: "buyaoqian",
+			moneyNeeded: -1
+		}]; // for debug
+
+		for (var i = 0; i < project.length; ++i) {
+			if (project[i].moneyNeeded === -1) {
+				project[i].ratio = -1;
+			}
+			else {
+				project[i].ratio = project[i].moneyRaised / project[i].moneyNeeded;
+			}
+		}
 		var ans = {
 			total: project.length,
 			project: project
 		};
+		console.log(ans);
 		res.render('project_all', ans);
 	});
 });
@@ -42,6 +62,7 @@ router.post('/search', function (req, res) {
 			ProjectService.latestProject(3, function(latest) {
 				var ans = {
 					keyword: req.body.keyword,
+					total: latest.length,
 					latest: latest
 				};
 				res.render('search_nofound', ans);
@@ -62,36 +83,11 @@ router.post('/search', function (req, res) {
  * get one available project
  */
 router.get('/:id', function (req, res) {
-});
-
-/*
- * get latest n available project
- */
-router.get('/latest', function (req, res) {
-});
-
-/*
- * get available comments of a available project
- */
-router.get('/:id/comment', function (req, res) {
-});
-
-/*
- * get all joined individual of a project
- */
-router.get('/:id/joinedIndividual', passport.authenticate('local'), function(req, res) {
-});
-
-/*
- * get all donation of a project
- */
-router.get('/:id/donation', passport.authenticate('local'), function(req, res) {
-});
-
-/*
- * publish a project
- */
-router.post('/publish', passport.authenticate('local'), function(req, res) {
+	ProjectService.getProjectById(req.params.id, function(result) {
+		if (result.success) {
+			res.render('project_detail', result.message);
+		}
+	});
 });
 
 module.exports = router;

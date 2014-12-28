@@ -27,7 +27,6 @@ router.get('/', function(req, res) {
 					latest[i].ratio = latest[i].moneyRaised / latest[i].moneyNeeded;
 				}
 			}
-			console.dir(latest);
 			res.render('index', {latest: latest});
 		}
 		else {

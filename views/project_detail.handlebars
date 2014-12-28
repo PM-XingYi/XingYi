@@ -3,11 +3,11 @@
 <head>
 	<meta charset=utf-8>
 	<title>行益网-Details</title>
-	<link rel="stylesheet" type="text/css" href="css/general.css">
-	<script type="text/javascript" src="js/jquery-1.11.1.js"></script>
-	<script type="text/javascript" src="js/general.js"></script>
-	<script type="text/javascript" src="js/interface.js"></script>
-	<script type="text/javascript" src="js/pager.js"></script>
+	<link rel="stylesheet" type="text/css" href="/css/general.css">
+	<script type="text/javascript" src="/js/jquery-1.11.1.js"></script>
+	<script type="text/javascript" src="/js/general.js"></script>
+	<script type="text/javascript" src="/js/interface.js"></script>
+	<script type="text/javascript" src="/js/pager.js"></script>
 </head>
 <body>
 	
@@ -16,17 +16,17 @@
 		<div class="wrapper" id="header-wrapper">
 			<div id="logo">
 				<div id="logo-img">
-					<img src="img/logo.png">
+					<img src="/img/logo.png">
 				</div>
 				<div id="logo-name">
-					<img src="img/name.png">
+					<img src="/img/name.png">
 				</div>
 			</div>
 			<!-- the search input, login and register entries -->
 			<div id="entry">
 				<div id="search">
 					<input id="search-box" type="search">
-					<img id="search-icon" src="img/search.png" placeholder="搜索..." autocomplete="off">
+					<img id="search-icon" src="/img/search.png" placeholder="搜索..." autocomplete="off">
 				</div>
 				<label>您好，<a id="user-entry">Sheer</a></label>
 				<a id="dashboard-entry">Dashboard</a>
@@ -39,6 +39,7 @@
 	<div id="content">
 		<div class="wrapper" id="view-details-wrapper">
 			<section class="container">
+				<div class="for-id">{{project._id}}</div>
 				<h1 class="section-title">
 					项目概况
 				</h1>
@@ -46,18 +47,15 @@
 					<h1>
 						{{project.name}}
 					</h1>
-					<button class="rounded-button" id="star">+关注({{project.watchNum}})</button>
+					<button class="rounded-button" id="star">+关注</button>
 					<p>{{project.desc}}</p>
-					<img src="img/pj{{project.id}}.png">
+					<img src="/img/pj_{{project._id}}.png">
 				</section>
 				<section class="project-events">
 					<h2>
 						大事件
 					</h2>
 					<section class="project-timeline">
-						<label>START<i class="start-time">11/02/14</i></label>
-						<div class="timeline">
-						</div>
 						{{#each project.milestone}}
 						<label>{{title}}<i class="start-time">{{date}}</i></label>
 						<div class="timeline">
@@ -152,7 +150,7 @@
 							<section class="expenses-record">
 								<section class="show">
 									<div class="collection">
-										{{#each expenditure}}
+										{{#each project.expenditure}}
 										<div class="row">
 											<div class="col-1">
 												{{date}}
@@ -215,15 +213,15 @@
 							<section class="sponsor-other-info">
 								<div class="info-row">
 									<label>名称</label>
-									<i>{{owner.detail.orgName}}</i>
+									<i>{{project.owner.detail.orgName}}</i>
 								</div>
 								<div class="info-row">
 									<label>邮箱</label>
-									<i>{{owner.email}}</i>
+									<i>{{project.owner.email}}</i>
 								</div>
 								<div class="info-row">
 									<label>电话</label>
-									<i>{{owner.detail.phone}}</i>
+									<i>{{project.owner.detail.phone}}</i>
 								</div>
 							</section>
 						</section>
@@ -233,7 +231,7 @@
 						</h2>
 						<section class="sponsor-intro">
 							<p>
-								{{owner.detail.desc}}
+								{{project.owner.detail.desc}}
 							</p>
 						</section>
 					</section>

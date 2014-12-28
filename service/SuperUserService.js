@@ -10,11 +10,13 @@ var SuperUserService = function () {
  * @param {Boolean} approve
  * @return {Boolean} success
  */
-SuperUserService.examineProject = function (projectID, approve) {
+SuperUserService.examineProject = function (projectID, approve, remark, callback) {
 	go.database.Project.findByIdAndUpdate(projectID, 
 		{
-			$set:
-			{approved: approve}
+			$set: {
+				approved: approve,
+				remark: remark
+			}
 		}, function(err, result){
 			if(err){
 				callback({
@@ -36,11 +38,13 @@ SuperUserService.examineProject = function (projectID, approve) {
  * @param {Boolean} approve
  * @return {Boolean} success
  */
-SuperUserService.examineComment = function (commentID, approve) {
+SuperUserService.examineComment = function (commentID, approve, remark, callback) {
 	go.database.Comment.findByIdAndUpdate(commentID, 
 		{
-			$set:
-			{approved: approve}
+			$set: {
+				approved: approve,
+				remark: remark
+			}
 		}, function(err, result){
 			if(err){
 				callback({
@@ -57,19 +61,24 @@ SuperUserService.examineComment = function (commentID, approve) {
 
 /*
  * get unchecked, passed, failed comments
+ * @return {
+ *	 @param {Array of Comment} unchecked
+ *	 @param {Array of Comment} passed
+ *	 @param {Array of Comment} failed
+ * }
  */
-SuperUserService.getAllComment = function (commentID, approve) {
-	go.database.Comment.find({},function(err, docs){
-		if(err){
-			callback({
-				success: false,
-				message: "internal error"
-			});
-		}
-		console.log(docs);
-		callback({
-			success: true,
-			message: docs
-		});
-	});
+SuperUserService.getAllComment = function (callback) {
+	// go.database.Comment.find({},function(err, docs){
+	// 	if(err){
+	// 		callback({
+	// 			success: false,
+	// 			message: "internal error"
+	// 		});
+	// 	}
+	// 	console.log(docs);
+	// 	callback({
+	// 		success: true,
+	// 		message: docs
+	// 	});
+	// });
 }

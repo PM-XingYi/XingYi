@@ -80,6 +80,7 @@
 						<div class="collection">
 							{{#each unchecked}}
 							<div class="row">
+								<div class="for-id">{{_id}}</div>
 								<div class="col-1">
 									<input type="checkbox" class="check">
 								</div>
@@ -90,7 +91,7 @@
 									{{project}}
 								</div>
 								<div class="col-4">
-									{{user}}
+									{{username}}
 								</div>
 								<div class="col-5">
 									{{comment}}
@@ -115,6 +116,7 @@
 						<div class="collection">
 							{{#each passed}}
 							<div class="row">
+								<div class="for-id">{{_id}}</div>
 								<div class="col-1">
 									<input type="checkbox" class="check">
 								</div>
@@ -125,7 +127,7 @@
 									{{project}}
 								</div>
 								<div class="col-4">
-									{{user}}
+									{{username}}
 								</div>
 								<div class="col-5">
 									{{comment}}
@@ -149,6 +151,7 @@
 						<div class="collection">
 							{{#each failed}}
 							<div class="row">
+								<div class="for-id">{{_id}}</div>
 								<div class="col-1">
 									<input type="checkbox" class="check">
 								</div>
@@ -159,7 +162,7 @@
 									{{project}}
 								</div>
 								<div class="col-4">
-									{{user}}
+									{{username}}
 								</div>
 								<div class="col-5">
 									{{comment}}
