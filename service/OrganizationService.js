@@ -148,8 +148,15 @@ OrganizationService.publishProject = function (username, projectInfo, callback) 
 }
 
 /*
+ * update user info
+ * @param {Project} newProjectInfo
+ * @return {Boolean} success
+ */
+IndividualService.updateProject = function (newProjectInfo, callback) {
+}
+
+/*
  * add milestone for a project
- * @param {String} username
  * @param {ObjectId} project id
  * @param {
  *   @param {Date} date
@@ -158,7 +165,7 @@ OrganizationService.publishProject = function (username, projectInfo, callback) 
  * } milestone
  * @return {Boolean} success
  */
-OrganizationService.addMilestone = function (username, projectID, milestone, callback) {
+OrganizationService.addMilestone = function (projectID, milestone, callback) {
 	// organization user can only add milestones from it's own page, 
 	//so don't check the owner of the projectID is this organization
 	go.database.Project.findByIdAndUpdate(

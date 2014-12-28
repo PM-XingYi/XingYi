@@ -41,7 +41,7 @@ router.get('/profile', passport.authenticate('local'), function(req, res) {
  */
 var keySet = ['mobile', 'email'];
 router.post('/profile/edit', passport.authenticate('local'), function (req, res) {
-	IndividualService.updateUser(req.user, function(answer) {
+	IndividualService.updateUser(req.body, function(answer) {
 		res.send(answer);
 	});
 });
