@@ -24,17 +24,7 @@ router.param('id', /^\d+$/);
  */
 router.get('/all', function (req, res) {
 	ProjectService.allPassedProject(function(project) {
-		// project = [{
-		// 	_id: "ididid",
-		// 	name: "miaowu",
-		// 	moneyRaised: 10,
-		// 	moneyNeeded: 100
-		// }, {
-		// 	_id: "dididi",
-		// 	name: "buyaoqian",
-		// 	moneyNeeded: -1
-		// }]; // for debug
-
+		console.log(project);
 		for (var i = 0; i < project.length; ++i) {
 			if (project[i].moneyNeeded === -1) {
 				project[i].ratio = -1;
@@ -44,6 +34,7 @@ router.get('/all', function (req, res) {
 			}
 		}
 		var ans = {
+			curUser: req.user,
 			total: project.length,
 			project: project
 		};

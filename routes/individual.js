@@ -43,7 +43,6 @@ router.get('/profile', function(req, res) {
  * modify user profile
  * req.body.key is in []
  */
-var keySet = ['mobile', 'email'];
 router.post('/profile/edit', function (req, res) {
 	if (req.user) {
 		IndividualService.updateUser(req.body, function(answer) {
@@ -52,23 +51,28 @@ router.post('/profile/edit', function (req, res) {
 	}
 });
 
-router.get('/project/join', passport.authenticate('local'), function (req, res) {
-	IndividualService.getJoinProjectList(req.user.username, function (result) {
-		if (result.success) {
-			res.render('individual_join', {
-				project: result.message
-			});
-		}
-	});
+router.get('/project/join', function (req, res) {
+	if (req.user) {
+		IndividualService.getJoinProjectList(req.user.username, function (result) {
+			if (result.success) {
+				res.render('individual_join', {
+					curUser: req.user,
+					project: result.message
+				});
+			}
+		});
+	}
 });
-router.get('/project/watch', passport.authenticate('local'), function (req, res) {
-	IndividualService.getWatchProjectList(req.user.username, function (result) {
-		if (result.success) {
-			res.render('individual_watch', {
-				project: result.message
-			});
-		}
-	});
+router.get('/project/watch', function (req, res) {
+	if (req.user) {
+		IndividualService.getWatchProjectList(req.user.username, function (result) {
+			if (result.success) {
+				res.render('individual_watch', {
+					project: result.message
+				});
+			}
+		});
+	}
 });
 
 /*

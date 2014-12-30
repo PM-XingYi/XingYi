@@ -88,9 +88,13 @@ IndividualService.getUser = function (username, callback) {
 
 /*
  * update user info
- * @param {Individual} newUserInfo
+ * @param {
+ *   @param {String} key
+ *   @param {String} value
+ * } newUserInfo
  * @return {Boolean} success
  */
+var keySet = ['mobile', 'email'];
 IndividualService.updateUser = function (newUserInfo, callback) {
 	go.database.User.findOne({username: newUserInfo.username}, function (err, user) {
 		if (user.userType !== 'individual') {
@@ -107,8 +111,8 @@ IndividualService.updateUser = function (newUserInfo, callback) {
 				});
 			}
 			for (var i = 0; i < keySet.length; ++i) {
-				if (keySet[i] === req.body.key) {
-					individual[keySet[i]] = req.body.value;
+				if (keySet[i] === newUserInfo.key) {
+					individual[keySet[i]] = newUserInfo.value;
 					individual.save(function (err) {
 						if (err) {
 							callback({
