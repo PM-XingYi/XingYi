@@ -6,7 +6,7 @@ var CommentSchema = new Schema({
 	project: {type: Schema.Types.ObjectId, ref: 'Project'},
 	date: Date,
 	comment: String,
-	approved: Boolean
+	approved: Number
 });
 
 var Comment  = mongoose.model('Comment', CommentSchema);
