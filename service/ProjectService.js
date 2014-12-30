@@ -117,12 +117,14 @@ ProjectService.getProjectById = function(projectID, callback){
 			}
 			var answer = [];
 			if(project  === null || project  === undefined){
-				answer = "cannot find it";
+				callback({
+					success: false,
+					message: "cannot find it"
+				});;
 			}else{
 				answer.push(project);
 			}
 			answer.push(user);
-			console.log(answer);
 			callback({
 				success: true,
 				message: answer

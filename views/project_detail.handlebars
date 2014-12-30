@@ -28,9 +28,14 @@
 					<input id="search-box" type="search">
 					<img id="search-icon" src="/img/search.png" placeholder="搜索..." autocomplete="off">
 				</div>
-				<label>您好，<a id="user-entry">Sheer</a></label>
+				{{#if curUser}}
+				<label>您好，<a id="user-entry">{{curUser.username}}</a></label>
 				<a id="dashboard-entry">Dashboard</a>
 				<a id="logout-entry">登出</a>
+				{{else}}
+				<a id="login-entry">登录</a>
+				<a id="register-entry">注册</a>
+				{{/if}}
 			</div>
 		</div>
 	</header>
@@ -64,12 +69,14 @@
 						<label>TODAY<i class="end-time">12/22/14</i></label>
 					</section>
 					<section class="project-event-show">
+						{{#each project.milestone}}
 						<section class="event">
-							<i>{{project.lastMilestone.date}}</i>
+							<i>{{date}}</i>
 							<article>
-								{{project.lastMilestone.desc}}
+								{{desc}}
 							</article>
 						</section>
+						{{/each}}
 					</section>
 				</section>
 				<section class="project-detail-tab">
@@ -99,13 +106,20 @@
 							<input type="checkbox">
 							我已了解上述须知
 						</label>
-						<button class="rounded-button" id="apply">申请参加</button>
-					<!-- The following three are using in different situation...... -->
-					<!--
+						{{#ifEq project.approve 2}}
 						<button class="rounded-button disable-button yellow-font">等待审核...</button>
-						<button class="rounded-button disable-button grey-font">已参加</button>
-						<button class="rounded-button disable-button red-font">申请未通过</button>
-					-->
+						{{else}}
+							{{#ifEq project.approve 1}}
+							<button class="rounded-button disable-button grey-font">已参加</button>
+							{{else}}
+								{{#ifEq project.approve 3}}
+								<button class="rounded-button disable-button red-font">申请未通过</button>
+								{{else}}
+								<button class="rounded-button" id="apply">申请参加</button>
+								{{/ifEq}}
+							{{/ifEq}}
+						{{/ifEq}}
+
 					</section>
 					{{#ifEq ratio -1}}
 					{{else}}
@@ -213,7 +227,7 @@
 							<section class="sponsor-other-info">
 								<div class="info-row">
 									<label>名称</label>
-									<i>{{project.owner.detail.orgName}}</i>
+									<i>{{project.owner.instituteName}}</i>
 								</div>
 								<div class="info-row">
 									<label>邮箱</label>
@@ -221,7 +235,7 @@
 								</div>
 								<div class="info-row">
 									<label>电话</label>
-									<i>{{project.owner.detail.phone}}</i>
+									<i>{{project.owner.phone}}</i>
 								</div>
 							</section>
 						</section>
@@ -231,7 +245,7 @@
 						</h2>
 						<section class="sponsor-intro">
 							<p>
-								{{project.owner.detail.desc}}
+								{{project.owner.desc}}
 							</p>
 						</section>
 					</section>
@@ -247,15 +261,15 @@
 				</div>
 				<div class="form-row">
 					<label>用户名</label>
-					<i>{{user.username}}</i>
+					<i>{{curUser.username}}</i>
 				</div>
 				<div class="form-row">
 					<label>手机号</label>
-					<i>{{user.detail.mobile}}</i>
+					<i>{{curUser.detail.mobile}}</i>
 				</div>
 				<div class="form-row">
 					<label>邮箱</label>
-					<i>{{user.email}}</i>
+					<i>{{curUser.email}}</i>
 				</div>
 				<div class="form-row">
 					<label>申请理由</label>
