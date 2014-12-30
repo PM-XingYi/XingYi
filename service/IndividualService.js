@@ -94,7 +94,6 @@ IndividualService.getUser = function (username, callback) {
  * } newUserInfo
  * @return {Boolean} success
  */
-var keySet = ['mobile', 'email'];
 IndividualService.updateUser = function (username, newUserInfo, callback) {
 	go.database.User.findOne({username: username}, function (err, user) {
 		if (user.userType !== 'individual') {
@@ -110,32 +109,38 @@ IndividualService.updateUser = function (username, newUserInfo, callback) {
 					message: "internal error"
 				});
 			}
-			var j = newUserInfo.length;
-			for (var i = 0; i < keySet.length; ++i) {
-				if (newUserInfo[keySet[i]] !== null) {
-					individual[keySet[i]] = newUserInfo[keySet[i]];
-					j--;
-				}
-			}
-			if(j === 0){
-				individual.save(function (err) {
+			console.log(newUserInfo["\"mobile\""]);
+			console.log("test");
+			console.log(newUserInfo["mobile"]);
+			if(newUserInfo["mobile"] !== undefined){
+				individual.mobile = newUserInfo["mobile"];
+				//console.log(newUserInfo["mobile"]);
+				individual.save(function(err){
 					if (err) {
 						callback({
 							success: false,
 							message: "update fail"
 						});
 					}
-					callback({
-						success: true,
-						message: "success"
-					});
+					console.log("ok");
 				});
-			}else{
-				callback({
-					success: false,
-					message: "illegal key"
+			}
+			if(newUserInfo["email"] !== undefined){
+				user.email = newUserInfo["email"];
+				console.log(newUserInfo["email"]);
+				user.save(function(err){
+					if (err) {
+						callback({
+							success: false,
+							message: "update fail"
+						});
+					}
 				});
-			}			
+			}
+			callback({
+				success: true,
+				message: "update successfully"
+			});						
 		});
 	});
 };
