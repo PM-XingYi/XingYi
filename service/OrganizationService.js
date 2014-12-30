@@ -89,6 +89,77 @@ OrganizationService.getUser = function (username, callback) {
 	});
 }
 
+/*
+ * update user info
+ * @param {
+ *   @param {String} key
+ *   @param {String} value
+ * } newUserInfo
+ * @return {Boolean} success
+ */
+OrganizationService.updateUser = function (username, newUserInfo, callback) {
+	go.database.User.findOne({username: username}, function (err, user) {
+		if (user.userType !== 'organization') {
+			callback({
+				success: false,
+				message: "not an organization user"
+			});
+		}
+		go.database.Organization.findById(user.detail, function (err, organization) {
+			if (err) {
+				callback({
+					success: false,
+					message: "internal error"
+				});
+			}
+
+			console.log("test");
+			//console.log(newUserInfo["phone"]);
+			if(newUserInfo["phone"] !== undefined){
+				organization.phone = newUserInfo["phone"];
+				//console.log(newUserInfo["mobile"]);
+				organization.save(function(err){
+					if (err) {
+						callback({
+							success: false,
+							message: "update fail"
+						});
+					}
+					console.log("ok");
+				});
+			}
+			if(newUserInfo["desc"] !== undefined){
+				organization.desc = newUserInfo["desc"];
+				//console.log(newUserInfo["desc"]);
+				organization.save(function(err){
+					if (err) {
+						callback({
+							success: false,
+							message: "update fail"
+						});
+					}
+					console.log("ok");
+				});
+			}
+			if(newUserInfo["email"] !== undefined){
+				user.email = newUserInfo["email"];
+				console.log(newUserInfo["email"]);
+				user.save(function(err){
+					if (err) {
+						callback({
+							success: false,
+							message: "update fail"
+						});
+					}
+				});
+			}
+			callback({
+				success: true,
+				message: "update successfully"
+			});						
+		});
+	});
+};
 
 /*
  * publish a project
