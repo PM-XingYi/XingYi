@@ -180,41 +180,75 @@ $(function() {
 	// register, go to register
 	$("#login-wrapper #register").bind("click", function() {
 		location.href = "register.html";
+		ev.preventDefault();
 		// TODO
 	});
-	// login---here I just login as an individual
-	$("#login-wrapper #login").bind("click", function() {
-		$.ajax({
-			url: "/login/individual",
-			type: "POST",
-			data: {username:$("#username").val(), password:$("#pwd").val()},
-			error: function() {
 
-			}
-		});
-	});
 
 	/*
 		Register Page
 	*/
 	// register button, to register
+	$("#register-wrapper input[name='identify'][value='普通用户']").focus(function () {
+		$("#mobile").show();
+		$("#phone").hide();
+		$("#orgNumber").hide();
+		$("#orgName").hide();
+	});
+	$("#register-wrapper input[name='identify'][value='项目管理者']").focus(function () {
+		$("#mobile").hide();
+		$("#phone").show();
+		$("#orgNumber").show();
+		$("#orgName").show();
+	});
 	$("#register-wrapper #register").bind("click", function() {
-		if(identify=="普通用户") {
+		if ($("#pwd").val() !== $("#pwd2").val()) {
+			alert("两次输入密码不一致");
+			return;
+		}
+		if ($('#agree').attr("checked") !== "checked") {
+			alert("请同意行益网条款");
+			return;
+		}
+		var identify = $("input[name='identify']:checked").val();
+		if(identify === "普通用户") {
 			$.ajax({
 				url: "/register/individual",
 				type: "POST",
-				data: {username:$("#username").val(), password:$("#pwd").val(), email:$("#email").val()},
-				error: function() {
-
+				data: {
+					username: $("#username").val(),
+					password: $("#pwd").val(),
+					email: $("#email").val(),
+					mobile: $("#mobile").val()
+				},
+				success: function (data) {
+					if (data && data.success) {
+						alert("注册成功，请登录");
+					}
+					else {
+						alert("注册失败 " + (data ? data.message : "!"));
+					}
 				}
 			});	
 		} else {
 			$.ajax({
 				url: "/register/organization",
 				type: "POST",
-				data: {username:$("#username").val(), password:$("#pwd").val(), email:$("#email").val()},
-				error: function() {
-
+				data: {
+					username: $("#username").val(),
+					password: $("#pwd").val(),
+					email: $("#email").val(),
+					phone: $("#phone").val(),
+					orgNumber: $("#orgNumber").val(),
+					orgName: $("#orgName").val()
+				},
+				success: function (data) {
+					if (data && data.success) {
+						alert("注册成功，请登录");
+					}
+					else {
+						alert("注册失败 " + (data ? data.message : "!"));
+					}
 				}
 			});	
 		}

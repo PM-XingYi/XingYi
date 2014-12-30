@@ -28,8 +28,14 @@
 					<input id="search-box" type="search">
 					<img id="search-icon" src="/img/search.png" placeholder="搜索..." autocomplete="off">
 				</div>
+				{{#if curUser}}
+				<label>您好，<a id="user-entry">{{curUser.username}}</a></label>
+				<a id="dashboard-entry">Dashboard</a>
+				<a id="logout-entry">登出</a>
+				{{else}}
 				<a id="login-entry">登录</a>
 				<a id="register-entry">注册</a>
+				{{/if}}
 			</div>
 		</div>
 	</header>

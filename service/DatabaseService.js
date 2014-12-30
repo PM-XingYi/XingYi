@@ -15,22 +15,20 @@ var DatabaseService = function (dbUrl) {
 	this.Application = require('../database/Application');
 }
 
-mongoose.connect(config.dbUrl);
-
 var DatabaseConnector = function (dbUrl) {
 	if (db === null) {
 		db = new DatabaseService(dbUrl);
+		db.connect();
 	}
 	return db;
 }
 
-DatabaseService.prototype.connect = function(succ, fail) {
-	mongoose.connect(this.dbUrl, function(e) {
-		if (e){
-			fail(e.message);
+DatabaseService.prototype.connect = function() {
+	mongoose.connect(this.dbUrl, function(err) {
+		if (err){
+			console.log(err.message);
 		} else {
-			var msg = "connect success!";
-			succ(msg);
+			console.log("connect success!");
 		}
 	});
 };

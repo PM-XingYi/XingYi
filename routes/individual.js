@@ -19,50 +19,60 @@ router.param(function(name, fn){
 });
 router.param('id', /^\d+$/);
 
-router.get('/home', passport.authenticate('local'), function(req, res) {
-	res.render('individual_dashboard');
+router.get('/home', function(req, res) {
+	if (req.user) {
+		res.render('individual_dashboard', {curUser: req.user});
+	}
 });
 
 /*
  * PAGE: user PRIVATE profile
  */
-router.get('/profile', passport.authenticate('local'), function(req, res) {
-	IndividualService.getUser(req.user.username, function (answer) {
-		if (answer.success) {
-			res.render('individual_profile', {
-				user: answer.message
-			});
-		}
-	});
+router.get('/profile', function(req, res) {
+	if (req.user) {
+		IndividualService.getUser(req.user.username, function (answer) {
+			if (answer.success) {
+				res.render('individual_profile', {
+					user: answer.message
+				});
+			}
+		});
+	}
 });
 /*
  * modify user profile
  * req.body.key is in []
  */
-var keySet = ['mobile', 'email'];
-router.post('/profile/edit', passport.authenticate('local'), function (req, res) {
-	IndividualService.updateUser(req.body, function(answer) {
-		res.send(answer);
-	});
+router.post('/profile/edit', function (req, res) {
+	if (req.user) {
+		IndividualService.updateUser(req.user.username, req.body, function(answer) {
+			res.send(answer);
+		});
+	}
 });
 
-router.get('/project/join', passport.authenticate('local'), function (req, res) {
-	IndividualService.getJoinProjectList(req.user.username, function (result) {
-		if (result.success) {
-			res.render('individual_join', {
-				project: result.message
-			});
-		}
-	});
+router.get('/project/join', function (req, res) {
+	if (req.user) {
+		IndividualService.getJoinProjectList(req.user.username, function (result) {
+			if (result.success) {
+				res.render('individual_join', {
+					curUser: req.user,
+					project: result.message
+				});
+			}
+		});
+	}
 });
-router.get('/project/watch', passport.authenticate('local'), function (req, res) {
-	IndividualService.getWatchProjectList(req.user.username, function (result) {
-		if (result.success) {
-			res.render('individual_watch', {
-				project: result.message
-			});
-		}
-	});
+router.get('/project/watch', function (req, res) {
+	if (req.user) {
+		IndividualService.getWatchProjectList(req.user.username, function (result) {
+			if (result.success) {
+				res.render('individual_watch', {
+					project: result.message
+				});
+			}
+		});
+	}
 });
 
 /*

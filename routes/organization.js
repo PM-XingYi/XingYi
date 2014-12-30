@@ -41,10 +41,12 @@ router.get('/profile', passport.authenticate('local'), function(req, res) {
  * req.body.key is in []
  */
 var keySet = ['mobile', 'email'];
-router.post('/profile/edit', passport.authenticate('local'), function (req, res) {
-	OrganizationService.updateUser(req.body, function(answer) {
-		res.send(answer);
-	});
+router.post('/profile/edit', function (req, res) {
+	if (req.user) {
+		OrganizationService.updateUser(req.user.username, req.body, function(answer) {
+			res.send(answer);
+		});
+	}
 });
 
 /*

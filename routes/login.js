@@ -4,8 +4,8 @@ var express = require('express'),
 
 router.post('/individual', passport.authenticate('local', {
 	successRedirect: '/individual/home',
-	failureRedirect: '/login.html',
-	failureFlash: true
+	failureRedirect: '/login.html'
+	
 }));
 
 router.post('/organization', passport.authenticate('local', {
