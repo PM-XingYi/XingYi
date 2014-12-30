@@ -8,7 +8,7 @@ var ProjectSchema = new Schema({
 	notice: String,
 	moneyNeeded: Number,
 	moneyRaised: Number,
-	owner: {type: Schema.Types.ObjectId, ref: 'User'},
+	owner: {type: Schema.Types.ObjectId, ref: 'Organization'},
 	joinedIndividual: [{type: Schema.Types.ObjectId, ref: 'Application'}],
 	comment: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
 	donation: [{type: Schema.Types.ObjectId, ref: 'Donation'}],

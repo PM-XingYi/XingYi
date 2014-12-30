@@ -50,7 +50,7 @@ IndividualService.register = function (username, password, email, mobile, callba
 				});
 			});
 		}		
-	});
+	});	
 };
 
 /*
@@ -306,7 +306,7 @@ IndividualService.joinProject = function (username, projectID, joinReason, callb
 							}
 						});
 						//add to project's joinedIndividual list
-						go.database.Project.findByIdAndUpdate("549ee621675f76a00bf5496a", 
+						go.database.Project.findByIdAndUpdate(projectID, 
 						{
 							$addToSet:
 							{
@@ -419,11 +419,14 @@ IndividualService.donateProject = function (username, donateInfo, callback) {
 						message: "internal error"
 					});
 				}
+				var update = {
+					$addToSet:
+						{donation: donation._id},
+					$inc:
+						{moneyRaised:donation.amount}
+					};
 				go.database.Project.findByIdAndUpdate({_id: donateInfo.project},
-					{
-						$addToSet:
-						{donation: donation._id}
-					}, function(err,result){
+					update, function(err,result){
 						if(err){
 							callback({
 								success: false,
