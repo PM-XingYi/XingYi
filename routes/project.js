@@ -23,9 +23,13 @@ router.param('id', /^\d+$/);
  * get all available project
  */
 router.get('/all', function (req, res) {
-	console.log('here');
-	ProjectService.allPassedProject(function(project) {
+	ProjectService.getAllProjectByStatus(2, function(result) {
+		if (!result.success) {
+			res.send(result);
+		}
+		var project = result.message;
 		console.log(project);
+		console.log(project.length);
 		for (var i = 0; i < project.length; ++i) {
 			if (project[i].moneyNeeded === -1) {
 				project[i].ratio = -1;
@@ -39,7 +43,7 @@ router.get('/all', function (req, res) {
 			total: project.length,
 			project: project
 		};
-		console.log(ans);
+		// console.log(ans);
 		res.render('project_all', ans);
 	});
 });
