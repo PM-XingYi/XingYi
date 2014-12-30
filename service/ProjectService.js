@@ -8,7 +8,8 @@ var ProjectService = function () {
  * @return {Array of Project}
  */
 ProjectService.getAllProjectByStatus = function (status,callback) {
-	go.database.Project.find({approved: status},function(err, docs){
+	go.database.Project.find(/*{approved: status}*/{},function(err, docs){
+		console.log("there");
 		if(err){
 			callback({
 				success: false,
@@ -18,7 +19,10 @@ ProjectService.getAllProjectByStatus = function (status,callback) {
 		console.log(docs);
 		var answer = [];
 		if(docs  === null || docs  === undefined){
-			answer = "cannot find it";
+			callback({
+				success: false,
+				message: "cannot find"
+			});
 		}else{
 			answer = docs;
 		}

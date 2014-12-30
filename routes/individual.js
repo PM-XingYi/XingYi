@@ -45,7 +45,7 @@ router.get('/profile', function(req, res) {
  */
 router.post('/profile/edit', function (req, res) {
 	if (req.user) {
-		IndividualService.updateUser(req.body, function(answer) {
+		IndividualService.updateUser(req.user.username, req.body, function(answer) {
 			res.send(answer);
 		});
 	}

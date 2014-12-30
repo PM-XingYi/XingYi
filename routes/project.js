@@ -23,6 +23,7 @@ router.param('id', /^\d+$/);
  * get all available project
  */
 router.get('/all', function (req, res) {
+	console.log('here');
 	ProjectService.allPassedProject(function(project) {
 		console.log(project);
 		for (var i = 0; i < project.length; ++i) {
