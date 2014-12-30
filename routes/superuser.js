@@ -5,14 +5,17 @@ var express = require('express'),
 	SuperUserService = require('../service/SuperUserService'),
 	ProjectService = require('../service/ProjectService');
 
-router.get('/home', passport.authenticate('local'), function(req, res) {
+router.get('/home', function(req, res) {
+
+	if (!req.user)  return;
+
 	res.render('superuser_dashboard.handlebars');
 });
 
 /*
  * get all project including unavailable ones
  */
-router.get('/examProject', passport.authenticate('local'), function(req, res) {
+router.get('/examProject', function(req, res) {
 	ProjectService.getAllProjectByStatus(2, function (unchecked) {
 		ProjectService.getAllProjectByStatus(1, function (passed) {
 			ProjectService.getAllProjectByStatus(3, function (failed) {
@@ -35,7 +38,8 @@ router.get('/examProject', passport.authenticate('local'), function(req, res) {
 /*
  * examine a project
  */
-router.post('/examProject', passport.authenticate('local'), function(req, res) {
+router.post('/examProject', function(req, res) {
+    console.log("before");
 	SuperUserService.examineProject(req.body.projectID, req.body.approve, req.body.remark, function (result) {
 		res.send(result);
 	});
@@ -44,7 +48,7 @@ router.post('/examProject', passport.authenticate('local'), function(req, res) {
 /*
  * get all comment including unavailable ones
  */
-router.get('/examComment', passport.authenticate('local'), function(req, res) {
+router.get('/examComment', function(req, res) {
 	ProjectService.getAllCommentByStatus(2, function (unchecked) {
 		ProjectService.getAllCommentByStatus(1, function (passed) {
 			ProjectService.getAllCommentByStatus(3, function (failed) {
@@ -67,7 +71,7 @@ router.get('/examComment', passport.authenticate('local'), function(req, res) {
 /*
  * examine a comment
  */
-router.post('/examComment', passport.authenticate('local'), function(req, res) {
+router.post('/examComment', function(req, res) {
 	SuperUserService.examineComment(req.body.commentID, req.body.approve, req.body.remark, function (result) {
 		res.send(result);
 	});

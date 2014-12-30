@@ -11,6 +11,7 @@ var SuperUserService = function () {
  * @return {Boolean} success
  */
 SuperUserService.examineProject = function (projectID, approve, remark, callback) {
+  console.log("  x "+projectID);
 	go.database.Project.findByIdAndUpdate(projectID, 
 		{
 			$set: {
@@ -90,3 +91,5 @@ SuperUserService.getAllCommentByStatus = function (approve, callback) {
 		});
 	});
 }
+
+module.exports = SuperUserService;

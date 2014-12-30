@@ -297,12 +297,12 @@ $(function() {
 		Admin Dashboard
 	*/
 	// project verify, go to project verify
-	$("#admin-dashboard-wrapper project-verify").bind("click", function() {
-		//TODO
+	$("#admin-dashboard-wrapper #project-verify").bind("click", function() {
+		location.href = "/superuser/examProject";
 	});
 	// comment manager, go to comment manager
-	$("#admin-dashboard-wrapper comment-manager").bind("click", function() {
-		//TODO
+	$("#admin-dashboard-wrapper #comment-manager").bind("click", function() {
+		location.href = "/superuser/examComment";
 	});
 
 
@@ -772,16 +772,30 @@ $(function() {
 		For Page Project-verify
 	**/
 	// set status to be passed
-	$("#project-verify-wrapper .show .card-part button.pass").bind("click", function() {
-		var project = $(this).parents(".card-part");
-		var rightpart = project.find(".right-part");
-		rightpart.children("button.fail").remove();
-		rightpart.children("textarea").remove();
-		rightpart.children("button.pass").text("已通过").removeClass("pass").addClass("passed");
-		$("#project-verify-wrapper #star_project .show .collection").append(project);
-		// TODO, in the server side
-
-	});
+  $("#project-verify-wrapper .show .card-part button.pass").bind("click", function() {
+      var project = $(this).parents(".card-part").find(".for-id").text();
+      // var rightpart = project.find(".right-part");
+      // rightpart.children("button.fail").remove();
+      // rightpart.children("textarea").remove();
+      // rightpart.children("button.pass").text("已通过").removeClass("pass").addClass("passed");
+      // $("#project-verify-wrapper #star_project .show .collection").append(project);
+      $.ajax({
+          url: "/superuser/examProject",
+          type: "POST",
+          data: {
+            projectID: project,
+            approve: 1,
+            remark: ""
+          }
+      }).then(function(data){
+          if (data && data.success) {
+            location.reload();
+          }
+          else {
+            alert("失败 " + (data ? data.message : "!"));
+          }
+      });	
+  });
 	// set status to be failed
 	$("#project-verify-wrapper .show .card-part button.fail").bind("click", function() {
 		if($(this).next().css("display")=="none") {

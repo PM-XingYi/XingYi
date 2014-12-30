@@ -2,11 +2,10 @@
 <html lang="zh">
 <head>
 	<meta charset=utf-8>
-	<title>行益网-Dashboard</title>
+	<title>行益网-Super User</title>
 	<link rel="stylesheet" type="text/css" href="/css/general.css">
 	<script type="text/javascript" src="/js/jquery-1.11.1.js"></script>
 	<script type="text/javascript" src="/js/general.js"></script>
-	<script type="text/javascript" src="/js/interface.js"></script>
 </head>
 <body>
 	
@@ -21,29 +20,22 @@
 					<img src="/img/name.png">
 				</div>
 			</div>
-			<!-- the search input, login and register entries -->
-			<div id="entry">
-				<div id="search">
-					<input id="search-box" type="search">
-					<img id="search-icon" src="/img/search.png" placeholder="搜索..." autocomplete="off">
-				</div>
-				<label>您好，<a id="user-entry">Admin</a></label>
-				<a id="dashboard-entry">Dashboard</a>
-				<a id="logout-entry">登出</a>
-			</div>
 		</div>
 	</header>
 
 	<!-- the container -->
 	<div id="content">
-		<div class="wrapper" id="admin-dashboard-wrapper">
+		<div class="wrapper" id="login-wrapper">
 			<section class="container">
 				<h1 class="section-title">
-					管理面板
+					超级用户登录
 				</h1>
-				<section class="dashboard">
-					<label id="project-verify">项目审核</label>
-					<label id="comment-manager">评论管理</label>
+				<section class="login-register-form">
+					<form method="POST" action="/login/superuser">
+						<input name="username" type="text" id="username" class="outline" placeholder="用户名" required="required">
+						<input name="password" type="password" id="pwd" class="outline" placeholder="密码" required="required">
+						<button class="rounded-button" id="login">超级用户登录</button>
+					</form>
 				</section>
 			</section>
 		</div>
@@ -89,3 +81,4 @@
 
 </body>
 </html>
+
