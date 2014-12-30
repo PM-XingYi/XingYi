@@ -93,51 +93,37 @@ $(function() {
 		if($("#search-box").val()!="") {	// go to search page
 			//TODO
 			//key word is $("#search-box").val()
+
 		}
 	});
 	//project box, if click, it should be linked to the detailed page of such project
 	$(".project-title").bind("click", function() {
-		//TODO
-		console.log($(this).text());
-	});
-	
-	/*
-		Profile View Page, if this page has been deleted, then ignore it.
-	*/
-	// edit button -- go to profile edit page
-	/*$(".profile-edit-wrapper #edit").bind("click", function() {
+		var id = $(this).parents("article").find(".for-id").text();
 		// TODO
-		location.href = "profile_edit.html";
-	});*/
-
-	/*
-		Profile Edit Page
-	*/
-	// save button
-	/*$(".profile-edit-wrapper #save").bind("click", function() {
-		var gender = $("input[name='gender']:checked").val();
-		var nickname = $("#nickname").val();
-		var phonenumber = $("#number").val();
-		var email = $("#email").val();
-		console.log(gender+" "+nickname+" "+phonenumber+" "+email);
-		// TODO -- save the information
 	});
-	// cancel button, go back to the previous page, here is profile view page
-	$(".profile-edit-wrapper #cancel").bind("click", function() {
-		// TODO
-		location.href = "profile_view.html";
-	});*/
 
 	/*
 		Individual Profile Edit Page
 	*/
 	$("#individual-profile #save").bind("click", function() {
-		var gender = $("input[name='gender']:checked").val();
+		/*var gender = $("input[name='gender']:checked").val();
 		var nickname = $("#nickname").val();
 		var phonenumber = $("#number").val();
 		var email = $("#email").val();
-		console.log(gender+" "+nickname+" "+phonenumber+" "+email);
-		// TODO -- save the information
+		console.log(gender+" "+nickname+" "+phonenumber+" "+email);*/
+		$.ajax({
+			url: "/individual/profile/edit",
+			type: "POST",
+			data: {
+				gender: $("input[name='gender']:checked").val(),
+				nickname: $("#nickname").val(),
+				phonenumber: $("#number").val(),
+				email: $("#email").val()
+			},
+			error: function() {
+
+			}
+		});
 	});
 	$("#individual-profile #cancel").bind("click", function() {
 		// TODO-- cancel edit
@@ -196,11 +182,16 @@ $(function() {
 		location.href = "register.html";
 		// TODO
 	});
-	// login
+	// login---here I just login as an individual
 	$("#login-wrapper #login").bind("click", function() {
-		var username = $("#username").val();
-		var password = $("#pwd").val();
-		// TODO
+		$.ajax({
+			url: "/login/individual",
+			type: "POST",
+			data: {username:$("#username").val(), password:$("#pwd").val()},
+			error: function() {
+
+			}
+		});
 	});
 
 	/*
@@ -208,12 +199,25 @@ $(function() {
 	*/
 	// register button, to register
 	$("#register-wrapper #register").bind("click", function() {
-		var identify = $("input[name='identify']:checked").val();
-		var username = $("#username").val();
-		var pwd = $("#pwd").val();
-		var email = $("#email").val();
-		console.log(identify+" "+username+" "+pwd+" "+email);
-		// TODO -- save the information
+		if(identify=="普通用户") {
+			$.ajax({
+				url: "/register/individual",
+				type: "POST",
+				data: {username:$("#username").val(), password:$("#pwd").val(), email:$("#email").val()},
+				error: function() {
+
+				}
+			});	
+		} else {
+			$.ajax({
+				url: "/register/organization",
+				type: "POST",
+				data: {username:$("#username").val(), password:$("#pwd").val(), email:$("#email").val()},
+				error: function() {
+
+				}
+			});	
+		}
 	});
 
 	/*
@@ -221,7 +225,14 @@ $(function() {
 	*/
 	// star button, to watch/star that project
 	$("#view-details-wrapper #star").bind("click", function() {
-		// TODO
+		var id = $(this).parents("#view-details-wrapper").find(".for-id").text();
+		$.ajax({
+			url: "/individual/project/watch/"+id,
+			type: "POST",
+			error: function() {
+
+			}
+		});
 	});
 
 
@@ -236,10 +247,14 @@ $(function() {
 			if(act=="username") {
 				$("#pwd").focus();
 			} else if(act=="pwd") {
-				//TODO
-				var username = $("#username").val();
-				var pwd = $("#pwd").val();
-				console.log(username+" "+pwd);
+				$.ajax({
+					url: "/login/superuser",
+					type: "POST",
+					data: {username:$("#username").val(), password:$("#pwd").val()},
+					error: function() {
+
+					}
+				});
 			} 
 		}
 	});
@@ -372,7 +387,14 @@ $(function() {
 	**/
 	// button unstar, just mark that project not followed
 	$("#view-followedpjs-user-wrapper .unstar").bind("click", function() {
-		//TODO
+		var id = $(this).parents(".project-wrapper").find(".for-id").text();
+		$.ajax({
+			url: "/individual/project/unwatch/"+id,
+			type: "POST",
+			error: function() {
+
+			}
+		});
 	});
 
 	/*
@@ -384,9 +406,16 @@ $(function() {
 	});
 	//this is for comment button, just make comments
 	$("#view-details-wrapper #make-comment").bind("click", function() {
-		var isAnonymous = $(".comment-form input[type='checkbox']").is(':checked');
-		var comment = $(".comment-form textarea").val();
-		alert(comment);
+		/*var isAnonymous = $(".comment-form input[type='checkbox']").is(':checked');
+		var comment = $(".comment-form textarea").val();*/
+		$.ajax({
+			url: "/individual/comment",
+			type: "POST",
+			data: {comment:$(".comment-form textarea").val()},
+			error: function() {
+
+			}
+		});
 	});
 	//this is for apply confirm
 	$("#view-details-wrapper #apply-form #confirm-apply").bind("click", function() {
@@ -401,7 +430,6 @@ $(function() {
 	// back
 	$("#donate-wrapper #return").bind("click", function() {
 		location.href = "view_detail.html";
-		// TODO
 	});
 	// donate
 	$("#donate-wrapper #go-to-donate").bind("click", function() {
@@ -413,6 +441,14 @@ $(function() {
 		var way = $("input[name='way']:checked").val();
 		var isAnonymous = $("#donate-wrapper input[type='checkbox']").is(':checked');
 		//TODO
+		$.ajax({
+			url: "/individual/donate",
+			type: "POST",
+			data: {},
+			error: function() {
+
+			}
+		});
 	});
 	
 	/**
@@ -421,12 +457,10 @@ $(function() {
 	// create a project
 	$("#dashboard-organization-wrapper #create-project").bind("click", function() {
 		location.href = "create_new_project_manager.html";
-		// TODO
 	});
 	// edit project
 	$("#dashboard-organization-wrapper #edit-project").bind("click", function() {
 		location.href = "view_all_project_manager.html";
-		// TODO
 	});
 
 	/*
@@ -436,7 +470,9 @@ $(function() {
 	$("#view-all-project-manager-wrapper button.rounded-button").filter(function() {
 		return !$(this).hasClass("disable-button")
 	}).bind("click", function() {
+		var id = $(this).parents(".project-wrapper").find(".for-id");
 		// TODO, just go to project
+
 	});
 
 
@@ -463,28 +499,25 @@ $(function() {
 	// base information
 	$("#dashbaord-edit-project-wrapper #base-info").bind("click", function() {
 		location.href = "baseinfo_view.html";
-		//TODO
 	});
 	// Message Update
 	$("#dashbaord-edit-project-wrapper #message-update").bind("click", function() {
 		location.href = "add_news.html";
-		//TODO
 	});
 	// Expense Management
 	$("#dashbaord-edit-project-wrapper #expense-manage").bind("click", function() {
 		location.href = "bookkeeping.html";
-		//TODO
 	});
 	// Volunteer Management
 	$("#dashbaord-edit-project-wrapper #joiner-manage").bind("click", function() {
 		location.href = "volunteer_manage.html";
-		//TODO
 	});
 
 	/**
 		For BaseInfo View
 	**/
 	// save button
+	// save project information
 	$("#baseinfo-view-wrapper #save-project").bind("click", function() {
 		var name_of_project = $("#name-of-project").text();
 		var intro_of_project = $("#intro-of-project").text();
@@ -501,7 +534,6 @@ $(function() {
 	// edit button, go to baseinfo_edit
 	$("#baseinfo-view-wrapper .edit-item").bind("click", function() {
 		location.html = "baseinfo_edit.html";
-		// TODO
 	});
 
 	/**
@@ -519,11 +551,10 @@ $(function() {
 		var explain_of_goal = $("#explain-of-goal").text();
 		var content_of_intro = $("#content-of-intro").text();
 		//TODO,  for the server
-
 	});
 	// save temporarily
 	$("#baseinfo-edit-wrapper .save-item").bind("click", function() {
-		// TODO
+		// go back to basic info view
 	});
 
 	/**
@@ -588,7 +619,7 @@ $(function() {
 	/**
 		For Book Keeping
 	**/
-	// publish news
+	// publish book
 	$("#bookkeeping-wrapper #publish-book").bind("click", function() {
 		var date = $("#book-date").val();
 		var number = parseInt($("#book-number").val());
@@ -621,7 +652,7 @@ $(function() {
 		obj.next().text("删除").removeClass("cancel").addClass("remove").bind("click", function() {
 			removeItemBook($(this));
 		});
-		// TODO, for the server, save news item
+		// TODO, for the server, save book item
 		var date = obj.parents(".row").children(".col-1").text();
 		var number = obj.parents(".row").children(".col-2 div").text();
 		var content = obj.parents(".row").children(".col-3").text();
@@ -629,7 +660,7 @@ $(function() {
 	}
 	function removeItemBook(obj) {
 		obj.parents(".row").remove();
-		// TODO, for the server, delete news item
+		// TODO, for the server, delete book item
 	}
 	function cancelItemBook(obj) {
 		obj.parents(".row").children(".col-1").attr("contentEditable", false).css({"border": "none"});

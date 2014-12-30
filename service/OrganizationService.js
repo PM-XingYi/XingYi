@@ -152,7 +152,7 @@ OrganizationService.publishProject = function (username, projectInfo, callback) 
  * @param {Project} newProjectInfo
  * @return {Boolean} success
  */
-IndividualService.updateProject = function (newProjectInfo, callback) {
+OrganizationService.updateProject = function (newProjectInfo, callback) {
 }
 
 /*

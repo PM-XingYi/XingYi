@@ -77,7 +77,10 @@ ProjectService.latestProject = function (n, callback) {
 		}
 		var answer = [];
 		if(projects  === null || projects  === undefined){
-			answer = "cannot find it";
+			callback({
+				success: false,
+				message: "find project error"
+			});	
 		}else{
 			answer = projects;
 		}

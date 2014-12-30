@@ -4,21 +4,10 @@ var express = require('express'),
 
 /* GET home page. */
 router.get('/', function(req, res) {
-	projectService.latestProject(6, function(ans) {
+	projectService.latestProject(8, function(ans) {
 		if (ans.success) {
 			var latest = ans.message;
-
-			latest = [{
-				_id: "ididid",
-				name: "miaowu",
-				moneyRaised: 10,
-				moneyNeeded: 100
-			}, {
-				_id: "dididi",
-				name: "buyaoqian",
-				moneyNeeded: -1
-			}]; // for debug
-			
+			console.log(latest);
 			for (var i = 0; i < latest.length; ++i) {
 				if (latest[i].moneyNeeded === -1) {
 					latest[i].ratio = -1;

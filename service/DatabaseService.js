@@ -1,4 +1,5 @@
-var mongoose = require('mongoose');
+var config = require('../config.json'),
+	mongoose = require('mongoose');
 
 var db = null;
 
@@ -13,7 +14,8 @@ var DatabaseService = function (dbUrl) {
 	this.Donation = require('../database/Donation');
 	this.Application = require('../database/Application');
 }
-	mongoose.connect('mongodb://localhost/test');
+
+mongoose.connect(config.dbUrl);
 
 var DatabaseConnector = function (dbUrl) {
 	if (db === null) {

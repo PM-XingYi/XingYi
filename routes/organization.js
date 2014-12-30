@@ -95,7 +95,7 @@ router.get('/publish', passport.authenticate('local'), function(req, res) {
 router.post('/publish', passport.authenticate('local'), function(req, res) {
 	OrganizationService.publishProject(req.user.username, req.body, function (result) {
 		res.send(result);
-	};
+	});
 });
 
 /*
@@ -107,7 +107,7 @@ router.get('/project/:id/milestone', passport.authenticate('local'), function(re
 			res.render('organization_project_milestone', result.message);
 		}
 	});
-})；
+});
 router.post('/project/:id/milestone/add', passport.authenticate('local'), function(req, res) {
 	OrganizationService.addMilestone(req.params.id, req.body, function (result) {
 		res.send(result);
@@ -123,7 +123,7 @@ router.get('/project/:id/expenditure', passport.authenticate('local'), function(
 			res.render('organization_project_expenditure', result.message);
 		}
 	});
-})；
+});
 router.post('/project/:id/expenditure/add', passport.authenticate('local'), function(req, res) {
 	OrganizationService.addExpenditure(req.params.id, req.body, function (result) {
 		res.send(result);
@@ -147,7 +147,7 @@ router.get('/project/:id/volunteer', passport.authenticate('local'), function(re
 			}
 		});
 	});
-})；
+});
 router.post('/project/:id/volunteer/add', passport.authenticate('local'), function(req, res) {
 	OrganizationService.examineApplication(req.body.applicationID, req.body.approve, function (result) {
 		res.send(result);
