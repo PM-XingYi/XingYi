@@ -11,6 +11,7 @@ function(e) {
 
 );
 	var mock = require('../test/Mock');
+	mock.insertSuperUser();
 	mock.insertUser();
 	mock.insertOrg();
 //	mock.insertPj();

@@ -2,22 +2,34 @@ var go = require('../globalObjects'),
 	mongoose = require('mongoose'),
 	MD5 = require('MD5'),
 	assert = require("assert");
-    service = require('Service');
+    service = require('../test/Service');
 
 var Mock = function () {
 };
 
+var superUserID;
+var userCount = 50;
+
+Mock.insertSuperUser = function () {
+	//check if user exists
+	service.registerSuperUser(
+				function(info) {
+					assert.equal(info.success, true);
+					console.log("insertSuperUser OK:"+info.superUserID);
+					superUserID = info.superUserID;
+				}
+	);
+};
 
 Mock.insertUser = function () {
 	//check if user exists
 	var i;
-	for (i=0;i<50;i++) {
+	for (i=0;i<userCount;i++) {
 		var username = "user"+i;
 		service.registerUser(username, "password", "email@email.com", "13000000000",
 					function(info) {
-						console.log(info.success);
 						assert.equal(info.success, true);
-						console.log("insertUserOK:"+username);
+						console.log("insertUser OK:"+username);
 					}
 		);
 	}
@@ -26,12 +38,12 @@ Mock.insertUser = function () {
 Mock.insertOrg = function () {
 	//check if user exists
 	var i;
-	for (i=0;i<10;i++) {
+	for (i=0;i<userCount/5;i++) {
 		var username = "userForOrg"+i;
 		var orgName = "org"+i;
 		service.registerOrg(username, "password", "email@email.com", "13000000000", orgName, "15000000000",function(info) {
 						assert.equal(info.success, true);
-						console.log("insertOrg:"+orgName);
+						console.log("insertOrg OK:"+orgName);
 						Mock.insertPj(info.username)
 					}					
 		);
@@ -40,82 +52,150 @@ Mock.insertOrg = function () {
 
 Mock.insertPj = function (username) {
 	//check if user exists
-	var organizationService = require('../service/OrganizationService');
-	var i,j;
-	for (i=0;i<5;i++) {
-		var projectInfo = {name:"pj"+i+"_"+username, desc:"desc",moneyNeeded:1000*i-1};
+	var i;
+	for (i=0;i<2;i++) {
+		var projectInfo = {
+			name:"pj"+i+"_"+username, 
+			desc:"desc",
+			longDesc:"longDesc",
+			notice:"notice",
+			moneyNeeded:-1
+		};
+		service.publishProject(username, projectInfo, function(info) {
+						assert.equal(info.success, true);
+						console.log("insertPj OK:"+projectInfo.name);
+						Mock.checkProject(info.projectID);
+						Mock.addWatch(info.projectID);
+						Mock.addJoin(info.projectID);
+						Mock.addComment(info.projectID);
+					}	) ;
+	}
+
+	for (i=2;i<5;i++) {
+		var projectInfo = {
+			name:"pj"+i+"_"+username, 
+			desc:"desc",
+			longDesc:"longDesc",
+			notice:"notice",
+			moneyNeeded:1000*i
+		};
 
 		service.publishProject(username, projectInfo, function(info) {
 						assert.equal(info.success, true);
-						console.log("insertPj:"+projectInfo.name);
-						Mock.addRelation(info.projectID);
+						console.log("insertMoneyPj OK:"+projectInfo.name);
+						Mock.checkProject(info.projectID, ((Math.random()*100)%2)*2+1);
+						Mock.addWatch(info.projectID);
+						Mock.addJoin(info.projectID);
+						Mock.addDonate(info.projectID);
+						Mock.addComment(info.projectID);
 					}	) ;
 	}
 	
 };
 
-Mock.addRelation = function (projectID) {
+Mock.addWatch = function (projectID) {
 	//check if user exists
-	var organizationService = require('../service/OrganizationService');
-	var individualService = require('../service/IndividualService');
-	var i,j;
-	for (j=0;j<30;j++) {
+	var j;
+	for (j=0;j<userCount/3;j++) {
 			var username = "user"+j;
 
-			individualService.watchProject(username, projectID, function(info) {
+			service.watchProject(username, projectID, function(info) {
 						assert.equal(info.success, true);
-						console.log("watchok:");
+						
 					}	)	;	
 	}
-	for (j=15;j<50;j++) {
+	console.log("watchok:"+projectID);
+};
+
+Mock.addJoin = function (projectID) {
+	var j;
+	for (j=userCount/3;j<userCount*2/3;j++) {
 			var username = "user"+j;
 
-			individualService.joinProject(username, projectID, function(info) {
+			service.joinProject(username, projectID, "like it", function(info) {
 						assert.equal(info.success, true);
-						console.log("joinok:");
+						
 					}	)		;
 	}
-	for (j=15;j<30;j++) {
+	console.log("joinok:"+projectID);
+}
+
+Mock.addDonate = function(projectID) {
+	var j;
+	for (j=userCount*2/3;j<userCount;j++) {
 			var username = "user"+j;
 			var donateInfo = {
+					project: projectID,
 					date: new Date(), 
 					amount: 10, 
 					remark:"hello world", 
 					anonymous:true
 	
 			};
-			individualService.donateProject(username, projectID, donateInfo, function(info) {
+			service.donateProject(username, donateInfo, function(info) {
 						assert.equal(info.success, true);
-						console.log("joinok:");
+						
 					}	)		;
 	}
-	for (j=30;j<50;j++) {
+	for (j=0;j<userCount/4;j++) {
 			var username = "user"+j;
 			var donateInfo = {
+					project: projectID,
 					date: new Date(), 
 					amount: 10, 
 					remark:"bye world", 
 					anonymous:false
 	
 			};
-			individualService.donateProject(username, projectID, donateInfo, function(info) {
+			service.donateProject(username, donateInfo, function(info) {
 						assert.equal(info.success, true);
-						console.log("donateok:");
 					}	)		;
 	}
+	console.log("donateok:"+projectID);
+}
 
-	for (j=40;j<80;j++) {
+Mock.addComment = function(projectID) {
+	var j;
+	for (j=userCount/4;j<userCount/2;j++) {
 			var username = "user"+j;
 			var commentInfo = {
+					project: projectID,
 					date: new Date(), 
 					comment:"very good very good very good very good"
 	
 			};
-			individualService.commentProject(username, projectID, commentInfo, function(info) 						{
-						assert.equal(info.success, true);
-						console.log("commentok:");
-					}	)	;	
+			service.commentProject(username, commentInfo, function(info)
+			{
+				assert.equal(info.success, true);
+				Mock.checkComment(info.commentID, ((Math.random()*100)%2)*2+1);
+				
+			});	
 	}
+	console.log("commentok:"+projectID);
+};
+
+Mock.checkProject = function(projectID, approve) {
+	var remark = "";
+	if (approve == 3) {
+		remark = "declined";
+	}
+	service.examineProject(superUserID, projectID, approve, remark, function(info)
+			{
+				assert.equal(info.success, true);
+				console.log("checkPJ ok:"+projectID+", "+approve);
+			}); 
+};
+
+Mock.checkComment = function(commentID, approve) {
+	var remark = "";
+	if (approve == 3) {
+		remark = "declined";
+	}
+	service.examineComment(superUserID, commentID, approve, remark, function(info)
+			{
+				assert.equal(info.success, true);
+				console.log("checkComment ok:"+commentID+", "+approve);
+			}); 
 };
 
 module.exports = Mock;
