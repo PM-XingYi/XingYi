@@ -2,6 +2,7 @@ var go = require('../globalObjects'),
 	mongoose = require('mongoose'),
 	MD5 = require('MD5'),
 	assert = require("assert");
+    service = require('Service');
 
 var Mock = function () {
 };
@@ -9,11 +10,10 @@ var Mock = function () {
 
 Mock.insertUser = function () {
 	//check if user exists
-	var individualService = require('../service/IndividualService');
 	var i;
-	for (i=0;i<100;i++) {
+	for (i=0;i<50;i++) {
 		var username = "user"+i;
-		individualService.register(username, "password", "email@email.com", "13000000000",
+		service.registerUser(username, "password", "email@email.com", "13000000000",
 					function(info) {
 						console.log(info.success);
 						assert.equal(info.success, true);
@@ -25,12 +25,11 @@ Mock.insertUser = function () {
 
 Mock.insertOrg = function () {
 	//check if user exists
-	var organizationService = require('../service/OrganizationService');
 	var i;
 	for (i=0;i<10;i++) {
 		var username = "userForOrg"+i;
 		var orgName = "org"+i;
-		organizationService.register(username, "password", "email@email.com", "13000000000", orgName, "15000000000",function(info) {
+		service.registerOrg(username, "password", "email@email.com", "13000000000", orgName, "15000000000",function(info) {
 						assert.equal(info.success, true);
 						console.log("insertOrg:"+orgName);
 						Mock.insertPj(info.username)
@@ -44,9 +43,9 @@ Mock.insertPj = function (username) {
 	var organizationService = require('../service/OrganizationService');
 	var i,j;
 	for (i=0;i<5;i++) {
-		var projectInfo = {name:"pj"+i+"_"+username, desc:"desc",moneyNeeded:1000*i};
+		var projectInfo = {name:"pj"+i+"_"+username, desc:"desc",moneyNeeded:1000*i-1};
 
-		organizationService.publishProject(username, projectInfo, function(info) {
+		service.publishProject(username, projectInfo, function(info) {
 						assert.equal(info.success, true);
 						console.log("insertPj:"+projectInfo.name);
 						Mock.addRelation(info.projectID);
