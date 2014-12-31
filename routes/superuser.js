@@ -39,7 +39,6 @@ router.get('/examProject', function(req, res) {
  * examine a project
  */
 router.post('/examProject', function(req, res) {
-    console.log("before");
 	SuperUserService.examineProject(req.body.projectID, req.body.approve, req.body.remark, function (result) {
 		res.send(result);
 	});
@@ -49,17 +48,17 @@ router.post('/examProject', function(req, res) {
  * get all comment including unavailable ones
  */
 router.get('/examComment', function(req, res) {
-	ProjectService.getAllCommentByStatus(2, function (unchecked) {
-		ProjectService.getAllCommentByStatus(1, function (passed) {
-			ProjectService.getAllCommentByStatus(3, function (failed) {
+	SuperUserService.getAllCommentByStatus(2, function (unchecked) {
+		SuperUserService.getAllCommentByStatus(1, function (passed) {
+			SuperUserService.getAllCommentByStatus(3, function (failed) {
 				if (unchecked.success && passed.success && failed.success) {
 					var ans = {
 						uncheckedNum: unchecked.message.length,
-						uncheckedProject: unchecked.message,
+						uncheckedComment: unchecked.message,
 						passedNum: passed.message.length,
-						passedProject: passed.message,
+						passedComment: passed.message,
 						failedNum: failed.message.length,
-						failedProject: failed.message
+						failedComment: failed.message
 					};
 					res.render('superuser_comment', ans);
 				}

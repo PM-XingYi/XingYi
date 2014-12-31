@@ -17,7 +17,7 @@ router.param(function(name, fn){
 		}
 	}
 });
-router.param('id', /^\d+$/);
+router.param('id', /^\w+$/);
 
 router.get('/home', function(req, res) {
 	if (req.user) {
@@ -78,12 +78,24 @@ router.get('/project/watch', function (req, res) {
 /*
  * get donation page
  */
-router.get('/donate/:id', passport.authenticate('local'), function(req, res) {
-	ProjectService.getProjectById(req.body.project, function (result) {
-		if (result.success) {
-			res.render('individual_donate', result.message);
-		}
-	});
+router.get('/donate/:id', function(req, res) {
+	if (req.user) {
+		ProjectService.getProjectById(req.params.id, function (result) {
+			if (result.success) {
+				console.log(result.message);
+				res.render('individual_donate', {
+					curUser: req.user,
+					project: result.message[0]
+				});
+			}
+		});
+	}
+	else {
+		res.send({
+			success: false,
+			message: "not login yet"
+		});
+	}
 });
 
 
@@ -131,10 +143,14 @@ router.post('/comment', passport.authenticate('local'), function(req, res) {
 /*
  * donate to a project
  */
-router.post('/donate', passport.authenticate('local'), function(req, res) {
-	IndividualService.donateProject(req.user.username, req.body, function (result) {
-		res.send(result);
-	});
+router.post('/donate', function(req, res) {
+	if (req.user) {
+		IndividualService.donateProject(req.user.username, req.body, function (result) {
+			console.log(result);
+			res.send(result);
+		});
+	}
+	
 });
 
 module.exports = router;

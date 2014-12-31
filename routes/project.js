@@ -89,7 +89,6 @@ router.get('/:id', function (req, res) {
 		else {
 			project.ratio = project.moneyRaised / project.moneyNeeded;
 		}
-		console.log(project);
 
 		if (result.success) {
 			res.render('project_detail', {

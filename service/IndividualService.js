@@ -401,7 +401,6 @@ IndividualService.getJoinProjectList = function (username, callback) {
  * @param {String} username
  * @param {
  *   @param {ObjectId} project
- *   @param {Date} date
  *   @param {Number} amount
  *   @param {String} remark
  *   @param {Boolean} anonymous

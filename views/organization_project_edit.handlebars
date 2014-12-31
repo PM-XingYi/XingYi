@@ -28,7 +28,7 @@
 					<input id="search-box" type="search">
 					<img id="search-icon" src="/img/search.png" placeholder="搜索..." autocomplete="off">
 				</div>
-				<label>您好，<a id="user-entry">Sheer</a></label>
+				<label>您好，<a id="user-entry">{{curUser.username}}</a></label>
 				<a id="dashboard-entry">Dashboard</a>
 				<a id="logout-entry">登出</a>
 			</div>
@@ -72,9 +72,7 @@
 							</label>
 						</div>
 						<div class="col-2">
-							<textarea id="intro-of-project">
-								{{project.desc}}
-							</textarea>
+							<textarea id="intro-of-project">{{project.desc}}</textarea>
 						</div>
 					</div>
 					<div class="row">
@@ -107,9 +105,7 @@
 							</label>
 						</div>
 						<div class="col-2">
-							<textarea id="content-of-copy">
-								{{project.longDesc}}
-							</textarea>
+							<textarea id="content-of-copy">{{project.longDesc}}</textarea>
 						</div>
 					</div>
 				</section>
@@ -129,9 +125,7 @@
 							</label>
 						</div>
 						<div class="col-2">
-							<textarea id="inform-of-join">
-								{{project.notice}}
-							</textarea>
+							<textarea id="inform-of-join">{{project.notice}}</textarea>
 						</div>
 					</div>
 				</section>
@@ -144,16 +138,18 @@
 							<div class="save-item"></div>
 						</div>
 					</div>
+					{{#ifEq project.moneyNeeded -1}}
+					<div class="row">无</div>
+					{{else}}
 					<div class="row">
 						<div class="col-1">
 							<label>
 								众筹目标
 							</label>
 						</div>
-						<div class="col-2">
-							{{project.needMoney}}元
-						</div>
+						<div class="col-2">{{project.moneyNeeded}}元</div>
 					</div>
+					{{/ifEq}}
 				</section>
 				<section class="project-part">
 					<div class="row">

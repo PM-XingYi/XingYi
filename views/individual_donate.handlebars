@@ -3,10 +3,10 @@
 <head>
 	<meta charset=utf-8>
 	<title>行益网-Donate</title>
-	<link rel="stylesheet" type="text/css" href="css/general.css">
-	<script type="text/javascript" src="js/jquery-1.11.1.js"></script>
-	<script type="text/javascript" src="js/general.js"></script>
-	<script type="text/javascript" src="js/interface.js"></script>
+	<link rel="stylesheet" type="text/css" href="/css/general.css">
+	<script type="text/javascript" src="/js/jquery-1.11.1.js"></script>
+	<script type="text/javascript" src="/js/general.js"></script>
+	<script type="text/javascript" src="/js/interface.js"></script>
 </head>
 <body>
 	
@@ -15,17 +15,17 @@
 		<div class="wrapper" id="header-wrapper">
 			<div id="logo">
 				<div id="logo-img">
-					<img src="img/logo.png">
+					<img src="/img/logo.png">
 				</div>
 				<div id="logo-name">
-					<img src="img/name.png">
+					<img src="/img/name.png">
 				</div>
 			</div>
 			<!-- the search input, login and register entries -->
 			<div id="entry">
 				<div id="search">
 					<input id="search-box" type="search">
-					<img id="search-icon" src="img/search.png" placeholder="搜索..." autocomplete="off">
+					<img id="search-icon" src="/img/search.png" placeholder="搜索..." autocomplete="off">
 				</div>
 				<label>您好，<a id="user-entry">{{curUser.username}}</a></label>
 				<a id="dashboard-entry">Dashboard</a>
@@ -42,6 +42,7 @@
 					捐款
 				</h1>
 				<section class="form-container">
+					<div class="for-id">{{project._id}}</div>
 					<div class="form-row">
 						<label>项目名称</label>
 						<b>{{project.name}}</b>
@@ -105,6 +106,10 @@
 								<input type="radio" name="way" value="网上银行">网上银行
 							</label>
 						</b>
+					</div>
+					<div class="form-row">
+						<label>备注</label>
+						<input type="text" name="remark">
 					</div>
 					<div class="form-row">
 						<label></label>

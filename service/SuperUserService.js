@@ -11,7 +11,6 @@ var SuperUserService = function () {
  * @return {Boolean} success
  */
 SuperUserService.examineProject = function (projectID, approve, remark, callback) {
-  console.log("  x "+projectID);
 	go.database.Project.findByIdAndUpdate(projectID, 
 		{
 			$set: {
@@ -70,7 +69,7 @@ SuperUserService.examineComment = function (commentID, approve, remark, callback
  */
 
 SuperUserService.getAllCommentByStatus = function (approve, callback) {
-	go.database.Comment.find({approved: approve},function(err, docs){
+	go.database.Comment.find(/*{approved: approve}*/{},function(err, docs){
 		if(err){
 			callback({
 				success: false,
@@ -79,12 +78,9 @@ SuperUserService.getAllCommentByStatus = function (approve, callback) {
 		}
 		console.log(docs);
 		var answer = [];
-		if(docs  === null || docs  === undefined){
-			answer = "cannot find it";
-		}else{
+		if(docs !== null && docs  !== undefined){
 			answer = docs;
 		}
-		console.log(answer);
 		callback({
 			success: true,
 			message: answer

@@ -26,9 +26,9 @@
 			<div id="entry">
 				<div id="search">
 					<input id="search-box" type="search">
-					<img id="search-icon" src="img/search.png" placeholder="搜索..." autocomplete="off">
+					<img id="search-icon" src="/img/search.png" placeholder="搜索..." autocomplete="off">
 				</div>
-				<label>您好，<a id="user-entry">Sheer</a></label>
+				<label>您好，<a id="user-entry">{{curUser.username}}</a></label>
 				<a id="dashboard-entry">Dashboard</a>
 				<a id="logout-entry">登出</a>
 			</div>
@@ -58,10 +58,11 @@
 							<article>
 								<div class="for-id">{{_id}}</div>
 								<section class="project-image">
-									<img src="/img/pj_{{_id}}.png">
+									<!-- <img src="/img/pj_{{_id}}.png"> -->
+									<img src="/img/bg1.png">
 								</section>
 								<section class="project-info">
-									<section class="project-title relative">
+									<section class="project-title relative organization">
 										{{name}}
 									</section>
 									{{#ifEq ratio -1}}
