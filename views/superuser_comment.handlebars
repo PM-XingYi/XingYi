@@ -3,11 +3,11 @@
 <head>
 	<meta charset=utf-8>
 	<title>行益网-Comments Manage</title>
-	<link rel="stylesheet" type="text/css" href="css/general.css">
-	<script type="text/javascript" src="js/jquery-1.11.1.js"></script>
-	<script type="text/javascript" src="js/general.js"></script>
-	<script type="text/javascript" src="js/interface.js"></script>
-	<script type="text/javascript" src="js/pager.js"></script>
+	<link rel="stylesheet" type="text/css" href="/css/general.css">
+	<script type="text/javascript" src="/js/jquery-1.11.1.js"></script>
+	<script type="text/javascript" src="/js/general.js"></script>
+	<script type="text/javascript" src="/js/interface.js"></script>
+	<script type="text/javascript" src="/js/pager.js"></script>
 </head>
 <body>
 	
@@ -16,17 +16,17 @@
 		<div class="wrapper" id="header-wrapper">
 			<div id="logo">
 				<div id="logo-img">
-					<img src="img/logo.png">
+					<img src="/img/logo.png">
 				</div>
 				<div id="logo-name">
-					<img src="img/name.png">
+					<img src="/img/name.png">
 				</div>
 			</div>
 			<!-- the search input, login and register entries -->
 			<div id="entry">
 				<div id="search">
 					<input id="search-box" type="search">
-					<img id="search-icon" src="img/search.png" placeholder="搜索..." autocomplete="off">
+					<img id="search-icon" src="/img/search.png" placeholder="搜索..." autocomplete="off">
 				</div>
 				<label>您好，<a id="user-entry">Admin</a></label>
 				<a id="dashboard-entry">Dashboard</a>
@@ -78,7 +78,7 @@
 				<section id="all_project" class="tab">
 					<section class="show">
 						<div class="collection">
-							{{#each unchecked}}
+							{{#each uncheckedComment}}
 							<div class="row">
 								<div class="for-id">{{_id}}</div>
 								<div class="col-1">
@@ -114,7 +114,7 @@
 				<section id="star_project" class="tab">
 					<section class="show">
 						<div class="collection">
-							{{#each passed}}
+							{{#each passedComment}}
 							<div class="row">
 								<div class="for-id">{{_id}}</div>
 								<div class="col-1">
@@ -149,7 +149,7 @@
 				<section id="join_project" class="tab">
 					<section class="show">
 						<div class="collection">
-							{{#each failed}}
+							{{#each failedComment}}
 							<div class="row">
 								<div class="for-id">{{_id}}</div>
 								<div class="col-1">

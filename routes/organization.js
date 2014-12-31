@@ -18,23 +18,36 @@ router.param(function(name, fn){
 		}
 	}
 });
-router.param('id', /^\d+$/);
+router.param('id', /^\w+$/);
 
-router.get('/home', passport.authenticate('local'), function(req, res) {
-	res.render('dashboard_organization');
+router.get('/home', function(req, res) {
+	console.log(req.user);
+	if (req.user && req.user.userType === 'organization') {
+		res.render('organization_dashboard', {
+			curUser: req.user
+		});
+	}
+	else {
+		res.status(203).end();
+	}
 });
 
 /*
  * PAGE: user PRIVATE profile
  */
-router.get('/profile', passport.authenticate('local'), function(req, res) {
-	OrganizationService.getUser(req.user.username, function (answer) {
-		if (answer.success) {
-			res.render('organization_profile', {
-				user: answer.message
-			});
-		}
-	});
+router.get('/profile', function(req, res) {
+	if (req.user && req.user.userType === 'organization') {
+		OrganizationService.getUser(req.user.username, function (answer) {
+			if (answer.success) {
+				res.render('organization_profile', {
+					user: answer.message
+				});
+			}
+		});
+	}
+	else {
+		res.status(203).end();
+	}
 });
 /*
  * modify user profile
@@ -42,118 +55,190 @@ router.get('/profile', passport.authenticate('local'), function(req, res) {
  */
 var keySet = ['mobile', 'email'];
 router.post('/profile/edit', function (req, res) {
-	if (req.user) {
+	if (req.user && req.user.userType === 'organization') {
 		OrganizationService.updateUser(req.user.username, req.body, function(answer) {
 			res.send(answer);
 		});
+	}
+	else {
+		res.status(203).end();
 	}
 });
 
 /*
  * all project page
  */
-router.get('/project', passport.authenticate('local'), function(req, res) {
-	ProjectService.getOrganizationProject(req.user.username, function (result) {
-		if (result.success) {
-			res.render('organization_project_all', {project: result.message});
-		}
-	});
+router.get('/project', function(req, res) {
+	if (req.user && req.user.userType === 'organization') {
+		ProjectService.getOrganizationProject(req.user.username, function (result) {
+			if (result.success) {
+				res.render('organization_project_all', {
+					curUser: req.user,
+					project: result.message
+				});
+			}
+		});
+	}
+	else {
+		res.status(203).end();
+	}
 });
 /*
  * one project page
  */
-router.get('/project/:id', passport.authenticate('local'), function(req, res) {
-	ProjectService.getProjectById(req.params.id, function (result) {
-		if (result.success) {
-			res.render('organization_project_all', {project: result.message});
-		}
-	});
+router.get('/project/:id', function(req, res) {
+	if (req.user && req.user.userType === 'organization') {
+		ProjectService.getProjectById(req.params.id, function (result) {
+			if (result.success) {
+				res.render('organization_project_detail', {
+					curUser: req.user,
+					project: result.message[0]
+				});
+			}
+		});
+	}
+	else {
+		res.status(203).end();
+	}
 });
 /*
  * edit project page
  */
-router.get('/project/:id/edit', passport.authenticate('local'), function(req, res) {
-	ProjectService.getProjectById(req.params.id, function (result) {
-		if (result.success) {
-			res.render('organization_project_all', {project: result.message});
-		}
-	});
+router.get('/project/:id/edit', function(req, res) {
+	if (req.user && req.user.userType === 'organization') {
+		ProjectService.getProjectById(req.params.id, function (result) {
+			if (result.success) {
+				res.render('organization_project_edit', {
+					curUser: req.user,
+					project: result.message[0]
+				});
+			}
+		});
+	}
+	else {
+		res.status(203).end();
+	}
 });
 /*
  * edit project
  */
-router.post('/project/:id/edit', passport.authenticate('local'), function(req, res) {
-	OrganizationService.updateProject(req.body, function (result) {
-		res.send(result);
-	});
+router.post('/project/:id/edit', function(req, res) {
+	if (req.user && req.user.userType === 'organization') {
+		OrganizationService.updateProject(req.body, function (result) {
+			res.send(result);
+		});
+	}
+	else {
+		res.status(203).end();
+	}
 });
 
 /*
  * [page]publish a project
  */
-router.get('/publish', passport.authenticate('local'), function(req, res) {
-	res.render('organization_publish');
+router.get('/publish', function(req, res) {
+	if (req.user && req.user.userType === 'organization') {
+		res.render('organization_publish');
+	}
+	else {
+		res.status(203).end();
+	}
 });
-router.post('/publish', passport.authenticate('local'), function(req, res) {
-	OrganizationService.publishProject(req.user.username, req.body, function (result) {
-		res.send(result);
-	});
+router.post('/publish', function(req, res) {
+	if (req.user && req.user.userType === 'organization') {
+		OrganizationService.publishProject(req.user.username, req.body, function (result) {
+			res.send(result);
+		});
+	}
+	else {
+		res.status(203).end();
+	}
 });
 
 /*
  * manage milestone
  */
-router.get('/project/:id/milestone', passport.authenticate('local'), function(req, res) {
-	ProjectService.getProjectById(req.params.id, function (result) {
-		if (result.success) {
-			res.render('organization_project_milestone', result.message);
-		}
-	});
+router.get('/project/:id/milestone', function(req, res) {
+	if (req.user && req.user.userType === 'organization') {
+		ProjectService.getProjectById(req.params.id, function (result) {
+			if (result.success) {
+				res.render('organization_project_milestone', result.message);
+			}
+		});
+	}
+	else {
+		res.status(203).end();
+	}
 });
-router.post('/project/:id/milestone/add', passport.authenticate('local'), function(req, res) {
-	OrganizationService.addMilestone(req.params.id, req.body, function (result) {
-		res.send(result);
-	});
+router.post('/project/:id/milestone/add', function(req, res) {
+	if (req.user && req.user.userType === 'organization') {
+		OrganizationService.addMilestone(req.params.id, req.body, function (result) {
+			res.send(result);
+		});
+	}
+	else {
+		res.status(203).end();
+	}
 });
 
 /*
  * manage expenditure
  */
-router.get('/project/:id/expenditure', passport.authenticate('local'), function(req, res) {
-	ProjectService.getProjectById(req.params.id, function (result) {
-		if (result.success) {
-			res.render('organization_project_expenditure', result.message);
-		}
-	});
+router.get('/project/:id/expenditure', function(req, res) {
+	if (req.user && req.user.userType === 'organization') {
+		ProjectService.getProjectById(req.params.id, function (result) {
+			if (result.success) {
+				res.render('organization_project_expenditure', result.message);
+			}
+		});
+	}
+	else {
+		res.status(203).end();
+	}
 });
-router.post('/project/:id/expenditure/add', passport.authenticate('local'), function(req, res) {
-	OrganizationService.addExpenditure(req.params.id, req.body, function (result) {
-		res.send(result);
-	});
+router.post('/project/:id/expenditure/add', function(req, res) {
+	if (req.user && req.user.userType === 'organization') {
+		OrganizationService.addExpenditure(req.params.id, req.body, function (result) {
+			res.send(result);
+		});
+	}
+	else {
+		res.status(203).end();
+	}
 });
 
 /*
  * manage volunteer
  */
-router.get('/project/:id/volunteer', passport.authenticate('local'), function(req, res) {
-	ProjectService.getUncheckedApplicationForProject(req.params.id, function (unchecked) {
-		ProjectService.getVolunteerForProject(req.params.id, function (volunteer) {
-			if (unchecked.success && volunteer.success) {
-				var ans = {
-					volunteerNum: volunteer.length,
-					volunteer: volunteer,
-					candidateNum: unchecked.length,
-					candidate: unchecked
+router.get('/project/:id/volunteer', function(req, res) {
+	if (req.user && req.user.userType === 'organization') {
+		ProjectService.getUncheckedApplicationForProject(req.params.id, function (unchecked) {
+			ProjectService.getVolunteerForProject(req.params.id, function (volunteer) {
+				if (unchecked.success && volunteer.success) {
+					var ans = {
+						volunteerNum: volunteer.length,
+						volunteer: volunteer,
+						candidateNum: unchecked.length,
+						candidate: unchecked
+					}
+					res.render('organization_project_volunteer', ans);
 				}
-				res.render('organization_project_volunteer', ans);
-			}
+			});
 		});
-	});
+	}
+	else {
+		res.status(203).end();
+	}
 });
-router.post('/project/:id/volunteer/add', passport.authenticate('local'), function(req, res) {
-	OrganizationService.examineApplication(req.body.applicationID, req.body.approve, function (result) {
-		res.send(result);
-	});
+router.post('/project/:id/volunteer/add', function(req, res) {
+	if (req.user && req.user.userType === 'organization') {
+		OrganizationService.examineApplication(req.body.applicationID, req.body.approve, function (result) {
+			res.send(result);
+		});
+	}
+	else {
+		res.status(203).end();
+	}
 });
 
 module.exports = router;

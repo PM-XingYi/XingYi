@@ -5,88 +5,71 @@ $(function() {
 	// header login entry, go to login
 	$("#login-entry").bind("click", function() {
 		location.href = "login.html";
-		// TODO
 	});
 	// header register entry, go to register
 	$("#register-entry").bind("click", function() {
 		location.href = "register.html";
-		// TODO
 	});
 	// user entry, go to user profile view
 	$("#user-entry").bind("click", function() {
-		location.href = "profile_view.html";
-		// TODO
+		location.href = "/individual/profile";
 	});
 	// dashboard entry, go to dashboard, here should be some types....
 	// Admin Dashboard
 	$("#admin-comments-management-wrapper #dashboard-entry").bind("click", function() {
-		location.href = "admin_dashboard.html";
-		// TODO
+		location.href = "/superuser/home";
 	});
 	$("#project-verify-wrapper #dashboard-entry").bind("click", function() {
-		location.href = "admin_dashboard.html";
-		// TODO
+		location.href = "/superuser/home";
 	});
 	// Dashboard Individual
 	$("#recent-operations-user-wrapper #dashboard-entry").bind("click", function() {
-		location.href = "dashboard_individual.html";
-		// TODO
+		location.href = "/individual/home";
 	});
 	$("#view-followedpjs-user-wrapper #dashboard-entry").bind("click", function() {
-		location.href = "dashboard_individual.html";
-		// TODO
+		location.href = "/individual/home";
 	});
 	$("#view-participatingpjs-user-wrapper #dashboard-entry").bind("click", function() {
-		location.href = "dashboard_individual.html";
-		// TODO
+		location.href = "/individual/home";
 	});
 	// Dashboard Organization
 	$("#view-all-project-manager-wrapper #dashboard-entry").bind("click", function() {
-		location.href = "dashboard_organization.html";
-		// TODO
+		location.href = "/organization/home";
 	});
 	$("#create-new-project-manager-wrapper #dashboard-entry").bind("click", function() {
-		location.href = "dashboard_organization.html";
-		// TODO
+		location.href = "/organization/home";
 	});
 
 	// dashboard entry, go to dashboard, here should be some types....
 	// Admin Dashboard
 	$("#admin-comments-management-wrapper #go-back-dashboard").bind("click", function() {
-		location.href = "admin_dashboard.html";
-		// TODO
+		location.href = "/superuser/home";
 	});
 	$("#project-verify-wrapper #go-back-dashboard").bind("click", function() {
-		location.href = "admin_dashboard.html";
-		// TODO
+		location.href = "/superuser/home";
 	});
 	// Dashboard Individual
 	$("#recent-operations-user-wrapper #go-back-dashboard").bind("click", function() {
-		location.href = "dashboard_individual.html";
-		// TODO
+		location.href = "/individual/home";
 	});
 	$("#view-followedpjs-user-wrapper #go-back-dashboard").bind("click", function() {
-		location.href = "dashboard_individual.html";
-		// TODO
+		location.href = "/individual/home";
 	});
 	$("#view-participatingpjs-user-wrapper #go-back-dashboard").bind("click", function() {
-		location.href = "dashboard_individual.html";
-		// TODO
+		location.href = "/individual/home";
 	});
 	// Dashboard Organization
 	$("#view-all-project-manager-wrapper #go-back-dashboard").bind("click", function() {
-		location.href = "dashboard_organization.html";
-		// TODO
+		location.href = "/organization/home";
 	});
 	$("#create-new-project-manager-wrapper #go-back-dashboard").bind("click", function() {
-		location.href = "dashboard_organization.html";
-		// TODO
+		location.href = "/organization/home";
 	});
 	
 
 	// logout entry, to log out
 	$("#logout-entry").bind("click", function() {
-		// TODO
+		location.href = "/login/logout";
 	});
 	//
 	$("#search-icon").bind("click", function() {	//important!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -97,9 +80,13 @@ $(function() {
 		}
 	});
 	//project box, if click, it should be linked to the detailed page of such project
-	$(".project-title").bind("click", function() {
+	$(".project-title.public").bind("click", function() {
 		var id = $(this).parents("article").find(".for-id").text();
-		// TODO
+		location.href = "/project/" + id;
+	});
+	$(".project-title.organization").bind("click", function() {
+		var id = $(this).parents("article").find(".for-id").text();
+		location.href = "/organization/project/" + id;
 	});
 
 	/*
@@ -115,8 +102,6 @@ $(function() {
 			url: "/individual/profile/edit",
 			type: "POST",
 			data: {
-				gender: $("input[name='gender']:checked").val(),
-				nickname: $("#nickname").val(),
 				phonenumber: $("#number").val(),
 				email: $("#email").val()
 			},
@@ -133,40 +118,14 @@ $(function() {
 		Organization Profile Edit Page
 	*/
 	$("#organization-profile #save").bind("click", function() {
-		var gender = $("input[name='gender']:checked").val();
-		var nickname = $("#nickname").val();
 		var phonenumber = $("#number").val();
 		var email = $("#email").val();
-		var intro = $("#intro").val();
+		var desc = $("#intro").val();
 		console.log(gender+" "+nickname+" "+phonenumber+" "+email+" "+intro);
 		// TODO -- save the information
 	});
 	$("#organization-profile #cancel").bind("click", function() {
 		// TODO-- cancel edit
-	});
-
-
-	/*
-
-	*/
-
-	/*
-		Forget Reset Page
-	*/
-	$("#forget-reset-wrapper #submit").bind("click", function() {
-		var email = $("#email").val();
-		var username = $("#username").val();
-		var password = $("#pwd").val();
-		// TODO
-	});
-
-	/*
-		Forget Send Page
-	*/
-	// send, get the email address of the user
-	$("#forget-send-wrapper #send").bind("click", function() {
-		var email = $("#email").val();
-		// TODO
 	});
 
 	/*
@@ -436,7 +395,8 @@ $(function() {
 	*/
 	// this is for donate button, go to donate page
 	$("#view-details-wrapper #donate").bind("click", function() {
-		location.href = "donate.html";
+		var projectID = $(".for-id").text();
+		location.href = "/individual/donate/" + projectID;
 	});
 	//this is for comment button, just make comments
 	$("#view-details-wrapper #make-comment").bind("click", function() {
@@ -463,7 +423,8 @@ $(function() {
 	*/
 	// back
 	$("#donate-wrapper #return").bind("click", function() {
-		location.href = "view_detail.html";
+		var projectID = $(".for-id").text();
+		location.href = "/project/" + projectID;
 	});
 	// donate
 	$("#donate-wrapper #go-to-donate").bind("click", function() {
@@ -474,13 +435,23 @@ $(function() {
 			var money = parseInt(_money);
 		var way = $("input[name='way']:checked").val();
 		var isAnonymous = $("#donate-wrapper input[type='checkbox']").is(':checked');
-		//TODO
+
 		$.ajax({
 			url: "/individual/donate",
 			type: "POST",
-			data: {},
-			error: function() {
-
+			data: {
+				amount: money,
+				anonymous: isAnonymous,
+				project: $(".for-id").text(),
+				remark: $("input[name='remark']").text()
+			},
+			success: function(data) {
+				if (data && data.success) {
+					alert("捐款成功！谢谢您的爱心！");
+				}
+				else {
+					alert("啊哦失败了:( " + (data ? data.message : ""));
+				}
 			}
 		});
 	});
@@ -490,11 +461,11 @@ $(function() {
 	**/
 	// create a project
 	$("#dashboard-organization-wrapper #create-project").bind("click", function() {
-		location.href = "create_new_project_manager.html";
+		location.href = "/organization/publish";
 	});
 	// edit project
 	$("#dashboard-organization-wrapper #edit-project").bind("click", function() {
-		location.href = "view_all_project_manager.html";
+		location.href = "/organization/project";
 	});
 
 	/*
@@ -532,19 +503,23 @@ $(function() {
 	**/
 	// base information
 	$("#dashbaord-edit-project-wrapper #base-info").bind("click", function() {
-		location.href = "baseinfo_view.html";
+		var projectID = $(".for-id").text();
+		location.href = "/organization/project/" + projectID + "/edit";
 	});
 	// Message Update
 	$("#dashbaord-edit-project-wrapper #message-update").bind("click", function() {
-		location.href = "add_news.html";
+		var projectID = $(".for-id").text();
+		location.href = "/organization/project/" + projectID + "/milestone";
 	});
 	// Expense Management
 	$("#dashbaord-edit-project-wrapper #expense-manage").bind("click", function() {
-		location.href = "bookkeeping.html";
+		var projectID = $(".for-id").text();
+		location.href = "/organization/project/" + projectID + "/expenditure";
 	});
 	// Volunteer Management
 	$("#dashbaord-edit-project-wrapper #joiner-manage").bind("click", function() {
-		location.href = "volunteer_manage.html";
+		var projectID = $(".for-id").text();
+		location.href = "/organization/project/" + projectID + "/volunteer";
 	});
 
 	/**
@@ -772,46 +747,62 @@ $(function() {
 		For Page Project-verify
 	**/
 	// set status to be passed
-  $("#project-verify-wrapper .show .card-part button.pass").bind("click", function() {
-      var project = $(this).parents(".card-part").find(".for-id").text();
-      // var rightpart = project.find(".right-part");
-      // rightpart.children("button.fail").remove();
-      // rightpart.children("textarea").remove();
-      // rightpart.children("button.pass").text("已通过").removeClass("pass").addClass("passed");
-      // $("#project-verify-wrapper #star_project .show .collection").append(project);
-      $.ajax({
-          url: "/superuser/examProject",
-          type: "POST",
-          data: {
-            projectID: project,
-            approve: 1,
-            remark: ""
-          }
-      }).then(function(data){
-          if (data && data.success) {
-            location.reload();
-          }
-          else {
-            alert("失败 " + (data ? data.message : "!"));
-          }
-      });	
-  });
+	$("#project-verify-wrapper .show .card-part button.pass").bind("click", function() {
+		var project = $(this).parents(".card-part").find(".for-id").text();
+		// var rightpart = project.find(".right-part");
+		// rightpart.children("button.fail").remove();
+		// rightpart.children("textarea").remove();
+		// rightpart.children("button.pass").text("已通过").removeClass("pass").addClass("passed");
+		// $("#project-verify-wrapper #star_project .show .collection").append(project);
+		$.ajax({
+			url: "/superuser/examProject",
+			type: "POST",
+			data: {
+				projectID: project,
+				approve: 1,
+				remark: ""
+			}
+		}).then(function(data){
+			if (data && data.success) {
+				location.reload();
+			}
+			else {
+				alert("失败 " + (data ? data.message : "!"));
+			}
+		});
+	});
 	// set status to be failed
 	$("#project-verify-wrapper .show .card-part button.fail").bind("click", function() {
+		var projectID = $(this).parents(".card-part").find(".for-id").text();
 		if($(this).next().css("display")=="none") {
 			$(this).next().css("display", "block");
 			$(this).text("提交");
 		} else {
 			var content = $(this).next().val();
-			if(content!="") {
+			if(content !== "") {
 				var project = $(this).parents(".card-part");
 				var rightpart = project.find(".right-part");
 				rightpart.children("button.pass").remove();
 				rightpart.children("textarea").replaceWith("<h1>否决理由</h1><div>"+rightpart.children("textarea").val()+"</div>");
 				rightpart.children("button.fail").text("已否决").removeClass("fail").addClass("failed");			
 				$("#project-verify-wrapper #join_project .show .collection").append(project);
-				// TODO, in the server side
-
+				
+				$.ajax({
+					url: "/superuser/examProject",
+					type: "POST",
+					data: {
+						projectID: projectID,
+						approve: 3,
+						remark: $("#reason-" + projectID).text()
+					}
+				}).then(function(data){
+					if (data && data.success) {
+						location.reload();
+					}
+					else {
+						alert("失败 " + (data ? data.message : "!"));
+					}
+				});
 			} 
 		}
 	});

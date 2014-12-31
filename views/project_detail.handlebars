@@ -102,11 +102,11 @@
 						<p>
 							{{project.notice}}
 						</p>
+						{{#ifEq project.approve 2}}
 						<label>
 							<input type="checkbox">
 							我已了解上述须知
 						</label>
-						{{#ifEq project.approve 2}}
 						<button class="rounded-button disable-button yellow-font">等待审核...</button>
 						{{else}}
 							{{#ifEq project.approve 1}}
@@ -138,7 +138,7 @@
 									<div class="progress-done"></div>
 									<div class="progress-undone"></div>
 								</div>
-								<label>{{project.needMoney}}</label>
+								<label>{{project.moneyNeeded}}</label>
 							</section>
 							<section>
 								<button class="rounded-button" id="donate">捐款</button>

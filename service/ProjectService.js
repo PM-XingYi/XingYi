@@ -9,24 +9,16 @@ var ProjectService = function () {
  */
 ProjectService.getAllProjectByStatus = function (status,callback) {
 	go.database.Project.find(/*{approved: status}*/{},function(err, docs){
-		console.log("there");
 		if(err){
 			callback({
 				success: false,
 				message: "internal error"
 			});
 		}
-		console.log(docs);
 		var answer = [];
-		if(docs  === null || docs  === undefined){
-			callback({
-				success: false,
-				message: "cannot find"
-			});
-		}else{
+		if(docs  !== null && docs  !== undefined){
 			answer = docs;
 		}
-		console.log(answer);
 		callback({
 			success: true,
 			message: answer
@@ -148,10 +140,8 @@ ProjectService.getOrganizationProject = function(username, callback){
 					message: "internal error"
 				});
 			}
-			var answer;
-			if(project  === null || project  === undefined){
-				answer = "cannot find it";
-			}else{
+			var answer = [];
+			if(project !== null && project !== undefined){
 				answer = project;
 			}
 			callback({
