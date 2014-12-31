@@ -191,7 +191,6 @@ Service.watchProject = function (username, projectID, callback) {
 				message: "internal error"
 			});
 		}else {
-			console.log(user);
 			if(user !== null){
 				if(user.userType !== "individual"){
 					callback({
@@ -242,7 +241,6 @@ Service.joinProject = function (username, projectID, joinReason, callback) {
 				message: "internal error"
 			});
 		}else {
-			console.log(user);
 			if(user !== null){
 				if(user.userType !== "individual"){
 					callback({
@@ -265,7 +263,6 @@ Service.joinProject = function (username, projectID, joinReason, callback) {
 								message: "internal error"
 							});
 						}
-						console.log(application);
 						//add to individual's application list
 						go.database.Individual.findByIdAndUpdate(user.detail, 
 						{
@@ -464,7 +461,6 @@ Service.commentProject = function (username, commentInfo, callback) {
  * @return {Boolean} success
  */
 Service.examineProject = function (superUserID, projectID, approve, remark, callback) {
-  console.log("  x "+projectID);
 	go.database.Project.findByIdAndUpdate(projectID, 
 		{
 			$set: {

@@ -13,12 +13,13 @@ var DatabaseService = function (dbUrl) {
 	this.Comment = require('../database/Comment');
 	this.Donation = require('../database/Donation');
 	this.Application = require('../database/Application');
+	mongoose.connect('mongodb://localhost/test');
 }
 
 var DatabaseConnector = function (dbUrl) {
 	if (db === null) {
 		db = new DatabaseService(dbUrl);
-		db.connect();
+		//db.connect();
 	}
 	return db;
 }

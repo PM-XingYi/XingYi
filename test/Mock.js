@@ -38,7 +38,7 @@ Mock.insertUser = function () {
 Mock.insertOrg = function () {
 	//check if user exists
 	var i;
-	for (i=0;i<userCount/5;i++) {
+	for (i=0;i<Math.floor(userCount/5);i++) {
 		var username = "userForOrg"+i;
 		var orgName = "org"+i;
 		service.registerOrg(username, "password", "email@email.com", "13000000000", orgName, "15000000000",function(info) {
@@ -64,7 +64,7 @@ Mock.insertPj = function (username) {
 		service.publishProject(username, projectInfo, function(info) {
 						assert.equal(info.success, true);
 						console.log("insertPj OK:"+projectInfo.name);
-						Mock.checkProject(info.projectID);
+						Mock.checkProject(info.projectID, (Math.floor((Math.random()*100))%2)*2+1);
 						Mock.addWatch(info.projectID);
 						Mock.addJoin(info.projectID);
 						Mock.addComment(info.projectID);
@@ -83,7 +83,7 @@ Mock.insertPj = function (username) {
 		service.publishProject(username, projectInfo, function(info) {
 						assert.equal(info.success, true);
 						console.log("insertMoneyPj OK:"+projectInfo.name);
-						Mock.checkProject(info.projectID, ((Math.random()*100)%2)*2+1);
+						Mock.checkProject(info.projectID, (Math.floor((Math.random()*100))%2)*2+1);
 						Mock.addWatch(info.projectID);
 						Mock.addJoin(info.projectID);
 						Mock.addDonate(info.projectID);
@@ -96,7 +96,7 @@ Mock.insertPj = function (username) {
 Mock.addWatch = function (projectID) {
 	//check if user exists
 	var j;
-	for (j=0;j<userCount/3;j++) {
+	for (j=0;j<Math.floor(userCount/3);j++) {
 			var username = "user"+j;
 
 			service.watchProject(username, projectID, function(info) {
@@ -109,9 +109,8 @@ Mock.addWatch = function (projectID) {
 
 Mock.addJoin = function (projectID) {
 	var j;
-	for (j=userCount/3;j<userCount*2/3;j++) {
+	for (j=Math.floor(userCount/3);j<Math.floor(userCount*2/3);j++) {
 			var username = "user"+j;
-
 			service.joinProject(username, projectID, "like it", function(info) {
 						assert.equal(info.success, true);
 						
@@ -122,7 +121,7 @@ Mock.addJoin = function (projectID) {
 
 Mock.addDonate = function(projectID) {
 	var j;
-	for (j=userCount*2/3;j<userCount;j++) {
+	for (j=Math.floor(userCount*2/3);j<userCount;j++) {
 			var username = "user"+j;
 			var donateInfo = {
 					project: projectID,
@@ -137,7 +136,7 @@ Mock.addDonate = function(projectID) {
 						
 					}	)		;
 	}
-	for (j=0;j<userCount/4;j++) {
+	for (j=0;j<Math.floor(userCount/4);j++) {
 			var username = "user"+j;
 			var donateInfo = {
 					project: projectID,
@@ -156,7 +155,7 @@ Mock.addDonate = function(projectID) {
 
 Mock.addComment = function(projectID) {
 	var j;
-	for (j=userCount/4;j<userCount/2;j++) {
+	for (j=Math.floor(userCount/4);Math.floor(j<userCount/2);j++) {
 			var username = "user"+j;
 			var commentInfo = {
 					project: projectID,
@@ -167,7 +166,7 @@ Mock.addComment = function(projectID) {
 			service.commentProject(username, commentInfo, function(info)
 			{
 				assert.equal(info.success, true);
-				Mock.checkComment(info.commentID, ((Math.random()*100)%2)*2+1);
+				Mock.checkComment(info.commentID, (Math.floor((Math.random()*100))%2)*2+1);
 				
 			});	
 	}
