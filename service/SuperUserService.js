@@ -24,10 +24,27 @@ SuperUserService.examineProject = function (projectID, approve, remark, callback
 					message:"internal error"
 				});
 			}
-			callback({
-				success: true,
-				message: "change the aprroved state successfully"
-			});
+			go.database.SuperUser.findOneAndUpdate({},{
+				$addToSet:
+				{projectExamine: 
+					{
+						project: projectID,
+						approve: approve,
+						remark: remark
+					}
+				}
+			}, function(err, result){
+				if(err){
+					callback({
+						success: false,
+						message: "internal error"
+					});
+				}
+				callback({
+					success: true,
+					message: "change the aprroved state successfully"
+				});
+			})	
 	});
 }
 
@@ -52,10 +69,27 @@ SuperUserService.examineComment = function (commentID, approve, remark, callback
 					message:"internal error"
 				});
 			}
-			callback({
-				success: true,
-				message: "change the aprroved state successfully"
-			});
+			go.database.SuperUser.findOneAndUpdate({},{
+				$addToSet:
+				{commentExamine:
+					{
+						comment: commentID,
+						approve: approve,
+						remark: remark
+					}
+				}
+			},function(err, result){
+				if(err){
+					callback({
+						success: false,
+						message: "internal error"
+					});
+				}
+				callback({
+					success: true,
+					message: "change the aprroved state successfully"
+				});
+			});			
 	});
 }
 
@@ -69,22 +103,42 @@ SuperUserService.examineComment = function (commentID, approve, remark, callback
  */
 
 SuperUserService.getAllCommentByStatus = function (approve, callback) {
-	go.database.Comment.find(/*{approved: approve}*/{},function(err, docs){
+	go.database.Comment.find(/*{approved: approve}*/{}).populate('user project').exec(function(err, docs){
 		if(err){
 			callback({
 				success: false,
 				message: "internal error"
 			});
 		}
-		console.log(docs);
+	//	console.log(docs);
 		var answer = [];
-		if(docs !== null && docs  !== undefined){
-			answer = docs;
+		if(docs !== null && docs  !== undefined){			
+			var project;
+			for(var i = 0;i<docs.length;i++){
+				console.log(docs[i].user._id);
+				project = docs[i];
+				go.database.User.findOne({detail:docs[i].user._id} ,function(err, user){
+					if(err){
+						callback({
+							success: false,
+							message: "internal error"
+						});
+					}
+					project.detail = user;
+					answer.push(temp);
+				});
+			}
+			console.log(answer);
+			callback({
+				success: true,
+				message: answer
+			});			
+		}else{
+			callback({
+				success: true,
+				message: answer
+			});
 		}
-		callback({
-			success: true,
-			message: answer
-		});
 	});
 }
 

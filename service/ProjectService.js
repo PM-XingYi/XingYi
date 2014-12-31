@@ -89,7 +89,7 @@ ProjectService.latestProject = function (n, callback) {
 
 /*
  * return all info of a project
- * @return {an Array of info [0] = project [1] = user}
+ * @return {project}
  */
 ProjectService.getProjectById = function(projectID, callback){
 	go.database.Project.findById(projectID).populate('owner joinedIndividual comment donation').exec(function(err, project){
@@ -99,32 +99,36 @@ ProjectService.getProjectById = function(projectID, callback){
 				message: "internal error"
 			});
 		}
-		go.database.User.find({detail: project.owner._id}).populate('detail').exec(function(err, user){
-			if(err){
-				console.log(err);
-				callback({
-					success: false,
-					message: "internal error"
-				});
-			}
-			var answer = [];
-			if(project  === null || project  === undefined){
-				callback({
-					success: false,
-					message: "cannot find it"
-				});;
-			}else{
-				answer.push(project);
-			}
-			answer.push(user);
+		if(project  === null || project  === undefined){
 			callback({
-				success: true,
-				message: answer
-			});
-		});	
+				success: false,
+				message: "cannot find it"
+			});;
+		}else{
+			var answer = project;
+			go.database.User.find({detail: project.owner._id}).populate('detail').exec(function(err, user){
+				if(err){
+					console.log(err);
+					callback({
+						success: false,
+						message: "internal error"
+					});
+				}
+				answer.detail = user;
+				callback({
+					success: true,
+					message: answer
+				});
+			});	
+		}		
 	});
 }
 
+/*
+ * @param {String} username 
+ * return array of project 
+ * @return {array of project}
+ */
 ProjectService.getOrganizationProject = function(username, callback){
 	go.database.User.findOne({username: username}, function(err, user){
 		if(err){
