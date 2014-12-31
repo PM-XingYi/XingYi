@@ -72,7 +72,7 @@
 							</label>
 						</div>
 						<div class="col-2">
-							<textarea id="intro-of-project">{{project.desc}}</textarea>
+							<textarea id="edit-desc">{{project.desc}}</textarea>
 						</div>
 					</div>
 					<div class="row">
@@ -83,9 +83,9 @@
 						</div>
 						<div class="col-2">
 							<label class="input-file">
-								<input title="浏览文件" type="file" />浏览
+								<input id="edit-img" title="浏览文件" type="file" />浏览
 							</label>
-							<label>/pj_{{project._id}}.jpg</label>
+							<!-- <label>/pj_{{project._id}}.jpg</label> -->
 						</div>
 					</div>
 				</section>
@@ -105,7 +105,7 @@
 							</label>
 						</div>
 						<div class="col-2">
-							<textarea id="content-of-copy">{{project.longDesc}}</textarea>
+							<textarea id="edit-longDesc">{{project.longDesc}}</textarea>
 						</div>
 					</div>
 				</section>
@@ -125,7 +125,7 @@
 							</label>
 						</div>
 						<div class="col-2">
-							<textarea id="inform-of-join">{{project.notice}}</textarea>
+							<textarea id="edit-notice">{{project.notice}}</textarea>
 						</div>
 					</div>
 				</section>

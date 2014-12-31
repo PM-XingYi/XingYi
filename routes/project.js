@@ -81,7 +81,7 @@ router.post('/search', function (req, res) {
 router.get('/:id', function (req, res) {
 	ProjectService.getProjectById(req.params.id, function(result) {
 		var project = result.message[0];
-		project.owner = result.message[1];
+		project.owner.detail = result.message[1];
 
 		if (project.moneyNeeded === -1) {
 			project.ratio = -1;
