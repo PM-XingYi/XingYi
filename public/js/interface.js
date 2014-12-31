@@ -542,6 +542,7 @@ $(function() {
 
 		$.ajax({
 			type: "POST",
+			url: "/organization/project/" + projectID + "/edit",
 			data: data,
 			success: function (data) {
 				if (data && data.success) {
@@ -552,7 +553,7 @@ $(function() {
 					alert("啊哦失败了:(");
 				}
 			}
-		})
+		});
 	});
 	// save temporarily
 	$("#baseinfo-edit-wrapper .save-item").bind("click", function() {

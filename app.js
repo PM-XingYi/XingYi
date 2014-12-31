@@ -38,11 +38,10 @@ app.set('view engine', 'handlebars');
 
 app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
-app.use(express.bodyParser({uploadDir:'./uploads'}));
+// app.use(bodyParser({uploadDir:'./uploads'}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use("/img", express.static(path.join(__dirname, 'public/img')));
 app.use(cookieParser());
 app.use(expressSession({secret: 'secret key'}));
 app.use(passport.initialize());

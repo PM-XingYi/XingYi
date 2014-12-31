@@ -3,7 +3,8 @@ var express = require('express'),
 	passport = require('passport'),
 	go = require('../globalObjects'),
 	OrganizationService = require('../service/OrganizationService'),
-	ProjectService = require('../service/ProjectService');
+	ProjectService = require('../service/ProjectService'),
+	fs = require('fs');
 
 router.param(function(name, fn){
 	if (fn instanceof RegExp) {
@@ -124,6 +125,18 @@ router.get('/project/:id/edit', function(req, res) {
  */
 router.post('/project/:id/edit', function(req, res) {
 	if (req.user && req.user.userType === 'organization') {
+		if (req.files && req.files.image !== 'undifined') {
+			var tmpPath = req.files.iamge.path;
+			var targetPath = './public/img/pj_' + req.user._id + ".jpg";
+			fs.rename(tmp_path, target_path, function(err) {
+				if (err) {
+					console.log(err);
+				}
+				fs.unlink(tmp_path, function() {
+					if (err) throw err;
+				});
+			});
+		}
 		OrganizationService.updateProject(req.body, function (result) {
 			res.send(result);
 		});
