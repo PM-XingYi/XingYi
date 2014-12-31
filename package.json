@@ -19,6 +19,7 @@
     "mongoose": "*",
     "passport-local": "*",
     "MD5": "*",
-    "express-handlebars": "*"
+    "express-handlebars": "*",
+    "connect-busboy": "*"
   }
 }

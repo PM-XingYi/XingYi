@@ -124,22 +124,37 @@ router.get('/project/:id/edit', function(req, res) {
  * edit project
  */
 router.post('/project/:id/edit', function(req, res) {
+	console.log("here");
 	if (req.user && req.user.userType === 'organization') {
+		var fstream;
+		req.pipe(req.busboy);
+		req.busboy.on('file', function (fieldname, file, filename) {
+			console.log("Uploading: " + filename); 
+			fstream = fs.createWriteStream(__dirname + '/files/' + filename);
+			file.pipe(fstream);
+			fstream.on('close', function () {
+				res.redirect('back');
+			});
+		});
+		
+		console.dir(req);
 		if (req.files && req.files.image !== 'undifined') {
 			var tmpPath = req.files.iamge.path;
 			var targetPath = './public/img/pj_' + req.user._id + ".jpg";
-			fs.rename(tmp_path, target_path, function(err) {
+			fs.rename(tmpPath, targetPath, function(err) {
 				if (err) {
 					console.log(err);
 				}
-				fs.unlink(tmp_path, function() {
-					if (err) throw err;
+				fs.unlink(tmpPath, function() {
+					if (err) {
+						console.log(err);
+					}
 				});
 			});
 		}
-		OrganizationService.updateProject(req.body, function (result) {
-			res.send(result);
-		});
+		// OrganizationService.updateProject(req.body, function (result) {
+		// 	res.send(result);
+		// });
 	}
 	else {
 		res.status(203).end();

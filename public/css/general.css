@@ -1937,7 +1937,7 @@ section#apply-form button.disable-button:hover,
 
 #view-all-project-manager-wrapper .flag-note>:nth-child(2),
 #view-participatingpjs-user-wrapper .flag-note>:nth-child(2) {
-	background: url("../img/passed.png");
+	background: url("/img/passed.png");
 	background-size: 30px 30px;
 	background-repeat: no-repeat;
 }
@@ -1951,7 +1951,7 @@ section#apply-form button.disable-button:hover,
 
 #view-all-project-manager-wrapper .flag-note>:nth-child(4),
 #view-participatingpjs-user-wrapper .flag-note>:nth-child(4) {
-	background: url("../img/failed.png");
+	background: url("/img/failed.png");
 	background-size: 30px 30px;
 	background-repeat: no-repeat;
 }

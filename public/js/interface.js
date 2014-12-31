@@ -475,9 +475,9 @@ $(function() {
 	$("#view-all-project-manager-wrapper button.rounded-button").filter(function() {
 		return !$(this).hasClass("disable-button")
 	}).bind("click", function() {
-		var id = $(this).parents(".project-wrapper").find(".for-id");
-		// TODO, just go to project
-
+		console.log($(this).parents(".project-wrapper").find(".for-id"));
+		var projectID = $(this).parents(".project-wrapper").find(".for-id").text();
+		location.href = "/organization/project/" + projectID + "/edit";
 	});
 
 
@@ -528,10 +528,12 @@ $(function() {
 	// save button
 	$("#baseinfo-edit-wrapper #save-project").bind("click", function() {
 		var projectID = $(".for-id").text();
-		var desc = $("#edit-desc").text();
-		var longDesc = $("#edit-longDesc").text();
-		var notice = $("#edit-notice").text();
+		var desc = $("#edit-desc").val();
+		var longDesc = $("#edit-longDesc").val();
+		var notice = $("#edit-notice").val();
 		var image = $("#edit-img")[0].files[0];
+
+		$("#filename").text(image.name);
 
 		var data = new FormData();
 		data.append("project", projectID);
@@ -544,6 +546,8 @@ $(function() {
 			type: "POST",
 			url: "/organization/project/" + projectID + "/edit",
 			data: data,
+			contentType: false,
+			processData: false,
 			success: function (data) {
 				if (data && data.success) {
 					alert("修改成功！");

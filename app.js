@@ -5,6 +5,7 @@ var express = require('express'),
 	cookieParser = require('cookie-parser'),
 	bodyParser = require('body-parser'),
 	expressSession = require('express-session'),
+	busboy = require('connect-busboy'),
 	exphbs  = require('express-handlebars'),
 	passport = require('passport'),
 	LocalStrategy = require('passport-local').Strategy;
@@ -38,7 +39,7 @@ app.set('view engine', 'handlebars');
 
 app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
-// app.use(bodyParser({uploadDir:'./uploads'}));
+app.use(busboy());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
