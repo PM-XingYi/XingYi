@@ -523,43 +523,36 @@ $(function() {
 	});
 
 	/**
-		For BaseInfo View
-	**/
-	// save button
-	// save project information
-	$("#baseinfo-view-wrapper #save-project").bind("click", function() {
-		var name_of_project = $("#name-of-project").text();
-		var intro_of_project = $("#intro-of-project").text();
-		var filename = $("#project-pictures").text();
-		var title_of_copy = $("#title-of-copy").text();
-		var content_of_copy = $("#content-of-copy").text();
-		var inform_of_join = $("#inform-of-join").text();
-		var goal_of_kick = $("#goal-of-kick").text();
-		var explain_of_goal = $("#explain-of-goal").text();
-		var content_of_intro = $("#content-of-intro").text();
-		//TODO,  for the server
-
-	});
-	// edit button, go to baseinfo_edit
-	$("#baseinfo-view-wrapper .edit-item").bind("click", function() {
-		location.html = "baseinfo_edit.html";
-	});
-
-	/**
 		For BaseInfo Edit
 	**/
 	// save button
 	$("#baseinfo-edit-wrapper #save-project").bind("click", function() {
-		var name_of_project = $("#name-of-project").text();
-		var intro_of_project = $("#intro-of-project").text();
-		var filename = $("#project-pictures").text();
-		var title_of_copy = $("#title-of-copy").text();
-		var content_of_copy = $("#content-of-copy").text();
-		var inform_of_join = $("#inform-of-join").text();
-		var goal_of_kick = $("#goal-of-kick").text();
-		var explain_of_goal = $("#explain-of-goal").text();
-		var content_of_intro = $("#content-of-intro").text();
-		//TODO,  for the server
+		var projectID = $(".for-id").text();
+		var desc = $("#edit-desc").text();
+		var longDesc = $("#edit-longDesc").text();
+		var notice = $("#edit-notice").text();
+		var image = $("#edit-img")[0].files[0];
+
+		var data = new FormData();
+		data.append("project", projectID);
+		data.append("desc", desc);
+		data.append("longDesc", longDesc);
+		data.append("notice", notice);
+		data.append("image", image);
+
+		$.ajax({
+			type: "POST",
+			data: data,
+			success: function (data) {
+				if (data && data.success) {
+					alert("修改成功！");
+					location.href = "/organization/project/" + projectID;
+				}
+				else {
+					alert("啊哦失败了:(");
+				}
+			}
+		})
 	});
 	// save temporarily
 	$("#baseinfo-edit-wrapper .save-item").bind("click", function() {

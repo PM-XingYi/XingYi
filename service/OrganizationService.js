@@ -220,7 +220,12 @@ OrganizationService.publishProject = function (username, projectInfo, callback) 
 
 /*
  * update user info
- * @param {Project} newProjectInfo
+ * @param {
+ *   @param {Number} project
+ *   @param {String} desc
+ *   @param {String} longDesc
+ *   @param {String} notice
+ * } newProjectInfo
  * @return {Boolean} success
  */
 OrganizationService.updateProject = function (newProjectInfo, callback) {
