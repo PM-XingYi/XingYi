@@ -24,12 +24,15 @@ IndividualService.register = function (username, password, email, mobile, callba
 				success: false,
 				message: "user already exists"
 			});			
-
 		} else{
 			var ind = new go.database.Individual({mobile: mobile});
 			ind.save(function (err, ind) {
 				if (err) {
 					console.log(err);
+					callback({
+						success: false,
+						message: "internal error"
+					});
 				}
 				var user = new go.database.User({
 					username: username,
@@ -45,6 +48,7 @@ IndividualService.register = function (username, password, email, mobile, callba
 					else {
 						callback({
 							success: true
+							message:"register successfully"
 						});
 					}
 				});
@@ -109,7 +113,6 @@ IndividualService.updateUser = function (username, newUserInfo, callback) {
 					message: "internal error"
 				});
 			}
-			console.log(newUserInfo["\"mobile\""]);
 			console.log("test");
 			console.log(newUserInfo["mobile"]);
 			if(newUserInfo["mobile"] !== undefined){
@@ -254,7 +257,6 @@ IndividualService.getWatchProjectList = function (username, callback) {
 				answer = individual.watchedProject;
 			}
 			console.log(answer);
-
 			callback({
 				success: true,
 				message: answer
@@ -292,7 +294,7 @@ IndividualService.joinProject = function (username, projectID, joinReason, callb
 						user: user.detail,
 						project: projectID,
 						status:2,
-						reson:joinReason
+						reason:joinReason
 					});
 					application.save(function(err){
 						if(err){
@@ -357,6 +359,12 @@ IndividualService.joinProject = function (username, projectID, joinReason, callb
  */
 IndividualService.getJoinProjectList = function (username, callback) {
 	go.database.User.findOne({username: username},function(err, user){
+		if(err){
+			callback({
+				success: false,
+				message: "internal error"
+			});
+		}
 		go.database.Individual.findById({_id: user.detail},function(err, individual){
 			if(err){
 				callback({
@@ -415,16 +423,31 @@ IndividualService.donateProject = function (username, donateInfo, callback) {
 				message: "internal error"
 			});
 		}else{
+			var myDate = new Date();  
+			myDate.getYear();        //获取当前年份(2位)  
+			myDate.getFullYear();    //获取完整的年份(4位,1970-????)  
+			myDate.getMonth();       //获取当前月份(0-11,0代表1月)  
+			myDate.getDate();        //获取当前日(1-31)  
+			myDate.getDay();         //获取当前星期X(0-6,0代表星期天)  
+			myDate.getTime();        //获取当前时间(从1970.1.1开始的毫秒数)  
+			myDate.getHours();       //获取当前小时数(0-23)  
+			myDate.getMinutes();     //获取当前分钟数(0-59)  
+			myDate.getSeconds();     //获取当前秒数(0-59)  
+			myDate.getMilliseconds();    //获取当前毫秒数(0-999)  
+			myDate.toLocaleDateString();     //获取当前日期  
+			var mytime = myDate.toLocaleTimeString();     //获取当前时间  
+			myDate.toLocaleString( );        //获取日期与时间  
+			console.log(mytime);
 			var donation = new go.database.Donation(
 				{
 					user: user._id,
 					project: donateInfo.project, 
-					date: donateInfo.date, 
+					date: myDate, // 需要修改，变成系统当前时间
 					amount: donateInfo.amount, 
 					remark:donateInfo.remark, 
 					anonymous:donateInfo.anonymous
 				});
-			donation.save(function(err,donation){
+			donation.save(function(err){
 				if(err){
 					callback({
 						success: false,
@@ -480,7 +503,7 @@ IndividualService.getDonateProjectList = function (username, callback) {
 				message: "internal error"
 			});
 		}
-		go.database.Individual.findById({_id: user.detail}).populate('donation').exec(function(err, individual){
+		go.database.Donation.find({user: user.detail}).populate('project').exec(function(err, donations){
 			if(err){
 				console.log(err);
 				callback({
@@ -488,10 +511,10 @@ IndividualService.getDonateProjectList = function (username, callback) {
 				});
 			}
 			var answer = [];
-			if(individual === null || individual == undefined){
-				console.log(individual);
+			if(donations === null || donations === undefined){
+				console.log(donations);
 			}else{
-				answer = individual.donation;
+				answer = donations;
 			}
 			console.log(answer);
 			callback({
@@ -528,7 +551,7 @@ IndividualService.commentProject = function (username, commentInfo, callback) {
 					date: commentInfo.date, 
 					comment: commentInfo.comment, 
 				});
-			comment.save(function(err,comment){
+			comment.save(function(err){
 				if(err){
 					callback({
 						success: false,
@@ -580,7 +603,7 @@ IndividualService.getCommentProjectList = function (username, callback) {
 				message: "internal error"
 			});
 		}
-		go.database.Individual.findById({_id: user.detail}).populate('comment').exec(function(err, individual){
+		go.database.Comment.find({user: user.detail}).populate('project').exec(function(err, comments){
 			if(err){
 				callback({
 					success: false
@@ -588,9 +611,9 @@ IndividualService.getCommentProjectList = function (username, callback) {
 			}
 			var answer = [];
 			if(answer === null || answer === undefined){
-				console.log(individual);
+				console.log(comments);
 			}else{
-				answer = individual.comment;
+				answer = comments;
 			}		
 			callback({
 				success: true,

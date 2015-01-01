@@ -89,7 +89,7 @@ ProjectService.latestProject = function (n, callback) {
 
 /*
  * return all info of a project
- * @return {an Array of info [0] = project [1] = user}
+ * @return {project}
  */
 ProjectService.getProjectById = function(projectID, callback){
 	go.database.Project.findById(projectID).populate('owner joinedIndividual comment donation').exec(function(err, project){
@@ -99,46 +99,48 @@ ProjectService.getProjectById = function(projectID, callback){
 				message: "internal error"
 			});
 		}
-		go.database.User.find({detail: project.owner._id}).populate('detail').exec(function(err, user){
-			if(err){
-				console.log(err);
-				callback({
-					success: false,
-					message: "internal error"
-				});
-			}
-			var answer = [];
-			if(project  === null || project  === undefined){
-				callback({
-					success: false,
-					message: "cannot find it"
-				});;
-			}else{
-				answer.push(project);
-			}
-			answer.push(user);
-
-			// format date
-			for (var i = 0; i < answer[0].expenditure.length; ++i) {
-				var temp = answer[0].expenditure[i].date.toISOString();
-				temp = temp.substr(0, 10);
-				answer[0].expenditure[i].dateStr = temp;
-			}
-			console.log(answer[0]);
-			for (var i = 0; i < answer[0].mileStone.length; ++i) {
-				var temp = answer[0].mileStone[i].date.toISOString();
-				temp = temp.substr(0, 10);
-				answer[0].mileStone[i].dateStr = temp;
-			}
-			
+		if(project  === null || project  === undefined){
 			callback({
-				success: true,
-				message: answer
-			});
-		});	
+				success: false,
+				message: "cannot find it"
+			});;
+		}else{
+			var answer = project;
+			go.database.User.find({detail: project.owner._id}).populate('detail').exec(function(err, user){
+				if(err){
+					console.log(err);
+					callback({
+						success: false,
+						message: "internal error"
+					});
+				}
+				answer.detail = user;
+				// format date
+				for (var i = 0; i < answer[0].expenditure.length; ++i) {
+					var temp = answer[0].expenditure[i].date.toISOString();
+					temp = temp.substr(0, 10);
+					answer[0].expenditure[i].dateStr = temp;
+				}
+				console.log(answer[0]);
+				for (var i = 0; i < answer[0].mileStone.length; ++i) {
+					var temp = answer[0].mileStone[i].date.toISOString();
+					temp = temp.substr(0, 10);
+					answer[0].mileStone[i].dateStr = temp;
+				}
+				callback({
+					success: true,
+					message: answer
+				});
+			});	
+		}		
 	});
 }
 
+/*
+ * @param {String} username 
+ * return array of project 
+ * @return {array of project}
+ */
 ProjectService.getOrganizationProject = function(username, callback){
 	go.database.User.findOne({username: username}, function(err, user){
 		if(err){
