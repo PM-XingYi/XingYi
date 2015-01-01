@@ -191,6 +191,11 @@ OrganizationService.publishProject = function (username, projectInfo, callback) 
 				name:projectInfo.name, 
 				desc:projectInfo.desc, 
 				moneyNeeded: projectInfo.moneyNeeded,
+				mileStone:[{
+					date: Date,
+					title: "startDay",
+					desc: "Our project is published"
+				}],
 				owner: user.detail
 			});
 			project.save(function(err){
