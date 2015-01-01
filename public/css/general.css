@@ -1,6 +1,8 @@
 /*
 	general
 */
+
+@import url("csshake.min.css");
 * {
 	font-family: '微软雅黑',Arial,Helvetica,sans-serif;
 	font-size: 14px;
@@ -25,19 +27,6 @@ body {
 	position: absolute;
 }
 
-
-@-webkit-keyframes spin {
-    0%   {-webkit-transform: rotate(0deg)}
-    100% {-webkit-transform: rotate(360deg)}
-}
-@-moz-keyframes spin {
-    0%   {-moz-transform: rotate(0deg)}
-    100% {-moz-transform: rotate(360deg)}
-}
-@keyframes spin {
-    0%   {transform: rotate(0deg)}
-    100% {transform: rotate(360deg)}
-}
 
 /*
 	This is for id 
@@ -484,13 +473,87 @@ footer #author-gallery img {
 	height: 116px;
 	border-radius: 50%;
 	border: 0px;
+ -webkit-animation-iteration-count: infinite;
+ -ms-animation-iteration-count: infinite;
+ animation-iteration-count: infinite;
+ -webkit-animation-timing-function: ease-in-out;
+ -ms-animation-timing-function: ease-in-out;
+ animation-timing-function: ease-in-out;
+ -webkit-animation-delay: 0s;
+ -ms-animation-delay: 0s;
+ animation-delay: 0s;
+ -webkit-animation-play-state: running;
+ -ms-animation-play-state: running;
+ animation-play-state: running;
 }
 
 footer #author-gallery img:hover {
-  -webkit-animation: spin 3s infinite linear;
-  -moz-animation: spin 3s infinite linear;
-  animation: spin 3s infinite linear;
-}
+-webkit-animation-name:shake-base;
+-ms-animation-name:shake-base;
+animation-name:shake-base;
+-webkit-animation-duration:100ms;
+-ms-animation-duration:100ms;
+animation-duration:100ms;
+ }
+
+footer #author-gallery img:nth-child(1):hover {
+-webkit-animation-name:shake-rotate;
+-ms-animation-name:shake-rotate;
+animation-name:shake-rotate;
+-webkit-animation-duration:100ms;
+-ms-animation-duration:100ms;
+animation-duration:100ms;
+ }
+
+footer #author-gallery img:nth-child(2):hover {
+-webkit-animation-name:shake-slow;
+-ms-animation-name:shake-slow;
+animation-name:shake-slow;
+-webkit-animation-duration:4s;
+-ms-animation-duration:4s;
+animation-duration:4s;
+ }
+footer #author-gallery img:nth-child(3):hover {
+ -webkit-animation-name: shake-hard;
+ -ms-animation-name: shake-hard;
+ animation-name: shake-hard;
+ -webkit-animation-duration: 100ms;
+ -ms-animation-duration: 100ms;
+ animation-duration: 100ms;
+ }
+footer #author-gallery img:nth-child(4):hover {
+-webkit-animation-name:shake-vertical;
+-ms-animation-name:shake-vertical;
+animation-name:shake-vertical;
+-webkit-animation-duration:100ms;
+-ms-animation-duration:100ms;
+animation-duration:100ms;
+ }
+footer #author-gallery img:nth-child(5):hover {
+-webkit-animation-name:shake-little;
+-ms-animation-name:shake-little;
+animation-name:shake-little;
+-webkit-animation-duration:100ms;
+-ms-animation-duration:100ms;
+animation-duration:100ms;
+ }
+footer #author-gallery img:nth-child(6):hover {
+-webkit-animation-name:shake-crazy;
+-ms-animation-name:shake-crazy;
+animation-name:shake-crazy;
+-webkit-animation-duration:100ms;
+-ms-animation-duration:100ms;
+animation-duration:100ms;
+ }
+
+footer #author-gallery img:nth-child(7):hover {
+-webkit-animation-name:shake-horizontal;
+-ms-animation-name:shake-horizontal;
+animation-name:shake-horizontal;
+-webkit-animation-duration:100ms;
+-ms-animation-duration:100ms;
+animation-duration:100ms;
+ }
 
 ul.nav {
 	list-style-type: none;
