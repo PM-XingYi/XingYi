@@ -599,9 +599,30 @@ $(function() {
 	**/
 	// publish news
 	$("#add-news-wrapper #publish-news").bind("click", function() {
+		var projectID = $(".for-id").text();
 		var date = $("#news-date").val();
+		var title = $("#news-title").val();
 		var content = $("#news-content").val();
-		// TODO
+
+		var data = {
+			date: date,
+			title: title,
+			desc: content
+		};
+		$.ajax({
+			method: "POST",
+			url: "/project/" + projectID + "/milestone/add",
+			data: data,
+			success: function (data) {
+				if (data && data.success) {
+					alert("发布成功！");
+					location.reload();
+				}
+				else {
+					alert("发布失败:( " + (data ? data.message : ""));
+				}
+			}
+		})
 	});
 
 	function editItemNews(obj) {

@@ -124,10 +124,11 @@ ProjectService.getProjectById = function(projectID, callback){
 				temp = temp.substr(0, 10);
 				answer[0].expenditure[i].dateStr = temp;
 			}
-			for (var i = 0; i < answer[0].milestone.length; ++i) {
-				var temp = answer[0].milestone[i].date.toISOString();
+			console.log(answer[0]);
+			for (var i = 0; i < answer[0].mileStone.length; ++i) {
+				var temp = answer[0].mileStone[i].date.toISOString();
 				temp = temp.substr(0, 10);
-				answer[0].milestone[i].dateStr = temp;
+				answer[0].mileStone[i].dateStr = temp;
 			}
 			
 			callback({

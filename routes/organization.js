@@ -181,8 +181,13 @@ router.post('/publish', function(req, res) {
 router.get('/project/:id/milestone', function(req, res) {
 	if (req.user && req.user.userType === 'organization') {
 		ProjectService.getProjectById(req.params.id, function (result) {
+			var ans = {
+				curUser: req.user,
+				project: result.message[0]
+			};
+
 			if (result.success) {
-				res.render('organization_project_milestone', result.message);
+				res.render('organization_project_milestone', ans);
 			}
 		});
 	}
