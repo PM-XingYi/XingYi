@@ -29,7 +29,7 @@ body {
 	This is for id 
 */
 .for-id {
-	display: none;
+	display: none !important;
 }
 
 /*
@@ -1467,6 +1467,7 @@ input.hack-like {
 
 #admin-comments-management-wrapper .col-1 {
 	width: 30px;
+  display:none;
 }
 
 #admin-comments-management-wrapper .col-2 {
@@ -1474,7 +1475,7 @@ input.hack-like {
 }
 
 #admin-comments-management-wrapper .col-3 {
-	width: 100px;
+	width: 130px;
 }
 
 #admin-comments-management-wrapper .col-4 {
@@ -2522,6 +2523,12 @@ button#publish-project {
 #project-verify-wrapper #join_project .right-part>div {
 	width: 200px;
 	margin: auto;
+}
+
+
+#admin-comments-management-wrapper #preserve-checked,
+#admin-comments-management-wrapper #delete-checked{
+  display:none;
 }
 
 .back-nav{

@@ -283,33 +283,51 @@ $(function() {
 	// just set it to be passed
 	$("#admin-comments-management-wrapper #all_project .preserve").bind("click", function() {
 		var row = $(this).parents(".row");
-		row.remove();
+    var commentId = row.children(".for-id").text()
 
-		$("#admin-comments-management-wrapper #star_project .collection").append(row);
+		$.ajax({
+			url: "/superuser/examComment",
+			type: "POST",
+			data: {
+				commentID: commentId,
+				approve: 1,
+				remark: ""
+			}
+		}).then(function(data){
+      if (data && data.success) {
+        row.remove();
+        $("#admin-comments-management-wrapper #star_project .collection").append(row);
+      }
+			else {
+				alert("失败 " + (data ? data.message : "!"));
+			}
+		});
 
-		//////// A trick, need optimaization1!!!!!!!!!! //////////////////
-		// Page navigation update.... Do it later!!!
-		$("#admin-comments-management-wrapper #all_project").find(".active_page").click();
-		$("#admin-comments-management-wrapper #star_project").find(".active_page").click();
-		///////////////////////////////////////////////////////////////////
-
-		// TODO, for the server
 	});
 	// delete this comment
 	// just set it to be unpassed.
 	$("#admin-comments-management-wrapper #all_project .delete").bind("click", function() {
 		var row = $(this).parents(".row");
-		row.remove();
+    var commentId = row.children(".for-id").text()
 
-		$("#admin-comments-management-wrapper #join_project .collection").append(row);
+		$.ajax({
+			url: "/superuser/examComment",
+			type: "POST",
+			data: {
+				commentID: commentId,
+				approve: 3,
+				remark: ""
+			}
+		}).then(function(data){
+      if (data && data.success) {
+        row.remove();
+        $("#admin-comments-management-wrapper #join_project .collection").append(row);
+      }
+			else {
+				alert("失败 " + (data ? data.message : "!"));
+			}
+		});
 
-		//////// A trick, need optimaization1!!!!!!!!!! //////////////////
-		// Page navigation update.... Do it later!!!
-		$("#admin-comments-management-wrapper #all_project").find(".active_page").click();
-		$("#admin-comments-management-wrapper #join_project").find(".active_page").click();
-		///////////////////////////////////////////////////////////////////
-
-		// TODO, for the server
 	});
 	// preserve all selected.
 	// just set them to be passed
@@ -812,20 +830,13 @@ $(function() {
 		} else {
 			var content = $(this).next().val();
 			if(content !== "") {
-				var project = $(this).parents(".card-part");
-				var rightpart = project.find(".right-part");
-				rightpart.children("button.pass").remove();
-				rightpart.children("textarea").replaceWith("<h1>否决理由</h1><div>"+rightpart.children("textarea").val()+"</div>");
-				rightpart.children("button.fail").text("已否决").removeClass("fail").addClass("failed");			
-				$("#project-verify-wrapper #join_project .show .collection").append(project);
-				
 				$.ajax({
 					url: "/superuser/examProject",
 					type: "POST",
 					data: {
 						projectID: projectID,
 						approve: 3,
-						remark: $("#reason-" + projectID).text()
+						remark: $("#reason-" + projectID).val()
 					}
 				}).then(function(data){
 					if (data && data.success) {

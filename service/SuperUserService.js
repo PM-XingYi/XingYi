@@ -70,14 +70,14 @@ SuperUserService.examineComment = function (commentID, approve, remark, callback
  */
 
 SuperUserService.getAllCommentByStatus = function (approve, callback) {
-	go.database.Comment.find(/*{approved: approve}*/{},function(err, docs){
+	go.database.Comment.find({approved: approve},function(err, docs){
 		if(err){
 			callback({
 				success: false,
 				message: "internal error"
 			});
 		}
-		console.log(docs);
+		// console.log(docs);
 		var answer = [];
 		if(docs !== null && docs  !== undefined){
 			answer = docs;
