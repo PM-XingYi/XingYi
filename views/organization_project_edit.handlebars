@@ -72,18 +72,6 @@
 							<textarea id="edit-desc">{{project.desc}}</textarea>
 						</div>
 					</div>
-					<div class="row">
-						<div class="col-1">
-							<label>
-								项目图片
-							</label>
-						</div>
-						<div class="col-2">
-							<label class="input_file">
-								<input id="edit-img" title="浏览文件" type="file" />
-							</label>
-						</div>
-					</div>
 				</section>
 				<section class="project-part">
 					<div class="row">
@@ -126,7 +114,9 @@
 						</div>
 					</div>
 					{{#ifEq project.moneyNeeded -1}}
-					<div class="row">无</div>
+					<div class="row">
+						<div class="col-1">无</div>
+					</div>
 					{{else}}
 					<div class="row">
 						<div class="col-1">
@@ -144,6 +134,28 @@
 						</div>
 						<div class="col-2">
 							<button class="rounded-button" id="save-project">保存</button>
+						</div>
+					</div>
+				</section>
+				<section class="project-part">
+					<div class="row">
+						<div class="col-1">
+							<h1>修改图片</h1>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-1">
+							<label>
+								项目图片
+							</label>
+						</div>
+						<div class="col-2">
+							<label class="input_file">
+								<input id="edit-img" title="浏览文件" type="file" />
+							</label>
+						</div>
+						<div class="col-3">
+							<button class="rounded-button" id="save-project-img">保存图片</button>
 						</div>
 					</div>
 				</section>

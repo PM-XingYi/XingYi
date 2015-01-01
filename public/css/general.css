@@ -2215,6 +2215,9 @@ button#publish-project {
 #baseinfo-edit-wrapper button#save-project {
 	font-size: 24px;
 }
+#baseinfo-edit-wrapper button#save-project-img {
+	font-size: 24px;
+}
 
 /***
 **

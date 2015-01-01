@@ -526,32 +526,23 @@ $(function() {
 		For BaseInfo Edit
 	**/
 	// save button
-	$("#baseinfo-edit-wrapper #save-project").bind("click", function() {
+	$("#baseinfo-edit-wrapper #save-project-img").bind("click", function() {
 		var projectID = $(".for-id").text();
-		var desc = $("#edit-desc").val();
-		var longDesc = $("#edit-longDesc").val();
-		var notice = $("#edit-notice").val();
 		var image = $("#edit-img")[0].files[0];
 
-		$("#filename").text(image.name);
-
 		var data = new FormData();
-		data.append("project", projectID);
-		data.append("desc", desc);
-		data.append("longDesc", longDesc);
-		data.append("notice", notice);
 		data.append("image", image);
 
 		$.ajax({
 			type: "POST",
-			url: "/organization/project/" + projectID + "/edit",
+			url: "/organization/project/" + projectID + "/editImg",
 			data: data,
 			contentType: false,
 			processData: false,
 			success: function (data) {
 				if (data && data.success) {
-					alert("修改成功！");
-					location.href = "/organization/project/" + projectID;
+					alert("修改图片成功！");
+					location.href = "/organization/project/" + projectID + "/edit";
 				}
 				else {
 					alert("啊哦失败了:(");
@@ -559,9 +550,31 @@ $(function() {
 			}
 		});
 	});
-	// save temporarily
-	$("#baseinfo-edit-wrapper .save-item").bind("click", function() {
-		// go back to basic info view
+	$("#baseinfo-edit-wrapper #save-project").bind("click", function() {
+		var projectID = $(".for-id").text();
+		var desc = $("#edit-desc").val();
+		var longDesc = $("#edit-longDesc").val();
+		var notice = $("#edit-notice").val();
+
+		$.ajax({
+			type: "POST",
+			url: "/organization/project/" + projectID + "/edit",
+			data: {
+				project: projectID,
+				desc: desc,
+				longDesc: longDesc,
+				notice: notice
+			},
+			success: function (data) {
+				if (data && data.success) {
+					alert("修改成功！");
+					location.href = "/organization/project/" + projectID + "/edit";
+				}
+				else {
+					alert("啊哦失败了:( " + (data ? data.message : ""));
+				}
+			}
+		});
 	});
 
 	/**

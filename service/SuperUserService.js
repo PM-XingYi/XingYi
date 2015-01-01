@@ -7,7 +7,8 @@ var SuperUserService = function () {
  * examine project
  * @param {String} username
  * @param {ObjectId} project id
- * @param {Boolean} approve
+ * @param {Number} approve
+ * @param {String} remark
  * @return {Boolean} success
  */
 SuperUserService.examineProject = function (projectID, approve, remark, callback) {

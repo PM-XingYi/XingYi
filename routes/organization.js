@@ -4,7 +4,8 @@ var express = require('express'),
 	go = require('../globalObjects'),
 	OrganizationService = require('../service/OrganizationService'),
 	ProjectService = require('../service/ProjectService'),
-	fs = require('fs');
+	fs = require('fs'),
+	path = require('path');
 
 router.param(function(name, fn){
 	if (fn instanceof RegExp) {
@@ -123,38 +124,29 @@ router.get('/project/:id/edit', function(req, res) {
 /*
  * edit project
  */
-router.post('/project/:id/edit', function(req, res) {
-	console.log("here");
+router.post('/project/:id/editImg', function(req, res) {
 	if (req.user && req.user.userType === 'organization') {
 		var fstream;
 		req.pipe(req.busboy);
 		req.busboy.on('file', function (fieldname, file, filename) {
 			console.log("Uploading: " + filename); 
-			fstream = fs.createWriteStream(__dirname + '/files/' + filename);
+			fstream = fs.createWriteStream(path.join(__dirname, '../public/img/pj_' + req.params.id + ".jpg"));
 			file.pipe(fstream);
 			fstream.on('close', function () {
-				res.redirect('back');
+				res.send({ success: true });
 			});
 		});
-		
-		console.dir(req);
-		if (req.files && req.files.image !== 'undifined') {
-			var tmpPath = req.files.iamge.path;
-			var targetPath = './public/img/pj_' + req.user._id + ".jpg";
-			fs.rename(tmpPath, targetPath, function(err) {
-				if (err) {
-					console.log(err);
-				}
-				fs.unlink(tmpPath, function() {
-					if (err) {
-						console.log(err);
-					}
-				});
-			});
-		}
-		// OrganizationService.updateProject(req.body, function (result) {
-		// 	res.send(result);
-		// });
+	}
+	else {
+		res.status(203).end();
+	}
+});
+router.post('/project/:id/edit', function(req, res) {
+	if (req.user && req.user.userType === 'organization') {
+		console.log(req.body);
+		OrganizationService.updateProject(req.body, function (result) {
+			res.send(result);
+		});
 	}
 	else {
 		res.status(203).end();
@@ -215,8 +207,14 @@ router.post('/project/:id/milestone/add', function(req, res) {
 router.get('/project/:id/expenditure', function(req, res) {
 	if (req.user && req.user.userType === 'organization') {
 		ProjectService.getProjectById(req.params.id, function (result) {
+			var ans = {
+				curUser: req.user,
+				expenditure: result.message[0].expenditure
+			};
+			console.dir(ans);
+
 			if (result.success) {
-				res.render('organization_project_expenditure', result.message);
+				res.render('organization_project_expenditure', ans);
 			}
 		});
 	}
