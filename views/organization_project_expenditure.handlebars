@@ -39,6 +39,7 @@
 	<div id="content">
 		<div class="wrapper" id="bookkeeping-wrapper">
 			<section class="container">
+				<div class="for-id">{{project._id}}</div>
 				<h1 class="section-title">
 					开支管理
 				</h1>
@@ -115,17 +116,11 @@
 					</div>
 					<section class="show">
 						<div class="collection">
-							{{#each expenditure}}
+							{{#each project.expenditure}}
 							<div class="row">
-								<div class="col-1">
-									{{date}}
-								</div>
-								<div class="col-2">
-									{{expense}}
-								</div>
-								<div class="col-3">
-									{{usage}}
-								</div>
+								<div class="col-1">{{dateStr}}</div>
+								<div class="col-2">{{expense}}</div>
+								<div class="col-3">{{usage}}</div>
 							</div>
 							{{/each}}
 						</div>

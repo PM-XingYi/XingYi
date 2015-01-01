@@ -209,9 +209,8 @@ router.get('/project/:id/expenditure', function(req, res) {
 		ProjectService.getProjectById(req.params.id, function (result) {
 			var ans = {
 				curUser: req.user,
-				expenditure: result.message[0].expenditure
+				project: result.message[0]
 			};
-			console.dir(ans);
 
 			if (result.success) {
 				res.render('organization_project_expenditure', ans);

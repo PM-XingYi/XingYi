@@ -117,6 +117,19 @@ ProjectService.getProjectById = function(projectID, callback){
 				answer.push(project);
 			}
 			answer.push(user);
+
+			// format date
+			for (var i = 0; i < answer[0].expenditure.length; ++i) {
+				var temp = answer[0].expenditure[i].date.toISOString();
+				temp = temp.substr(0, 10);
+				answer[0].expenditure[i].dateStr = temp;
+			}
+			for (var i = 0; i < answer[0].milestone.length; ++i) {
+				var temp = answer[0].milestone[i].date.toISOString();
+				temp = temp.substr(0, 10);
+				answer[0].milestone[i].dateStr = temp;
+			}
+			
 			callback({
 				success: true,
 				message: answer

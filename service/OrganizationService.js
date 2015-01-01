@@ -274,16 +274,15 @@ OrganizationService.addMilestone = function (projectID, milestone, callback) {
 
 /*
  * add expenditure for a project
- * @param {String} username
  * @param {ObjectId} project id
  * @param {
- *   @param {Date} date
+ *   @param {String} date
  *   @param {Number} expense
  *   @param {String} usage
  * } expenditure
  * @return {Boolean} success
  */
-OrganizationService.addExpenditure = function (username, projectID, expenditure, callback) {
+OrganizationService.addExpenditure = function (projectID, expenditure, callback) {
 	go.database.Project.findByIdAndUpdate(
 		{
 			_id:projectID

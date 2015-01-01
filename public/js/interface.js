@@ -641,10 +641,31 @@ $(function() {
 	**/
 	// publish book
 	$("#bookkeeping-wrapper #publish-book").bind("click", function() {
+		var projectID = $(".for-id").text();
 		var date = $("#book-date").val();
 		var number = parseInt($("#book-number").val());
 		var content = $("#book-content").val();
-		// TODO
+		
+		var data = {
+			date: date,
+			expense: number,
+			usage: content
+		};
+		console.log(data);
+		$.ajax({
+			method: "POST",
+			url: "/organization/project/" + projectID + "/expenditure/add",
+			data: data,
+			success: function (data) {
+				if (data && data.success) {
+					alert("添加成功！");
+					location.reload();
+				}
+				else {
+					alert("添加失败:( " + (data ? data.message : ""));
+				}
+			}
+		})
 	});
 
 	function editItemBook(obj) {
