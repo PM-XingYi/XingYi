@@ -12,8 +12,9 @@ $(function() {
 	navigation_html += '<a class="next_link">Next</a>';
 	$('#page_navigation').append(navigation_html);
 	$('#page_navigation .page_link:first').addClass('active_page');
-	$('.show .collection').children().css('display', 'none');
-	$('.show .collection').children().slice(0, show_per_page).css('display', 'block');
+
+	//$('.show .collection').children().css('display', 'none');
+	//$('.show .collection').children().slice(0, show_per_page).css('display', 'block');
 
 	$("#page_navigation .next_link").bind("click", function() {
 		next();

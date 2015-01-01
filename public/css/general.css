@@ -2523,3 +2523,11 @@ button#publish-project {
 	width: 200px;
 	margin: auto;
 }
+
+.back-nav{
+  cursor: pointer;
+  color: #007942;
+}
+.back-nav:hover{
+  color: blue;
+}
