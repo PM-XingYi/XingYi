@@ -94,7 +94,7 @@
 				<section class="project-part">
 					<div class="row">
 						<div class='col-1'>
-							<h1>管理已发布消息</h1>
+							<h1>已发布消息</h1>
 						</div>
 						<div class="col-2">
 						</div>
@@ -107,21 +107,19 @@
 							日期
 						</div>
 						<div class="col-2">
-							内容
+							标题
 						</div>
 						<div class="col-3">
+							内容
 						</div>
 					</div>
 					<section class="show">
 						<div class="collection">
 							{{#each project.mileStone}}
 							<div class="row">
-								<div class="col-1">
-									{{date}}
-								</div>
-								<div class="col-2">
-									{{desc}}
-								</div>
+								<div class="col-1">{{dateStr}}</div>
+								<div class="col-2">{{title}}</div>
+								<div class="col-3">{{desc}}</div>
 							</div>
 							{{/each}}
 						</div>

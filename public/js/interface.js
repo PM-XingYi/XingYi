@@ -611,7 +611,7 @@ $(function() {
 		};
 		$.ajax({
 			method: "POST",
-			url: "/project/" + projectID + "/milestone/add",
+			url: "/organization/project/" + projectID + "/milestone/add",
 			data: data,
 			success: function (data) {
 				if (data && data.success) {
