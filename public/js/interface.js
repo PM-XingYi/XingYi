@@ -74,8 +74,7 @@ $(function() {
 	//
 	$("#search-icon").bind("click", function() {	//important!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		if($("#search-box").val()!="") {	// go to search page
-			//TODO
-			//key word is $("#search-box").val()
+      location.href="/project/search?keyword=" + encodeURIComponent($("#search-box").val());
 
 		}
 	});

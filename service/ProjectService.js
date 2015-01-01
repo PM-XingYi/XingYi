@@ -27,7 +27,7 @@ ProjectService.getAllProjectByStatus = function (status,callback) {
 }
 
 ProjectService.searchProject = function (keyword, callback) {
-	var regexStr = '/'+keyword+'/';
+	var regexStr = keyword;
 	go.database.Project.find(
 		{
 			$or:
