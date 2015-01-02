@@ -128,11 +128,6 @@ ProjectService.getProjectById = function(projectID, callback){
 					temp = temp.substr(0, 10);
 					answer.mileStone[i].dateStr = temp;
 				}
-				for (var i = 0; i < answer.comment.length; ++i) {
-					var temp = answer.comment[i].date.toISOString();
-					temp = temp.substr(0, 10);
-					answer.comment[i].dateStr = temp;
-				}
 			});	
 			go.database.Comment.find({project: projectID}).populate('user').sort({date: -1}).exec(function(err, comments){
 				if(err){
@@ -180,6 +175,14 @@ ProjectService.getProjectById = function(projectID, callback){
 							}
 							console.log(commentList);
 							answer.comment = commentList;
+
+							//format date
+							for (var i = 0; i < answer.comment.length; ++i) {
+								var temp = answer.comment[i].date.toISOString();
+								temp = temp.substr(0, 10);
+								answer.comment[i].dateStr = temp;
+							}
+							
 							callback({
 								success: true,
 								message: answer

@@ -24,7 +24,7 @@ router.param('id', /^\w+$/);
  * get all available project
  */
 router.get('/all', function (req, res) {
-	ProjectService.getAllProjectByStatus(2, function(result) {
+	ProjectService.getAllProjectByStatus(1, function(result) {
 		if (!result.success) {
 			res.send(result);
 		}
@@ -115,7 +115,6 @@ router.get('/:id', function (req, res) {
 		}
 
 		function render( watched , mobile){
-			project.today = new Date().toISOString().substr(0, 10)
 			res.render('project_detail', {
 				today: new Date().toISOString().substr(0, 10),
 				curUser: req.user,
