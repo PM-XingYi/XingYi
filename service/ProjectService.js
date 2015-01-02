@@ -129,7 +129,7 @@ ProjectService.getProjectById = function(projectID, callback){
 					answer.mileStone[i].dateStr = temp;
 				}
 			});	
-			go.database.Comment.find({project: projectID}).populate('user').exec(function(err, comments){
+			go.database.Comment.find({project: projectID}).populate('user').sort({date: -1}).exec(function(err, comments){
 				if(err){
 					callback({
 						success: false,
