@@ -89,7 +89,7 @@ ProjectService.latestProject = function (n, callback) {
 
 /*
  * return all info of a project
- * @param {projectID}
+ * @param {String} projectID
  * @return {project}
  */
 ProjectService.getProjectById = function(projectID, callback){
@@ -115,7 +115,7 @@ ProjectService.getProjectById = function(projectID, callback){
 						message: "internal error"
 					});
 				}
-				answer.owner.detail = user;
+				answer.owner = user;
 
 				// format date
 				for (var i = 0; i < answer.expenditure.length; ++i) {

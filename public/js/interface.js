@@ -507,10 +507,40 @@ $(function() {
 		var longDesc = $("#content-of-copy").val();
 		var notice = $("#inform-of-join").val();
 		var moneyNeeded = parseInt($("#goal-of-kick").val());
-		
-		var data = {
-			
+
+		var noticeShow = $("#inform-of-join").parents(".row").eq(0).css("display") !== "none";
+		var moneyShow = $("#goal-of-kick").parents(".row").eq(0).css("display") !== "none";
+		if (!(noticeShow || moneyShow)) {
+			alert("志愿者和众筹必须至少一项");
+			return;
 		}
+		if (moneyShow && isNaN(moneyNeeded)) {
+			alert("请输入合法的众筹目标");
+			return;
+		}
+
+		var data = {
+			name: name,
+			desc: desc,
+			longDesc: longDesc,
+			notice: notice,
+			moneyNeeded: (moneyShow ? moneyNeeded : -1)
+		};
+		$.ajax({
+			method: "POST",
+			url: "/organization/publish",
+			data: data,
+			success: function (data) {
+				if (data && data.success) {
+					alert("发布成功！现在可以上传图片！");
+					$(".project-part.image").append('<div class="for-id">' + data.message + '</div>');
+					$(".project-part.image").show();
+				}
+				else {
+					alert("啊哦失败了:( " + (data ? data.message : ""));
+				}
+			}
+		})
 	});
 
 	/**
