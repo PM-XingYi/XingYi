@@ -420,6 +420,10 @@ OrganizationService.getUncheckedApplicationForProject = function(projectID, call
 				}
 				if(users === null || users === undefined){
 					console.log(users);
+					callback({
+						success: false,
+						message: answer
+					});
 				}else{
 					for(var i = 0;i<users.length;i++){
 						var temp = {
@@ -479,6 +483,10 @@ OrganizationService.getVolunteerForProject = function(projectID, callback){
 				}
 				if(users === null || users === undefined){
 					console.log(users);
+					callback({
+						success: false,
+						message: answer
+					});
 				}else{
 					for(var i = 0;i<users.length;i++){
 						var temp = {
