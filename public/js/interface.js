@@ -82,7 +82,7 @@ $(function() {
 		}
 	});
 	//project box, if click, it should be linked to the detailed page of such project
-	$(".project-title.public").bind("click", function() {
+	$(".project-title:not(.organization)").bind("click", function() {
 		var id = $(this).parents("article").find(".for-id").text();
 		location.href = "/project/" + id;
 	});
@@ -95,25 +95,25 @@ $(function() {
 		Individual Profile Edit Page
 	*/
 	$("#individual-profile #save").bind("click", function() {
-		/*var gender = $("input[name='gender']:checked").val();
-		var nickname = $("#nickname").val();
-		var phonenumber = $("#number").val();
-		var email = $("#email").val();
-		console.log(gender+" "+nickname+" "+phonenumber+" "+email);*/
+
 		$.ajax({
 			url: "/individual/profile/edit",
 			type: "POST",
 			data: {
-				phonenumber: $("#number").val(),
+				mobile: $("#number").val(),
 				email: $("#email").val()
-			},
-			error: function() {
-
 			}
-		});
-	});
-	$("#individual-profile #cancel").bind("click", function() {
-		// TODO-- cancel edit
+		}).then(function(data){
+      if (data && data.success) {
+        location.reload();
+      }
+      else {
+        alert("失败 " + (data ? data.message : "!"));
+      }
+    }, function(xhr, errorText){
+      alert("网络故障： " + errorText);
+    });
+
 	});
 
 	/*
@@ -223,11 +223,33 @@ $(function() {
 		var id = $(this).parents("#view-details-wrapper").find(".for-id").text();
 		$.ajax({
 			url: "/individual/project/watch/"+id,
-			type: "POST",
-			error: function() {
-
-			}
-		});
+			type: "POST"
+		}).then(function(data){
+      if (data && data.success) {
+        location.reload();
+      }
+      else {
+        alert("失败 " + (data ? data.message : "!"));
+      }
+    }, function(xhr, errorText){
+      alert("网络故障： " + errorText);
+    });
+	});
+	$("#view-details-wrapper #unstar").bind("click", function() {
+		var id = $(this).parents("#view-details-wrapper").find(".for-id").text();
+		$.ajax({
+			url: "/individual/project/unwatch/"+id,
+			type: "POST"
+		}).then(function(data){
+      if (data && data.success) {
+        location.reload();
+      }
+      else {
+        alert("失败 " + (data ? data.message : "!"));
+      }
+    }, function(xhr, errorText){
+      alert("网络故障： " + errorText);
+    });
 	});
 
 
@@ -379,20 +401,13 @@ $(function() {
 	/**
 		Individual Dashboard
 	**/
-	// operate history, go to operate history, link
-	$("#dashboard-individual-wrapper #operate-history").bind("click", function() {
-		location.href = "recent_operations_user.html";
-		//TODO
-	});
 	// scan star, have a look at projects starring
 	$("#dashboard-individual-wrapper #scan-star").bind("click", function() {
-		location.href = "view_followedpjs_user.html";
-		//TODO
+		location.href = "/individual/project/watch";
 	});
 	// scan join, have a look at projects joining
 	$("#dashboard-individual-wrapper #scan-join").bind("click", function() {
-		location.href = "view_participatingpjs_user.html";
-		//TODO
+		location.href = "/individual/project/join";
 	});
 	
 	/**
@@ -400,14 +415,21 @@ $(function() {
 	**/
 	// button unstar, just mark that project not followed
 	$("#view-followedpjs-user-wrapper .unstar").bind("click", function() {
-		var id = $(this).parents(".project-wrapper").find(".for-id").text();
+    var $project = $(this).parents(".project-wrapper");
+		var id = $project.find(".for-id").text();
 		$.ajax({
 			url: "/individual/project/unwatch/"+id,
-			type: "POST",
-			error: function() {
-
-			}
-		});
+			type: "POST"
+		}).then(function(data){
+      if (data && data.success) {
+        $project.remove();
+      }
+      else {
+        alert("失败 " + (data ? data.message : "!"));
+      }
+    }, function(xhr, errorText){
+      alert("网络故障： " + errorText);
+    });
 	});
 
 	/*

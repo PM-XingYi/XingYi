@@ -1036,6 +1036,7 @@ input.outline:focus {
 	height: 600px;
 }
 
+#view-details-wrapper button#unstar ,
 #view-details-wrapper button#star {
 	float: right;
 }

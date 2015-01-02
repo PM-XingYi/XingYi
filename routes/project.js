@@ -2,6 +2,7 @@ var express = require('express'),
 	router = express.Router(),
 	passport = require('passport'),
 	go = require('../globalObjects'),
+	IndividualService = require('../service/IndividualService');
 	ProjectService = require('../service/ProjectService');
 
 router.param(function(name, fn){
@@ -113,13 +114,28 @@ router.get('/:id', function (req, res) {
 		}
 
 		console.log(project);
+    function render( watched , mobile){
+      res.render('project_detail', {
+        curUser: req.user,
+        project: project,
+        watched: watched,
+        userMobile: mobile
+      });
+    }
 
-		if (result.success) {
-			res.render('project_detail', {
-				curUser: req.user,
-				project: project
-			});
-		}
+    if (result.success) {
+      if (req.user) {
+        IndividualService.getUser(req.user.username, function(data){
+          if (!data.success){
+            res.send(500);
+            return;
+          }
+          render(data.message.detail.watchedProject.indexOf(projectID) !== -1, data.message.detail.mobile);
+        });
+      } else {
+        render();
+      }
+    }
 	});
 });
 

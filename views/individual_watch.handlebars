@@ -16,10 +16,10 @@
 		<div class="wrapper" id="header-wrapper">
 			<div id="logo">
 				<div id="logo-img">
-					<img src="img/logo.png">
+					<img src="/img/logo.png">
 				</div>
 				<div id="logo-name">
-					<img src="img/name.png">
+					<img src="/img/name.png">
 				</div>
 			</div>
 			<!-- the search input, login and register entries -->
@@ -29,7 +29,7 @@
 					<img id="search-icon" src="/img/search.png" placeholder="搜索..." autocomplete="off">
 				</div>
 				<label>您好，<a id="user-entry-individual">Sheer</a></label>
-				<a id="dashboard-entry">Dashboard</a>
+				<a id="dashboard-entry" href="/individual/home">管理面板</a>
 				<a id="logout-entry">登出</a>
 			</div>
 		</div>
@@ -42,9 +42,6 @@
 				<h1 class="section-title">
 					关注项目
 				</h1>
-				<a class="section-title-more" id="go-back-dashboard">
-					Back to DashBoard>
-				</a>
 				<section class="show">
 					<div class="collection">
 						{{#each project}}

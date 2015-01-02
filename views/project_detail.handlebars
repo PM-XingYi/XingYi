@@ -52,7 +52,13 @@
 					<h1>
 						{{project.name}}
 					</h1>
-					<button class="rounded-button" id="star">+关注</button>
+          {{#if curUser}}
+          {{#if watched}}
+					<button class="rounded-button" id="unstar">-取消关注</button>
+          {{else}}
+          <button class="rounded-button" id="star">+关注</button>
+          {{/if}}
+          {{/if}}
 					<p>{{project.desc}}</p>
 					<img src="/img/pj_{{project._id}}.png">
 				</section>
@@ -265,7 +271,7 @@
 				</div>
 				<div class="form-row">
 					<label>手机号</label>
-					<i>{{curUser.detail.mobile}}</i>
+					<i>{{userMobile}}</i>
 				</div>
 				<div class="form-row">
 					<label>邮箱</label>

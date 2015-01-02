@@ -57,6 +57,16 @@ router.get('/project/join', function (req, res) {
 	if (req.user) {
 		IndividualService.getJoinProjectList(req.user.username, function (result) {
 			if (result.success) {
+
+        result.message.forEach(function(projectModel){
+          if (projectModel.moneyNeeded === -1) {
+            projectModel.ratio = -1;
+          }
+          else {
+            projectModel.ratio = (projectModel.moneyRaised / projectModel.moneyNeeded).toFixed(2);
+          }
+        });
+
 				res.render('individual_join', {
 					curUser: req.user,
 					project: result.message
@@ -69,7 +79,18 @@ router.get('/project/watch', function (req, res) {
 	if (req.user) {
 		IndividualService.getWatchProjectList(req.user.username, function (result) {
 			if (result.success) {
+
+        result.message.forEach(function(projectModel){
+          if (projectModel.moneyNeeded === -1) {
+            projectModel.ratio = -1;
+          }
+          else {
+            projectModel.ratio = (projectModel.moneyRaised / projectModel.moneyNeeded).toFixed(2);
+          }
+        });
+
 				res.render('individual_watch', {
+          user: req.user,
 					project: result.message
 				});
 			}
@@ -104,32 +125,48 @@ router.get('/donate/:id', function(req, res) {
 /*
  * join a project
  */
-router.post('/project/join/:id', passport.authenticate('local'), function(req, res) {
-	IndividualService.joinProject(req.user.username, req.params.id, function(answer) {
+router.post('/project/join/:id', function(req, res) {
+	if (!req.user) {
+    res.send(403);
+    return;
+  }
+	IndividualService.joinProject(req.user.username, req.params.id.input ||req.params.id, function(answer) {
 		res.send(answer);
 	});
 });
 /*
  * unjoin a project
  */
-router.post('/project/unjoin/:id', passport.authenticate('local'), function(req, res) {
-	IndividualService.cancelJoinProject(req.user.username, req.params.id, function(answer) {
+router.post('/project/unjoin/:id', function(req, res) {
+	if (!req.user) {
+    res.send(403);
+    return;
+  }
+	IndividualService.cancelJoinProject(req.user.username, req.params.id.input ||req.params.id, function(answer) {
 		res.send(answer);
 	});
 });
 /*
  * watch a project
  */
-router.post('/project/watch/:id', passport.authenticate('local'), function(req, res) {
-	IndividualService.watchProject(req.user.username, req.params.id, function(answer) {
+router.post('/project/watch/:id', function(req, res) {
+	if (!req.user) {
+    res.send(403);
+    return;
+  }
+	IndividualService.watchProject(req.user.username, req.params.id.input ||req.params.id, function(answer) {
 		res.send(answer);
 	});
 });
 /*
  * unwatch a project
  */
-router.post('/project/unwatch/:id', passport.authenticate('local'), function(req, res) {
-	IndividualService.cancelWatchProject(req.user.username, req.params.id, function(answer) {
+router.post('/project/unwatch/:id', function(req, res) {
+	if (!req.user) {
+    res.send(403);
+    return;
+  }
+	IndividualService.cancelWatchProject(req.user.username, req.params.id.input ||req.params.id, function(answer) {
 		res.send(answer);
 	});
 });
@@ -137,7 +174,11 @@ router.post('/project/unwatch/:id', passport.authenticate('local'), function(req
 /*
  * add a comment to a project
  */
-router.post('/comment', passport.authenticate('local'), function(req, res) {
+router.post('/comment', function(req, res) {
+	if (!req.user) {
+    res.send(403);
+    return;
+  }
 	IndividualService.commentProject(req.user.username, req.body, function (result) {
 		res.send(result);
 	});

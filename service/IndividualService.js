@@ -116,6 +116,7 @@ IndividualService.updateUser = function (username, newUserInfo, callback) {
 			}
 			console.log("test");
 			console.log(newUserInfo["mobile"]);
+      var success = true;
 			if(newUserInfo["mobile"] !== undefined){
 				individual.mobile = newUserInfo["mobile"];
 				//console.log(newUserInfo["mobile"]);
@@ -125,6 +126,7 @@ IndividualService.updateUser = function (username, newUserInfo, callback) {
 							success: false,
 							message: "update fail"
 						});
+            success = false;
 					}
 					console.log("ok");
 				});
@@ -138,13 +140,16 @@ IndividualService.updateUser = function (username, newUserInfo, callback) {
 							success: false,
 							message: "update fail"
 						});
+            success = false;
 					}
 				});
 			}
-			callback({
-				success: true,
-				message: "update successfully"
-			});						
+      if (success) {
+        callback({
+          success: true,
+          message: "update successfully"
+        });						
+      }
 		});
 	});
 };
@@ -250,6 +255,7 @@ IndividualService.getWatchProjectList = function (username, callback) {
 				callback({
 					success: false
 				});
+        return;
 			}
 			var answer = [];
 			if(individual === null || individual === undefined){
