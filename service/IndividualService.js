@@ -441,7 +441,7 @@ IndividualService.donateProject = function (username, donateInfo, callback) {
 			console.log(mytime);
 			var donation = new go.database.Donation(
 				{
-					user: user._id,
+					user: user.detail,
 					project: donateInfo.project, 
 					date: myDate, // 需要修改，变成系统当前时间
 					amount: donateInfo.amount, 
@@ -547,7 +547,7 @@ IndividualService.commentProject = function (username, commentInfo, callback) {
 		}else{
 			var comment = new go.database.Comment(
 				{
-					user: user._id,
+					user: user.detail,
 					project: commentInfo.project, 
 					date: commentInfo.date, 
 					comment: commentInfo.comment, 

@@ -130,6 +130,10 @@ SuperUserService.getAllCommentByStatus = function (approve, callback) {
 				}
 				if(users === null || users === undefined){
 					console.log(users);
+					callback({
+						success: false,
+						message: answer
+					});
 				}else{
 					for(var i = 0;i<users.length;i++){
 						var temp = {
