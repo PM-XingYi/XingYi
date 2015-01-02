@@ -417,7 +417,7 @@ IndividualService.donateProject = function (username, donateInfo, callback) {
 		}else{
 			var donation = new go.database.Donation(
 				{
-					user: user._id,
+					user: user.detail,
 					project: donateInfo.project, 
 					date: donateInfo.date, 
 					amount: donateInfo.amount, 
@@ -523,7 +523,7 @@ IndividualService.commentProject = function (username, commentInfo, callback) {
 		}else{
 			var comment = new go.database.Comment(
 				{
-					user: user._id,
+					user: user.detail,
 					project: commentInfo.project, 
 					date: commentInfo.date, 
 					comment: commentInfo.comment, 
