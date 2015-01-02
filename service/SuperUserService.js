@@ -112,33 +112,48 @@ SuperUserService.getAllCommentByStatus = function (approve, callback) {
 			});
 		}
 		var answer = [];
-		if(docs !== null && docs  !== undefined){			
-			var project;
+		if(docs === null || docs === undefined){
+			console.log(docs);
+		}else{
+			var ids = [];
 			for(var i = 0;i<docs.length;i++){
 				console.log(docs[i].user._id);
-				project = docs[i];
-				go.database.User.findOne({detail:docs[i].user._id} ,function(err, user){
-					if(err){
-						callback({
-							success: false,
-							message: "internal error"
-						});
-					}
-					project.detail = user;
-					answer.push(temp);
-				});
+				ids.push(docs[i].user._id.toString());
 			}
-			console.log(answer);
-			callback({
-				success: true,
-				message: answer
-			});			
-		}else{
-			callback({
-				success: true,
-				message: answer
+			go.database.User.find({detail:{$in: ids}}, function(err,users){
+				if(err){
+					console.log(err);
+					callback({
+						success: false,
+						message: "internal error"
+					});
+				}
+				if(users === null || users === undefined){
+					console.log(users);
+				}else{
+					for(var i = 0;i<users.length;i++){
+						var temp = {
+							"comment":{},
+							"user":{}
+						};
+						for(var k = 0;k<ids.length;k++){
+							if(ids[k] == users[i].detail){
+								temp.user = users[i];
+								temp.comment = docs[k];
+								console.log(temp);
+								answer.push(temp);
+								break;
+							}
+						}
+					}
+					console.log(answer);
+					callback({
+						success: true,
+						message: answer
+					});
+				}
 			});
-		}
+		}	
 	});
 }
 

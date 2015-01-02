@@ -88,6 +88,7 @@ IndividualService.getUser = function (username, callback) {
 			});
 		}
 	});
+
 };
 
 /*

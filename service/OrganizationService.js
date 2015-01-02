@@ -396,28 +396,44 @@ OrganizationService.getUncheckedApplicationForProject = function(projectID, call
 		if(applications === null || applications === undefined){
 			console.log(applications);
 		}else{
-			answer = applications;
-			var temp;
+			var ids = [];
 			for(var i = 0;i<applications.length;i++){
 				console.log(applications[i].user._id);
-				temp = applications[i];
-				go.database.User.find({detail: applications[i].user._id},function(err, user){
-					if(err){
-						console.log(err);
-						callback({
-							success: false,
-							message: "internal error"
-						});
-					}
-					temp.detail = user;
-					answer.push(temp);	
-				});
+				ids.push(applications[i].user._id.toString());
 			}
-			console.log(answer);
-			callback({
-				success:true,
-				message:answer
-			});			
+			go.database.User.find({detail:{$in: ids}}, function(err,users){
+				if(err){
+					console.log(err);
+					callback({
+						success: false,
+						message: "internal error"
+					});
+				}
+				if(users === null || users === undefined){
+					console.log(users);
+				}else{
+					for(var i = 0;i<users.length;i++){
+						var temp = {
+							"application":{},
+							"user":{}
+						};
+						for(var k = 0;k<ids.length;k++){
+							if(ids[k] == users[i].detail){
+								temp.user = users[i];
+								temp.application = applications[k];
+								console.log(temp);
+								answer.push(temp);
+								break;
+							}
+						}
+					}
+					console.log(answer);
+					callback({
+						success: true,
+						message: answer
+					});
+				}
+			});
 		}	
 	});
 }
@@ -428,7 +444,7 @@ OrganizationService.getUncheckedApplicationForProject = function(projectID, call
  *
  */
 OrganizationService.getVolunteerForProject = function(projectID, callback){
-	go.database.Application.find({project: projectID, status:1}).exec(function(err, applications){
+	go.database.Application.find({project: projectID, status: 1}).populate('user').exec(function(err, applications){
 		if(err){
 			console.log(err);
 			callback({
@@ -440,25 +456,43 @@ OrganizationService.getVolunteerForProject = function(projectID, callback){
 		if(applications === null || applications === undefined){
 			console.log(applications);
 		}else{
-			var temp;
+			var ids = [];
 			for(var i = 0;i<applications.length;i++){
-				console.log(applications[i].user);
-				go.database.User.find({detail: applications[i].user}).populate('detail').exec(function(err, user){
-					if(err){
-						console.log(err);
-						callback({
-							success: false,
-							message: "internal error"
-						});
-					}
-					temp = user;
-					answer.push(temp);	
-				});
+				console.log(applications[i].user._id);
+				ids.push(applications[i].user._id.toString());
 			}
-			console.log(answer);
-			callback({
-				success:true,
-				message:answer
+			go.database.User.find({detail:{$in: ids}}, function(err,users){
+				if(err){
+					console.log(err);
+					callback({
+						success: false,
+						message: "internal error"
+					});
+				}
+				if(users === null || users === undefined){
+					console.log(users);
+				}else{
+					for(var i = 0;i<users.length;i++){
+						var temp = {
+							"user":{},
+							"detail":{}
+						};
+						for(var k = 0;k<ids.length;k++){
+							if(ids[k] == users[i].detail){
+								temp.user = users[i];
+								temp.detail = applications[k].user;
+								console.log(temp);
+								answer.push(temp);
+								break;
+							}
+						}
+					}
+					console.log(answer);
+					callback({
+						success: true,
+						message: answer
+					});
+				}
 			});
 		}	
 	});
