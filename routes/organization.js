@@ -3,7 +3,9 @@ var express = require('express'),
 	passport = require('passport'),
 	go = require('../globalObjects'),
 	OrganizationService = require('../service/OrganizationService'),
-	ProjectService = require('../service/ProjectService');
+	ProjectService = require('../service/ProjectService'),
+	fs = require('fs'),
+	path = require('path');
 
 router.param(function(name, fn){
 	if (fn instanceof RegExp) {
@@ -92,7 +94,7 @@ router.get('/project/:id', function(req, res) {
 			if (result.success) {
 				res.render('organization_project_detail', {
 					curUser: req.user,
-					project: result.message[0]
+					project: result.message
 				});
 			}
 		});
@@ -110,7 +112,7 @@ router.get('/project/:id/edit', function(req, res) {
 			if (result.success) {
 				res.render('organization_project_edit', {
 					curUser: req.user,
-					project: result.message[0]
+					project: result.message
 				});
 			}
 		});
@@ -122,8 +124,26 @@ router.get('/project/:id/edit', function(req, res) {
 /*
  * edit project
  */
+router.post('/project/:id/editImg', function(req, res) {
+	if (req.user && req.user.userType === 'organization') {
+		var fstream;
+		req.pipe(req.busboy);
+		req.busboy.on('file', function (fieldname, file, filename) {
+			console.log("Uploading: " + filename); 
+			fstream = fs.createWriteStream(path.join(__dirname, '../public/img/pj_' + req.params.id + ".jpg"));
+			file.pipe(fstream);
+			fstream.on('close', function () {
+				res.send({ success: true });
+			});
+		});
+	}
+	else {
+		res.status(203).end();
+	}
+});
 router.post('/project/:id/edit', function(req, res) {
 	if (req.user && req.user.userType === 'organization') {
+		console.log(req.body);
 		OrganizationService.updateProject(req.body, function (result) {
 			res.send(result);
 		});
@@ -138,7 +158,7 @@ router.post('/project/:id/edit', function(req, res) {
  */
 router.get('/publish', function(req, res) {
 	if (req.user && req.user.userType === 'organization') {
-		res.render('organization_publish');
+		res.render('organization_publish', req.user);
 	}
 	else {
 		res.status(203).end();
@@ -161,8 +181,13 @@ router.post('/publish', function(req, res) {
 router.get('/project/:id/milestone', function(req, res) {
 	if (req.user && req.user.userType === 'organization') {
 		ProjectService.getProjectById(req.params.id, function (result) {
+			var ans = {
+				curUser: req.user,
+				project: result.message[0]
+			};
+
 			if (result.success) {
-				res.render('organization_project_milestone', result.message);
+				res.render('organization_project_milestone', ans);
 			}
 		});
 	}
@@ -187,8 +212,13 @@ router.post('/project/:id/milestone/add', function(req, res) {
 router.get('/project/:id/expenditure', function(req, res) {
 	if (req.user && req.user.userType === 'organization') {
 		ProjectService.getProjectById(req.params.id, function (result) {
+			var ans = {
+				curUser: req.user,
+				project: result.message[0]
+			};
+
 			if (result.success) {
-				res.render('organization_project_expenditure', result.message);
+				res.render('organization_project_expenditure', ans);
 			}
 		});
 	}

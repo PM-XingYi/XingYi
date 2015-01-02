@@ -1,5 +1,7 @@
 var go = require('../globalObjects'),
-	MD5 = require('MD5');
+	MD5 = require('MD5'),
+	fs = require('fs'),
+	path = require('path');
 var OrganizationService = function () {
 
 }
@@ -31,9 +33,13 @@ OrganizationService.register = function (username, password, email, phone, orgNa
 				instituteName: orgName,
 				instituteNumber: orgNumber
 			});
-			organization.save(function(err, organization){
+			organization.save(function(err){
 				if(err){
 					console.log(err);
+					callback({
+						success: false,
+						message: "internal error"
+					});
 				}
 				var user = new go.database.User({
 					username: username,
@@ -45,6 +51,10 @@ OrganizationService.register = function (username, password, email, phone, orgNa
 				user.save(function (err) {
 					if (err) {
 						console.log(err);
+						callback({
+							success: false,
+							message: "internal error"
+						});
 					}
 					else {
 						callback({
@@ -167,6 +177,8 @@ OrganizationService.updateUser = function (username, newUserInfo, callback) {
  * @param {
  *   @param {String} name
  *   @param {String} desc
+ *   @param {String} longDesc
+ *   @param {String} notice
  *   @param {Number} moneyNeeded
  * } project info
  * @return {Boolean} success
@@ -180,25 +192,39 @@ OrganizationService.publishProject = function (username, projectInfo, callback) 
 			});
 		}else {
 			var project = new go.database.Project({
-				name:projectInfo.name, 
-				desc:projectInfo.desc, 
+				name: projectInfo.name, 
+				desc: projectInfo.desc, 
+				longDesc: projectInfo.longDesc, 
+				notice: projectInfo.notice, 
 				moneyNeeded: projectInfo.moneyNeeded,
+				mileStone: [{
+					date: Date.now(),
+					title: "项目发布日",
+					desc: "我们的项目开始了"
+				}],
 				owner: user.detail
 			});
-			project.save(function(err, project){
+			project.save(function(err, projectRes){
 				if(err){
 					callback({
 						success: false,
 						message:"internal error"
 					});
 				}
+
+				// copy default img
+				console.log(path.join(__dirname, "../public/img/pj_default.jpg"));
+				var readable = fs.createReadStream(path.join(__dirname, "../public/img/pj_default.jpg"));
+				var writable = fs.createWriteStream(path.join(__dirname, "../public/img/pj_" + projectRes._id + ".jpg"));
+				readable.pipe(writable);
+
 				go.database.Organization.findByIdAndUpdate(
 				{
 					_id:user.detail
 				},{
 					$addToSet: 
 					{
-						project: project._id
+						project: projectRes._id
 					}
 				},function(err, result){
 					if(err){
@@ -209,7 +235,7 @@ OrganizationService.publishProject = function (username, projectInfo, callback) 
 					}else{
 						callback({
 							success: true,
-							message: "publish successfully"
+							message: projectRes._id
 						});
 					}
 				});										
@@ -219,11 +245,41 @@ OrganizationService.publishProject = function (username, projectInfo, callback) 
 }
 
 /*
- * update user info
- * @param {Project} newProjectInfo
+ * update project info
+ * @param {
+ *   @param {String} project
+ *   @param {String} desc
+ *   @param {String} longDesc
+ *   @param {String} notice
+ * } newProjectInfo
  * @return {Boolean} success
  */
 OrganizationService.updateProject = function (newProjectInfo, callback) {
+	go.database.Project.findById(newProjectInfo.project, function(err, project){
+		if(err){
+			console.log(err);
+			callback({
+				success: false,
+				message: "internal error"
+			});
+		}
+		project.desc = newProjectInfo.desc;
+		project.longDesc = newProjectInfo.longDesc;
+		project.notice = newProjectInfo.notice;
+		project.save(function(err){
+			if(err){
+				console.log(err);
+				callback({
+					success: false,
+					message: "internal error"
+				});
+			}
+			callback({
+				success: true,
+				message: "update project successfully"
+			});
+		});
+	});
 }
 
 /*
@@ -269,16 +325,15 @@ OrganizationService.addMilestone = function (projectID, milestone, callback) {
 
 /*
  * add expenditure for a project
- * @param {String} username
  * @param {ObjectId} project id
  * @param {
- *   @param {Date} date
+ *   @param {String} date
  *   @param {Number} expense
  *   @param {String} usage
  * } expenditure
  * @return {Boolean} success
  */
-OrganizationService.addExpenditure = function (username, projectID, expenditure, callback) {
+OrganizationService.addExpenditure = function (projectID, expenditure, callback) {
 	go.database.Project.findByIdAndUpdate(
 		{
 			_id:projectID
@@ -332,9 +387,9 @@ OrganizationService.examineApplication = function (applicationID, approved, call
 }
 
 
-/*I cannot put userinfo with application info
- * so they are kept in two array, 
- * eg. application[a](stored in answer[a])'s corresponding user info is stored in answer[2a+1]
+/* @return {array of application}
+ * 
+ * need to contain the info of user(individual)
  *
  */
 OrganizationService.getUncheckedApplicationForProject = function(projectID, callback){
@@ -350,13 +405,12 @@ OrganizationService.getUncheckedApplicationForProject = function(projectID, call
 		if(applications === null || applications === undefined){
 			console.log(applications);
 		}else{
-			answer = applications;
 			var ids = [];
 			for(var i = 0;i<applications.length;i++){
 				console.log(applications[i].user._id);
-				ids.push(applications[i].user._id);
+				ids.push(applications[i].user._id.toString());
 			}
-			go.database.User.find({detail: {$in: ids}}).populate('detail').exec(function(err, users){
+			go.database.User.find({detail:{$in: ids}}, function(err,users){
 				if(err){
 					console.log(err);
 					callback({
@@ -364,25 +418,42 @@ OrganizationService.getUncheckedApplicationForProject = function(projectID, call
 						message: "internal error"
 					});
 				}
-				
 				if(users === null || users === undefined){
 					console.log(users);
 				}else{
-					answer.push(users);
+					for(var i = 0;i<users.length;i++){
+						var temp = {
+							"application":{},
+							"user":{}
+						};
+						for(var k = 0;k<ids.length;k++){
+							if(ids[k] == users[i].detail){
+								temp.user = users[i];
+								temp.application = applications[k];
+								console.log(temp);
+								answer.push(temp);
+								break;
+							}
+						}
+					}
+					console.log(answer);
+					callback({
+						success: true,
+						message: answer
+					});
 				}
-				console.log(answer);
-				callback({
-					success:true,
-					message:answer
-				});
 			});
 		}	
 	});
 }
 
-
+/* @return {array of user}
+ * 
+ * need to contain the info of (individual)
+ *
+ */
 OrganizationService.getVolunteerForProject = function(projectID, callback){
-	go.database.Application.find({project: projectID, status:1}).populate('user').exec(function(err, applications){
+	go.database.Application.find({project: projectID, status: 1}).populate('user').exec(function(err, applications){
 		if(err){
 			console.log(err);
 			callback({
@@ -394,30 +465,43 @@ OrganizationService.getVolunteerForProject = function(projectID, callback){
 		if(applications === null || applications === undefined){
 			console.log(applications);
 		}else{
-			answer = applications;
 			var ids = [];
 			for(var i = 0;i<applications.length;i++){
 				console.log(applications[i].user._id);
-				ids.push(applications[i].user._id);
+				ids.push(applications[i].user._id.toString());
 			}
-			go.database.User.find({detail: {$in: ids}}).populate('detail').exec(function(err, users){
+			go.database.User.find({detail:{$in: ids}}, function(err,users){
 				if(err){
 					console.log(err);
 					callback({
 						success: false,
 						message: "internal error"
 					});
-				}				
+				}
 				if(users === null || users === undefined){
 					console.log(users);
 				}else{
-					answer.push(users);
+					for(var i = 0;i<users.length;i++){
+						var temp = {
+							"user":{},
+							"detail":{}
+						};
+						for(var k = 0;k<ids.length;k++){
+							if(ids[k] == users[i].detail){
+								temp.user = users[i];
+								temp.detail = applications[k].user;
+								console.log(temp);
+								answer.push(temp);
+								break;
+							}
+						}
+					}
+					console.log(answer);
+					callback({
+						success: true,
+						message: answer
+					});
 				}
-				console.log(answer);
-				callback({
-					success:true,
-					message:answer
-				});
 			});
 		}	
 	});

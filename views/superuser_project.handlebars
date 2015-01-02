@@ -29,7 +29,7 @@
 					<img id="search-icon" src="/img/search.png" placeholder="搜索..." autocomplete="off">
 				</div>
 				<label>您好，<a id="user-entry">Admin</a></label>
-				<a id="dashboard-entry">Dashboard</a>
+				<a id="dashboard-entry" onclick="location.href='/superuser/home'">管理面板</a>
 				<a id="logout-entry">登出</a>
 			</div>
 		</div>
@@ -40,7 +40,7 @@
 		<div class="wrapper" id="project-verify-wrapper">
 			<section class="container">
 				<h1 class="section-title">
-					人员管理
+					项目审核
 				</h1>
 				<section class="show-result">
 					共有{{uncheckedNum}}个未审批的项目
@@ -86,8 +86,7 @@
 											<label>项目图片</label>
 										</div>
 										<div class="col-2">
-											<!-- <img src="/img/pj_{{_id}}.png"> -->
-											<img src="/img/bg1.png">
+                      <img src="/img/pj_{{_id}}.png">
 										</div>
 									</div>
 								</div>
@@ -123,7 +122,7 @@
 										</div>
 									</div>
 									<div class="row">
-										<div class-{{_id}}="col-1">
+										<div class="col-1">
 											<label>项目简介</label>
 										</div>
 										<div class="col-2">
@@ -193,7 +192,7 @@
 									<h1>否决理由
 									</h1>
 									<div>
-										{{reason}}
+										{{remark}}
 									</div>
 								</div>
 							</div>
@@ -206,6 +205,11 @@
 					</section>
 				</section>				
 			</section>
+
+				<!-- <h1 class="back-nav" onclick="location.href='/superuser/home'" > -->
+				<!--   回到管理面板                                             -->
+        <!-- </h1>                                                            -->
+
 		</div>
 	</div>
 

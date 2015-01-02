@@ -7,8 +7,10 @@ var express = require('express'),
 
 router.get('/home', function(req, res) {
 
-	if (!req.user)  return;
-
+	if (!req.user){
+    res.redirect("/superuserLogin.html");
+    return;
+  }
 	res.render('superuser_dashboard.handlebars');
 });
 
@@ -16,6 +18,10 @@ router.get('/home', function(req, res) {
  * get all project including unavailable ones
  */
 router.get('/examProject', function(req, res) {
+	if (!req.user){
+    res.redirect("/superuserLogin.html");
+    return;
+  }
 	ProjectService.getAllProjectByStatus(2, function (unchecked) {
 		ProjectService.getAllProjectByStatus(1, function (passed) {
 			ProjectService.getAllProjectByStatus(3, function (failed) {
@@ -48,6 +54,10 @@ router.post('/examProject', function(req, res) {
  * get all comment including unavailable ones
  */
 router.get('/examComment', function(req, res) {
+	if (!req.user){
+    res.redirect("/superuserLogin.html");
+    return;
+  }
 	SuperUserService.getAllCommentByStatus(2, function (unchecked) {
 		SuperUserService.getAllCommentByStatus(1, function (passed) {
 			SuperUserService.getAllCommentByStatus(3, function (failed) {

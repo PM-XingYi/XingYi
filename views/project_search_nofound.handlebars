@@ -27,9 +27,14 @@
 					<input id="search-box" type="search">
 					<img id="search-icon" src="/img/search.png" placeholder="搜索..." autocomplete="off">
 				</div>
-				<label>您好，<a id="user-entry">Sheer</a></label>
+				{{#if curUser}}
+				<label>您好，<a id="user-entry">{{curUser.username}}</a></label>
 				<a id="dashboard-entry">Dashboard</a>
 				<a id="logout-entry">登出</a>
+				{{else}}
+				<a id="login-entry">登录</a>
+				<a id="register-entry">注册</a>
+				{{/if}}
 			</div>
 		</div>
 	</header>
@@ -55,7 +60,7 @@
 								<img src="/img/pj_{{_id}}.png">
 							</section>
 							<section class="project-info">
-								<section class="project-title relative">
+								<section class="project-title public">
 									{{name}}
 								</section>
 								{{#ifEq ratio -1}}
@@ -86,13 +91,13 @@
 				关于我们
 			</h1>
 			<section id="author-gallery">
-				<img src="img/p1.gif">
-				<img src="img/p2.gif">
-				<img src="img/p3.gif">
-				<img src="img/p4.gif">
-				<img src="img/p5.gif">
-				<img src="img/p6.gif">
-				<img src="img/p7.gif">
+				<img src="/img/p1.gif">
+				<img src="/img/p2.gif">
+				<img src="/img/p3.gif">
+				<img src="/img/p4.gif">
+				<img src="/img/p5.gif">
+				<img src="/img/p6.gif">
+				<img src="/img/p7.gif">
 			</section>
 			
 			<section id="site-info">

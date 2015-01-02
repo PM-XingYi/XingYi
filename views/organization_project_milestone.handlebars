@@ -16,19 +16,19 @@
 		<div class="wrapper" id="header-wrapper">
 			<div id="logo">
 				<div id="logo-img">
-					<img src="img/logo.png">
+					<img src="/img/logo.png">
 				</div>
 				<div id="logo-name">
-					<img src="img/name.png">
+					<img src="/img/name.png">
 				</div>
 			</div>
 			<!-- the search input, login and register entries -->
 			<div id="entry">
 				<div id="search">
 					<input id="search-box" type="search">
-					<img id="search-icon" src="img/search.png" placeholder="搜索..." autocomplete="off">
+					<img id="search-icon" src="/img/search.png" placeholder="搜索..." autocomplete="off">
 				</div>
-				<label>您好，<a id="user-entry">Sheer</a></label>
+				<label>您好，<a id="user-entry-organization">{{curUser.username}}</a></label>
 				<a id="dashboard-entry">Dashboard</a>
 				<a id="logout-entry">登出</a>
 			</div>
@@ -39,6 +39,7 @@
 	<div id="content">
 		<div class="wrapper" id="add-news-wrapper">
 			<section class="container">
+				<div class="for-id">{{project._id}}</div>
 				<h1 class="section-title">
 					新消息
 				</h1>
@@ -64,6 +65,16 @@
 					<div class="row">
 						<div class="col-1">
 							<label>
+								标题
+							</label>
+						</div>
+						<div class="col-2">
+							<input type="text" id="news-title">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-1">
+							<label>
 								内容
 							</label>
 						</div>
@@ -83,7 +94,7 @@
 				<section class="project-part">
 					<div class="row">
 						<div class='col-1'>
-							<h1>管理已发布消息</h1>
+							<h1>已发布消息</h1>
 						</div>
 						<div class="col-2">
 						</div>
@@ -96,25 +107,19 @@
 							日期
 						</div>
 						<div class="col-2">
-							内容
+							标题
 						</div>
 						<div class="col-3">
+							内容
 						</div>
 					</div>
 					<section class="show">
 						<div class="collection">
-							{{#each milestone}}
+							{{#each project.mileStone}}
 							<div class="row">
-								<div class="col-1">
-									{{date}}
-								</div>
-								<div class="col-2">
-									{{desc}}
-								</div>
-								<div class="col-3">
-									<button class="rounded-button light-button edit">编辑</button>
-									<button class="rounded-button light-red-button remove">删除</button>
-								</div>
+								<div class="col-1">{{dateStr}}</div>
+								<div class="col-2">{{title}}</div>
+								<div class="col-3">{{desc}}</div>
 							</div>
 							{{/each}}
 						</div>

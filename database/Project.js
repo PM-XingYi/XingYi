@@ -13,7 +13,6 @@ var ProjectSchema = new Schema({
 	comment: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
 	donation: [{type: Schema.Types.ObjectId, ref: 'Donation'}],
 	mileStone: [{
-		startDay:{type: Date, default: Date.now},
 		date: Date,
 		title: String,
 		desc: String

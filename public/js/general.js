@@ -66,7 +66,7 @@ $(function() {
 		var undone = done.next();
 		done.css("width", per*width);
 		undone.css("width", (1-per)*width);
-		var result = per*100+"%";
+		var result = (per*100).toFixed(0) +"%";
 		if(per>=0.5) {
 			done.text(result);
 		} else {

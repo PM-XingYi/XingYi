@@ -35,7 +35,7 @@ router.get('/all', function (req, res) {
 				project[i].ratio = -1;
 			}
 			else {
-				project[i].ratio = project[i].moneyRaised / project[i].moneyNeeded;
+				project[i].ratio = (project[i].moneyRaised / project[i].moneyNeeded).toFixed(2);
 			}
 		}
 		var ans = {
@@ -51,26 +51,46 @@ router.get('/all', function (req, res) {
 /*
  * search project
  */
-router.post('/search', function (req, res) {
-	ProjectService.searchProject(req.body.keyword, function(result) {
+router.get('/search', function (req, res) {
+	ProjectService.searchProject(req.query.keyword, function(result) {
 		// no result, render search_nofound page
-		if (result.length === 0) {
+		if (result.message.length === 0) {
 			ProjectService.latestProject(3, function(latest) {
+        var project = latest.message;
+        project.forEach(function(projectModel){
+          if (projectModel.moneyNeeded === -1) {
+            projectModel.ratio = -1;
+          }
+          else {
+            projectModel.ratio = (projectModel.moneyRaised / projectModel.moneyNeeded).toFixed(2);
+          }
+        });
 				var ans = {
-					keyword: req.body.keyword,
-					total: latest.length,
-					latest: latest
+          curUser: req.user,
+					keyword: req.query.keyword,
+					total: latest.message.length,
+					latest: latest.message
 				};
-				res.render('search_nofound', ans);
+				res.render('project_search_nofound', ans);
 			});
 		}
 		// result found
 		else {
+        var project = result.message;
+        project.forEach(function(projectModel){
+          if (projectModel.moneyNeeded === -1) {
+            projectModel.ratio = -1;
+          }
+          else {
+            projectModel.ratio = (projectModel.moneyRaised / projectModel.moneyNeeded).toFixed(2);
+          }
+        });
 			var ans = {
-				keyword: req.body.keyword,
-				project: result
+        curUser: req.user,
+				keyword: req.query.keyword,
+				project: project
 			};
-			res.render('search_result', ans);
+			res.render('project_search_result', ans);
 		}
 	});
 });
@@ -79,9 +99,11 @@ router.post('/search', function (req, res) {
  * get one available project
  */
 router.get('/:id', function (req, res) {
-	ProjectService.getProjectById(req.params.id, function(result) {
-		var project = result.message[0];
-		project.owner = result.message[1];
+	var projectID = req.params.id;
+	if (typeof(projectID) !== "string")
+		projectID = req.params.id[0];
+	ProjectService.getProjectById(projectID, function(result) {
+		var project = result.message;
 
 		if (project.moneyNeeded === -1) {
 			project.ratio = -1;
@@ -89,6 +111,8 @@ router.get('/:id', function (req, res) {
 		else {
 			project.ratio = project.moneyRaised / project.moneyNeeded;
 		}
+
+		console.log(project);
 
 		if (result.success) {
 			res.render('project_detail', {

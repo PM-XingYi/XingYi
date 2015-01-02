@@ -29,7 +29,7 @@
 					<img id="search-icon" src="/img/search.png" placeholder="搜索..." autocomplete="off">
 				</div>
 				<label>您好，<a id="user-entry">Admin</a></label>
-				<a id="dashboard-entry">Dashboard</a>
+				<a id="dashboard-entry" onclick="location.href='/superuser/home'">管理面板</a>
 				<a id="logout-entry">登出</a>
 			</div>
 		</div>
@@ -69,8 +69,8 @@
 							评论内容
 						</div>
 						<div class="col-6">
-							<button class="rounded-button" id="preserve-checked">保留选中项</button>
-							<button class="rounded-button red-button" id="delete-checked">删除选中项</button>
+							<button class="rounded-button" id="preserve-checked">通过</button>
+							<button class="rounded-button red-button" id="delete-checked">删除</button>
 						</div>
 					</article>
 				</section>
@@ -137,6 +137,7 @@
 									<button class="rounded-button light-red-button delete">x</button>
 								</div>
 							</div>
+              {{/each}}
 						</div>
 					</section>
 					<section class="page_navigation">
@@ -182,6 +183,10 @@
 				</section>
 				
 			</section>
+
+      <!-- <h1 class="back-nav" onclick="location.href='/superuser/home'" > -->
+      <!--   回到管理面板                                             -->
+      <!-- </h1>                                                            -->
 		</div>
 	</div>
 
@@ -192,13 +197,13 @@
 				关于我们
 			</h1>
 			<section id="author-gallery">
-				<img src="img/p1.gif">
-				<img src="img/p2.gif">
-				<img src="img/p3.gif">
-				<img src="img/p4.gif">
-				<img src="img/p5.gif">
-				<img src="img/p6.gif">
-				<img src="img/p7.gif">
+				<img src="/img/p1.gif">
+				<img src="/img/p2.gif">
+				<img src="/img/p3.gif">
+				<img src="/img/p4.gif">
+				<img src="/img/p5.gif">
+				<img src="/img/p6.gif">
+				<img src="/img/p7.gif">
 			</section>
 			
 			<section id="site-info">

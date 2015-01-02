@@ -11,8 +11,11 @@ $(function() {
 		location.href = "register.html";
 	});
 	// user entry, go to user profile view
-	$("#user-entry").bind("click", function() {
+	$("#user-entry-individual").bind("click", function() {
 		location.href = "/individual/profile";
+	});
+	$("#user-entry-organization").bind("click", function() {
+		location.href = "/organization/profile";
 	});
 	// dashboard entry, go to dashboard, here should be some types....
 	// Admin Dashboard
@@ -74,8 +77,7 @@ $(function() {
 	//
 	$("#search-icon").bind("click", function() {	//important!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		if($("#search-box").val()!="") {	// go to search page
-			//TODO
-			//key word is $("#search-box").val()
+      location.href="/project/search?keyword=" + encodeURIComponent($("#search-box").val());
 
 		}
 	});
@@ -283,33 +285,51 @@ $(function() {
 	// just set it to be passed
 	$("#admin-comments-management-wrapper #all_project .preserve").bind("click", function() {
 		var row = $(this).parents(".row");
-		row.remove();
+    var commentId = row.children(".for-id").text()
 
-		$("#admin-comments-management-wrapper #star_project .collection").append(row);
+		$.ajax({
+			url: "/superuser/examComment",
+			type: "POST",
+			data: {
+				commentID: commentId,
+				approve: 1,
+				remark: ""
+			}
+		}).then(function(data){
+      if (data && data.success) {
+        row.remove();
+        $("#admin-comments-management-wrapper #star_project .collection").append(row);
+      }
+			else {
+				alert("失败 " + (data ? data.message : "!"));
+			}
+		});
 
-		//////// A trick, need optimaization1!!!!!!!!!! //////////////////
-		// Page navigation update.... Do it later!!!
-		$("#admin-comments-management-wrapper #all_project").find(".active_page").click();
-		$("#admin-comments-management-wrapper #star_project").find(".active_page").click();
-		///////////////////////////////////////////////////////////////////
-
-		// TODO, for the server
 	});
 	// delete this comment
 	// just set it to be unpassed.
 	$("#admin-comments-management-wrapper #all_project .delete").bind("click", function() {
 		var row = $(this).parents(".row");
-		row.remove();
+    var commentId = row.children(".for-id").text()
 
-		$("#admin-comments-management-wrapper #join_project .collection").append(row);
+		$.ajax({
+			url: "/superuser/examComment",
+			type: "POST",
+			data: {
+				commentID: commentId,
+				approve: 3,
+				remark: ""
+			}
+		}).then(function(data){
+      if (data && data.success) {
+        row.remove();
+        $("#admin-comments-management-wrapper #join_project .collection").append(row);
+      }
+			else {
+				alert("失败 " + (data ? data.message : "!"));
+			}
+		});
 
-		//////// A trick, need optimaization1!!!!!!!!!! //////////////////
-		// Page navigation update.... Do it later!!!
-		$("#admin-comments-management-wrapper #all_project").find(".active_page").click();
-		$("#admin-comments-management-wrapper #join_project").find(".active_page").click();
-		///////////////////////////////////////////////////////////////////
-
-		// TODO, for the server
 	});
 	// preserve all selected.
 	// just set them to be passed
@@ -475,9 +495,9 @@ $(function() {
 	$("#view-all-project-manager-wrapper button.rounded-button").filter(function() {
 		return !$(this).hasClass("disable-button")
 	}).bind("click", function() {
-		var id = $(this).parents(".project-wrapper").find(".for-id");
-		// TODO, just go to project
-
+		console.log($(this).parents(".project-wrapper").find(".for-id"));
+		var projectID = $(this).parents(".project-wrapper").find(".for-id").text();
+		location.href = "/organization/project/" + projectID + "/edit";
 	});
 
 
@@ -485,17 +505,69 @@ $(function() {
 		For Create New Project Manager
 	**/
 	$("#create-new-project-manager-wrapper #publish-project").bind("click", function() {
-		var name_of_project = $("#name-of-project").val();
-		var intro_of_project = $("#intro-of-project").val();
-		var filename = $("input[type='file']").val();
-		var reason_of_project = $("#reason-of-project").val();
-		var title_of_copy = $("#title-of-copy").val();
-		var content_of_copy = $("#content-of-copy").val();
-		var inform_of_join = $("#inform-of-join").val();
-		var goal_of_kick = $("#goal-of-kick").val();
-		var explain_of_goal = $("#explain-of-goal").val();
-		var content_of_intro = $("#content-of-intro").val();
-		//TODO,  for the server
+		var name = $("#name-of-project").val();
+		var desc = $("#intro-of-project").val();
+		var longDesc = $("#content-of-copy").val();
+		var notice = $("#inform-of-join").val();
+		var moneyNeeded = parseInt($("#goal-of-kick").val());
+
+		var noticeShow = $("#inform-of-join").parents(".row").eq(0).css("display") !== "none";
+		var moneyShow = $("#goal-of-kick").parents(".row").eq(0).css("display") !== "none";
+		if (!(noticeShow || moneyShow)) {
+			alert("志愿者和众筹必须至少一项");
+			return;
+		}
+		if (moneyShow && isNaN(moneyNeeded)) {
+			alert("请输入合法的众筹目标");
+			return;
+		}
+
+		var data = {
+			name: name,
+			desc: desc,
+			longDesc: longDesc,
+			notice: notice,
+			moneyNeeded: (moneyShow ? moneyNeeded : -1)
+		};
+		$.ajax({
+			method: "POST",
+			url: "/organization/publish",
+			data: data,
+			success: function (data) {
+				if (data && data.success) {
+					alert("发布成功！现在可以上传图片！");
+					$(".project-part.image").append('<div class="for-id">' + data.message + '</div>');
+					$(".project-part.image").show();
+				}
+				else {
+					alert("啊哦失败了:( " + (data ? data.message : ""));
+				}
+			}
+		})
+	});
+	$("#create-new-project-manager-wrapper #save-project-img").bind("click", function() {
+		var projectID = $(".for-id").text();
+		var image = $("#edit-img")[0].files[0];
+
+		var data = new FormData();
+		data.append("image", image);
+
+		$.ajax({
+			type: "POST",
+			url: "/organization/project/" + projectID + "/editImg",
+			data: data,
+			contentType: false,
+			processData: false,
+			success: function (data) {
+				if (data && data.success) {
+					alert("修改图片成功！");
+					location.href = "/organization/project/" + projectID;
+				}
+				else {
+					alert("啊哦失败了:(");
+				}
+			}
+		});
 	});
 
 	/**
@@ -523,47 +595,58 @@ $(function() {
 	});
 
 	/**
-		For BaseInfo View
-	**/
-	// save button
-	// save project information
-	$("#baseinfo-view-wrapper #save-project").bind("click", function() {
-		var name_of_project = $("#name-of-project").text();
-		var intro_of_project = $("#intro-of-project").text();
-		var filename = $("#project-pictures").text();
-		var title_of_copy = $("#title-of-copy").text();
-		var content_of_copy = $("#content-of-copy").text();
-		var inform_of_join = $("#inform-of-join").text();
-		var goal_of_kick = $("#goal-of-kick").text();
-		var explain_of_goal = $("#explain-of-goal").text();
-		var content_of_intro = $("#content-of-intro").text();
-		//TODO,  for the server
-
-	});
-	// edit button, go to baseinfo_edit
-	$("#baseinfo-view-wrapper .edit-item").bind("click", function() {
-		location.html = "baseinfo_edit.html";
-	});
-
-	/**
 		For BaseInfo Edit
 	**/
 	// save button
-	$("#baseinfo-edit-wrapper #save-project").bind("click", function() {
-		var name_of_project = $("#name-of-project").text();
-		var intro_of_project = $("#intro-of-project").text();
-		var filename = $("#project-pictures").text();
-		var title_of_copy = $("#title-of-copy").text();
-		var content_of_copy = $("#content-of-copy").text();
-		var inform_of_join = $("#inform-of-join").text();
-		var goal_of_kick = $("#goal-of-kick").text();
-		var explain_of_goal = $("#explain-of-goal").text();
-		var content_of_intro = $("#content-of-intro").text();
-		//TODO,  for the server
+	$("#baseinfo-edit-wrapper #save-project-img").bind("click", function() {
+		var projectID = $(".for-id").text();
+		var image = $("#edit-img")[0].files[0];
+
+		var data = new FormData();
+		data.append("image", image);
+
+		$.ajax({
+			type: "POST",
+			url: "/organization/project/" + projectID + "/editImg",
+			data: data,
+			contentType: false,
+			processData: false,
+			success: function (data) {
+				if (data && data.success) {
+					alert("修改图片成功！");
+					location.href = "/organization/project/" + projectID + "/edit";
+				}
+				else {
+					alert("啊哦失败了:(");
+				}
+			}
+		});
 	});
-	// save temporarily
-	$("#baseinfo-edit-wrapper .save-item").bind("click", function() {
-		// go back to basic info view
+	$("#baseinfo-edit-wrapper #save-project").bind("click", function() {
+		var projectID = $(".for-id").text();
+		var desc = $("#edit-desc").val();
+		var longDesc = $("#edit-longDesc").val();
+		var notice = $("#edit-notice").val();
+
+		$.ajax({
+			type: "POST",
+			url: "/organization/project/" + projectID + "/edit",
+			data: {
+				project: projectID,
+				desc: desc,
+				longDesc: longDesc,
+				notice: notice
+			},
+			success: function (data) {
+				if (data && data.success) {
+					alert("修改成功！");
+					location.href = "/organization/project/" + projectID + "/edit";
+				}
+				else {
+					alert("啊哦失败了:( " + (data ? data.message : ""));
+				}
+			}
+		});
 	});
 
 	/**
@@ -571,9 +654,30 @@ $(function() {
 	**/
 	// publish news
 	$("#add-news-wrapper #publish-news").bind("click", function() {
+		var projectID = $(".for-id").text();
 		var date = $("#news-date").val();
+		var title = $("#news-title").val();
 		var content = $("#news-content").val();
-		// TODO
+
+		var data = {
+			date: date,
+			title: title,
+			desc: content
+		};
+		$.ajax({
+			method: "POST",
+			url: "/organization/project/" + projectID + "/milestone/add",
+			data: data,
+			success: function (data) {
+				if (data && data.success) {
+					alert("发布成功！");
+					location.reload();
+				}
+				else {
+					alert("发布失败:( " + (data ? data.message : ""));
+				}
+			}
+		})
 	});
 
 	function editItemNews(obj) {
@@ -630,10 +734,31 @@ $(function() {
 	**/
 	// publish book
 	$("#bookkeeping-wrapper #publish-book").bind("click", function() {
+		var projectID = $(".for-id").text();
 		var date = $("#book-date").val();
 		var number = parseInt($("#book-number").val());
 		var content = $("#book-content").val();
-		// TODO
+		
+		var data = {
+			date: date,
+			expense: number,
+			usage: content
+		};
+		console.log(data);
+		$.ajax({
+			method: "POST",
+			url: "/organization/project/" + projectID + "/expenditure/add",
+			data: data,
+			success: function (data) {
+				if (data && data.success) {
+					alert("添加成功！");
+					location.reload();
+				}
+				else {
+					alert("添加失败:( " + (data ? data.message : ""));
+				}
+			}
+		})
 	});
 
 	function editItemBook(obj) {
@@ -780,20 +905,13 @@ $(function() {
 		} else {
 			var content = $(this).next().val();
 			if(content !== "") {
-				var project = $(this).parents(".card-part");
-				var rightpart = project.find(".right-part");
-				rightpart.children("button.pass").remove();
-				rightpart.children("textarea").replaceWith("<h1>否决理由</h1><div>"+rightpart.children("textarea").val()+"</div>");
-				rightpart.children("button.fail").text("已否决").removeClass("fail").addClass("failed");			
-				$("#project-verify-wrapper #join_project .show .collection").append(project);
-				
 				$.ajax({
 					url: "/superuser/examProject",
 					type: "POST",
 					data: {
 						projectID: projectID,
 						approve: 3,
-						remark: $("#reason-" + projectID).text()
+						remark: $("#reason-" + projectID).val()
 					}
 				}).then(function(data){
 					if (data && data.success) {

@@ -22,7 +22,9 @@ router.param('id', /^\w+$/);
 router.get('/home', function(req, res) {
 	if (req.user) {
 		res.render('individual_dashboard', {curUser: req.user});
-	}
+	} else {
+    res.redirect("/superuserLogin.html");
+  }
 });
 
 /*

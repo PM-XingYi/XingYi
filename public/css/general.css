@@ -1,6 +1,8 @@
 /*
 	general
 */
+
+@import url("csshake.min.css");
 * {
 	font-family: '微软雅黑',Arial,Helvetica,sans-serif;
 	font-size: 14px;
@@ -25,11 +27,12 @@ body {
 	position: absolute;
 }
 
+
 /*
 	This is for id 
 */
 .for-id {
-	display: none;
+	display: none !important;
 }
 
 /*
@@ -174,6 +177,14 @@ header {
 
 #search>img {
 	height: 16px;
+  cursor: pointer;
+  -webkit-filter: grayscale(0.5);
+  -moz-filter: grayscale(0.5);
+}
+
+#search>img:hover{
+  -webkit-filter: inherit;
+  -moz-filter: inherit;
 }
 
 #search>input[type="search"] {
@@ -462,7 +473,87 @@ footer #author-gallery img {
 	height: 116px;
 	border-radius: 50%;
 	border: 0px;
+ -webkit-animation-iteration-count: infinite;
+ -ms-animation-iteration-count: infinite;
+ animation-iteration-count: infinite;
+ -webkit-animation-timing-function: ease-in-out;
+ -ms-animation-timing-function: ease-in-out;
+ animation-timing-function: ease-in-out;
+ -webkit-animation-delay: 0s;
+ -ms-animation-delay: 0s;
+ animation-delay: 0s;
+ -webkit-animation-play-state: running;
+ -ms-animation-play-state: running;
+ animation-play-state: running;
 }
+
+footer #author-gallery img:hover {
+-webkit-animation-name:shake-base;
+-ms-animation-name:shake-base;
+animation-name:shake-base;
+-webkit-animation-duration:100ms;
+-ms-animation-duration:100ms;
+animation-duration:100ms;
+ }
+
+footer #author-gallery img:nth-child(1):hover {
+-webkit-animation-name:shake-rotate;
+-ms-animation-name:shake-rotate;
+animation-name:shake-rotate;
+-webkit-animation-duration:100ms;
+-ms-animation-duration:100ms;
+animation-duration:100ms;
+ }
+
+footer #author-gallery img:nth-child(2):hover {
+-webkit-animation-name:shake-slow;
+-ms-animation-name:shake-slow;
+animation-name:shake-slow;
+-webkit-animation-duration:4s;
+-ms-animation-duration:4s;
+animation-duration:4s;
+ }
+footer #author-gallery img:nth-child(3):hover {
+ -webkit-animation-name: shake-hard;
+ -ms-animation-name: shake-hard;
+ animation-name: shake-hard;
+ -webkit-animation-duration: 100ms;
+ -ms-animation-duration: 100ms;
+ animation-duration: 100ms;
+ }
+footer #author-gallery img:nth-child(4):hover {
+-webkit-animation-name:shake-vertical;
+-ms-animation-name:shake-vertical;
+animation-name:shake-vertical;
+-webkit-animation-duration:100ms;
+-ms-animation-duration:100ms;
+animation-duration:100ms;
+ }
+footer #author-gallery img:nth-child(5):hover {
+-webkit-animation-name:shake-little;
+-ms-animation-name:shake-little;
+animation-name:shake-little;
+-webkit-animation-duration:100ms;
+-ms-animation-duration:100ms;
+animation-duration:100ms;
+ }
+footer #author-gallery img:nth-child(6):hover {
+-webkit-animation-name:shake-crazy;
+-ms-animation-name:shake-crazy;
+animation-name:shake-crazy;
+-webkit-animation-duration:100ms;
+-ms-animation-duration:100ms;
+animation-duration:100ms;
+ }
+
+footer #author-gallery img:nth-child(7):hover {
+-webkit-animation-name:shake-horizontal;
+-ms-animation-name:shake-horizontal;
+animation-name:shake-horizontal;
+-webkit-animation-duration:100ms;
+-ms-animation-duration:100ms;
+animation-duration:100ms;
+ }
 
 ul.nav {
 	list-style-type: none;
@@ -1467,6 +1558,7 @@ input.hack-like {
 
 #admin-comments-management-wrapper .col-1 {
 	width: 30px;
+  display:none;
 }
 
 #admin-comments-management-wrapper .col-2 {
@@ -1474,7 +1566,7 @@ input.hack-like {
 }
 
 #admin-comments-management-wrapper .col-3 {
-	width: 100px;
+	width: 130px;
 }
 
 #admin-comments-management-wrapper .col-4 {
@@ -1937,7 +2029,7 @@ section#apply-form button.disable-button:hover,
 
 #view-all-project-manager-wrapper .flag-note>:nth-child(2),
 #view-participatingpjs-user-wrapper .flag-note>:nth-child(2) {
-	background: url("../img/passed.png");
+	background: url("/img/passed.png");
 	background-size: 30px 30px;
 	background-repeat: no-repeat;
 }
@@ -1951,7 +2043,7 @@ section#apply-form button.disable-button:hover,
 
 #view-all-project-manager-wrapper .flag-note>:nth-child(4),
 #view-participatingpjs-user-wrapper .flag-note>:nth-child(4) {
-	background: url("../img/failed.png");
+	background: url("/img/failed.png");
 	background-size: 30px 30px;
 	background-repeat: no-repeat;
 }
@@ -2213,6 +2305,9 @@ button#publish-project {
 }
 
 #baseinfo-edit-wrapper button#save-project {
+	font-size: 24px;
+}
+#baseinfo-edit-wrapper button#save-project-img {
 	font-size: 24px;
 }
 
@@ -2519,4 +2614,18 @@ button#publish-project {
 #project-verify-wrapper #join_project .right-part>div {
 	width: 200px;
 	margin: auto;
+}
+
+
+#admin-comments-management-wrapper #preserve-checked,
+#admin-comments-management-wrapper #delete-checked{
+  display:none;
+}
+
+.back-nav{
+  cursor: pointer;
+  color: #007942;
+}
+.back-nav:hover{
+  color: blue;
 }

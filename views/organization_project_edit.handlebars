@@ -28,7 +28,7 @@
 					<input id="search-box" type="search">
 					<img id="search-icon" src="/img/search.png" placeholder="搜索..." autocomplete="off">
 				</div>
-				<label>您好，<a id="user-entry">{{curUser.username}}</a></label>
+				<label>您好，<a id="user-entry-organization">{{curUser.username}}</a></label>
 				<a id="dashboard-entry">Dashboard</a>
 				<a id="logout-entry">登出</a>
 			</div>
@@ -51,9 +51,6 @@
 						<div class="col-1">
 							<h1>基础信息</h1>
 						</div>
-						<div class="col-2">
-							<div class="save-item"></div>
-						</div>
 					</div>
 					<div class="row">
 						<div class="col-1">
@@ -72,20 +69,7 @@
 							</label>
 						</div>
 						<div class="col-2">
-							<textarea id="intro-of-project">{{project.desc}}</textarea>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-1">
-							<label>
-								项目图片
-							</label>
-						</div>
-						<div class="col-2">
-							<label class="input-file">
-								<input title="浏览文件" type="file" />浏览
-							</label>
-							<label>/pj_{{project._id}}.jpg</label>
+							<textarea id="edit-desc">{{project.desc}}</textarea>
 						</div>
 					</div>
 				</section>
@@ -93,9 +77,6 @@
 					<div class="row">
 						<div class="col-1">
 							<h1>项目文案</h1>
-						</div>
-						<div class="col-2">
-							<div class="save-item"></div>
 						</div>
 					</div>
 					<div class="row">
@@ -105,7 +86,7 @@
 							</label>
 						</div>
 						<div class="col-2">
-							<textarea id="content-of-copy">{{project.longDesc}}</textarea>
+							<textarea id="edit-longDesc">{{project.longDesc}}</textarea>
 						</div>
 					</div>
 				</section>
@@ -113,9 +94,6 @@
 					<div class="row">
 						<div class="col-1">
 							<h1>参与须知</h1>
-						</div>
-						<div class="col-2">
-							<div class="save-item"></div>
 						</div>
 					</div>
 					<div class="row">
@@ -125,7 +103,7 @@
 							</label>
 						</div>
 						<div class="col-2">
-							<textarea id="inform-of-join">{{project.notice}}</textarea>
+							<textarea id="edit-notice">{{project.notice}}</textarea>
 						</div>
 					</div>
 				</section>
@@ -134,12 +112,11 @@
 						<div class="col-1">
 							<h1>众筹目标</h1>
 						</div>
-						<div class="col-2">
-							<div class="save-item"></div>
-						</div>
 					</div>
 					{{#ifEq project.moneyNeeded -1}}
-					<div class="row">无</div>
+					<div class="row">
+						<div class="col-1">无</div>
+					</div>
 					{{else}}
 					<div class="row">
 						<div class="col-1">
@@ -157,6 +134,32 @@
 						</div>
 						<div class="col-2">
 							<button class="rounded-button" id="save-project">保存</button>
+						</div>
+					</div>
+				</section>
+				<section class="project-part">
+					<div class="row">
+						<div class="col-1">
+							<h1>修改图片</h1>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-1">
+							<label>
+								项目图片
+							</label>
+						</div>
+						<div class="col-2">
+							<label class="input_file">
+								<input id="edit-img" title="浏览文件" type="file" />
+							</label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-1">
+						</div>
+						<div class="col-2">
+							<button class="rounded-button" id="save-project-img">保存图片</button>
 						</div>
 					</div>
 				</section>

@@ -3,11 +3,11 @@
 <head>
 	<meta charset=utf-8>
 	<title>行益网-Bookkeeping</title>
-	<link rel="stylesheet" type="text/css" href="css/general.css">
-	<script type="text/javascript" src="js/jquery-1.11.1.js"></script>
-	<script type="text/javascript" src="js/general.js"></script>
-	<script type="text/javascript" src="js/interface.js"></script>
-	<script type="text/javascript" src="js/pager.js"></script>
+	<link rel="stylesheet" type="text/css" href="/css/general.css">
+	<script type="text/javascript" src="/js/jquery-1.11.1.js"></script>
+	<script type="text/javascript" src="/js/general.js"></script>
+	<script type="text/javascript" src="/js/interface.js"></script>
+	<script type="text/javascript" src="/js/pager.js"></script>
 </head>
 <body>
 	
@@ -16,19 +16,19 @@
 		<div class="wrapper" id="header-wrapper">
 			<div id="logo">
 				<div id="logo-img">
-					<img src="img/logo.png">
+					<img src="/img/logo.png">
 				</div>
 				<div id="logo-name">
-					<img src="img/name.png">
+					<img src="/img/name.png">
 				</div>
 			</div>
 			<!-- the search input, login and register entries -->
 			<div id="entry">
 				<div id="search">
 					<input id="search-box" type="search">
-					<img id="search-icon" src="img/search.png" placeholder="搜索..." autocomplete="off">
+					<img id="search-icon" src="/img/search.png" placeholder="搜索..." autocomplete="off">
 				</div>
-				<label>您好，<a id="user-entry">Sheer</a></label>
+				<label>您好，<a id="user-entry-organization">{{curUser.username}}</a></label>
 				<a id="dashboard-entry">Dashboard</a>
 				<a id="logout-entry">登出</a>
 			</div>
@@ -39,6 +39,7 @@
 	<div id="content">
 		<div class="wrapper" id="bookkeeping-wrapper">
 			<section class="container">
+				<div class="for-id">{{project._id}}</div>
 				<h1 class="section-title">
 					开支管理
 				</h1>
@@ -93,7 +94,7 @@
 				<section class="project-part">
 					<div class="row">
 						<div class='col-1'>
-							<h1>编辑开支</h1>
+							<h1>已发布开支</h1>
 						</div>
 						<div class="col-2">
 						</div>
@@ -115,21 +116,11 @@
 					</div>
 					<section class="show">
 						<div class="collection">
-							{{#each expenditure}}
+							{{#each project.expenditure}}
 							<div class="row">
-								<div class="col-1">
-									{{date}}
-								</div>
-								<div class="col-2">
-									{{expense}}
-								</div>
-								<div class="col-3">
-									{{usage}}
-								</div>
-								<div class="col-4">
-									<button class="rounded-button light-button edit">编辑</button>
-									<button class="rounded-button light-red-button remove">删除</button>
-								</div>
+								<div class="col-1">{{dateStr}}</div>
+								<div class="col-2">{{expense}}</div>
+								<div class="col-3">{{usage}}</div>
 							</div>
 							{{/each}}
 						</div>
@@ -150,13 +141,13 @@
 				关于我们
 			</h1>
 			<section id="author-gallery">
-				<img src="img/p1.gif">
-				<img src="img/p2.gif">
-				<img src="img/p3.gif">
-				<img src="img/p4.gif">
-				<img src="img/p5.gif">
-				<img src="img/p6.gif">
-				<img src="img/p7.gif">
+				<img src="/img/p1.gif">
+				<img src="/img/p2.gif">
+				<img src="/img/p3.gif">
+				<img src="/img/p4.gif">
+				<img src="/img/p5.gif">
+				<img src="/img/p6.gif">
+				<img src="/img/p7.gif">
 			</section>
 			
 			<section id="site-info">
