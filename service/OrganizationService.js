@@ -1,5 +1,7 @@
 var go = require('../globalObjects'),
-	MD5 = require('MD5');
+	MD5 = require('MD5'),
+	fs = require('fs'),
+	path = require('path');
 var OrganizationService = function () {
 
 }
@@ -194,6 +196,7 @@ OrganizationService.publishProject = function (username, projectInfo, callback) 
 				desc: projectInfo.desc, 
 				longDesc: projectInfo.longDesc, 
 				notice: projectInfo.notice, 
+				moneyRaised: 0,
 				moneyNeeded: projectInfo.moneyNeeded,
 				mileStone: [{
 					date: Date.now(),
@@ -209,13 +212,19 @@ OrganizationService.publishProject = function (username, projectInfo, callback) 
 						message:"internal error"
 					});
 				}
+
+				// copy default img
+				var readable = fs.createReadStream(path.join(__dirname, "../public/img/pj_default.jpg"));
+				var writable = fs.createWriteStream(path.join(__dirname, "../public/img/pj_" + projectRes._id + ".jpg"));
+				readable.pipe(writable);
+
 				go.database.Organization.findByIdAndUpdate(
 				{
 					_id:user.detail
 				},{
 					$addToSet: 
 					{
-						project: project._id
+						project: projectRes._id
 					}
 				},function(err, result){
 					if(err){
@@ -442,10 +451,9 @@ OrganizationService.getUncheckedApplicationForProject = function(projectID, call
 	});
 }
 
-/* @return {array of user}
- * 
+/*
+ * @return {array of user}
  * need to contain the info of (individual)
- *
  */
 OrganizationService.getVolunteerForProject = function(projectID, callback){
 	go.database.Application.find({project: projectID, status: 1}).populate('user').exec(function(err, applications){

@@ -28,7 +28,7 @@
 					<input id="search-box" type="search">
 					<img id="search-icon" src="/img/search.png" placeholder="搜索..." autocomplete="off">
 				</div>
-				<label>您好，<a id="user-entry">Sheer</a></label>
+				<label>您好，<a id="user-entry-organization">{{curUser.username}}</a></label>
 				<a id="dashboard-entry">Dashboard</a>
 				<a id="logout-entry">登出</a>
 			</div>
@@ -62,25 +62,17 @@
 						</div>
 						<div class="col-3">邮箱
 						</div>
-						<div class="col-4">备注
-						</div>
-						<div class="col-5">
-						</div>
 					</div>
 					<section class="show">
 						<div class="collection">
 							{{#each volunteer}}
 							<div class="row">
 								<div class="for-id">{{_id}}</div>
-								<div class="col-1">{{username}}</div>
+								<div class="col-1">{{user.username}}</div>
 								<div class="col-2">{{detail.mobile}}</div>
-								<div class="col-3">{{email}}</div>
-								<div class="col-4">{{reason}}</div>
-								<div class="col-5">
-									<button class="rounded-button edit">编辑</button>
-								</div>
+								<div class="col-3">{{user.email}}</div>
 							</div>
-							{{/each}}				
+							{{/each}}		
 						</div>
 					</section>
 					<section class="page_navigation">
@@ -95,7 +87,7 @@
 						<div class="collection">
 							{{#each candidate}}
 							<div class="card-part">
-								<div class="for-id">{{_id}}</div>
+								<div class="for-id">{{application._id}}</div>
 								<div class="top-part">
 									<div class="left-part">
 										<h1>基础信息</h1>
@@ -104,7 +96,7 @@
 												<label>用户名</label>
 											</div>
 											<div class="col-2 volunteer-username">
-												{{username}}
+												{{user.username}}
 											</div>
 										</div>
 										<div class="row">
@@ -112,7 +104,7 @@
 												<label>手机号</label>
 											</div>
 											<div class="col-2 volunteer-number">
-												{{detail.mobile}}
+												{{application.user.mobile}}
 											</div>
 										</div>
 										<div class="row">
@@ -120,7 +112,7 @@
 												<label>邮箱</label>
 											</div>
 											<div class="col-2 volunteer-mail">
-												{{email}}
+												{{user.email}}
 											</div>
 										</div>
 									</div>
@@ -129,7 +121,7 @@
 											申请理由
 										</h1>
 										<div class="volunteer-reason">
-											{{reason}}
+											{{application.reason}}
 										</div>
 									</div>
 								</div>
@@ -157,13 +149,13 @@
 				关于我们
 			</h1>
 			<section id="author-gallery">
-				<img src="img/p1.gif">
-				<img src="img/p2.gif">
-				<img src="img/p3.gif">
-				<img src="img/p4.gif">
-				<img src="img/p5.gif">
-				<img src="img/p6.gif">
-				<img src="img/p7.gif">
+				<img src="/img/p1.gif">
+				<img src="/img/p2.gif">
+				<img src="/img/p3.gif">
+				<img src="/img/p4.gif">
+				<img src="/img/p5.gif">
+				<img src="/img/p6.gif">
+				<img src="/img/p7.gif">
 			</section>
 			
 			<section id="site-info">

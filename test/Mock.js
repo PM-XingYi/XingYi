@@ -41,7 +41,7 @@ Mock.insertOrg = function () {
 	for (i=0;i<Math.floor(userCount/5);i++) {
 		var username = "userForOrg"+i;
 		var orgName = "org"+i;
-		service.registerOrg(username, "password", "email@email.com", "13000000000", orgName, "15000000000",function(info) {
+		service.registerOrg(username, "password", "email@email.com", "13000000000", "It is a charity organization", orgName, "15000000000",function(info) {
 						assert.equal(info.success, true);
 						console.log("insertOrg OK:"+orgName);
 						Mock.insertPj(info.username)
@@ -68,6 +68,7 @@ Mock.insertPj = function (username) {
 						Mock.addWatch(info.projectID);
 						Mock.addJoin(info.projectID);
 						Mock.addComment(info.projectID);
+						Mock.addMilestone(info.projectID);
 					}	) ;
 	}
 
@@ -88,6 +89,8 @@ Mock.insertPj = function (username) {
 						Mock.addJoin(info.projectID);
 						Mock.addDonate(info.projectID);
 						Mock.addComment(info.projectID);
+						Mock.addMilestone(info.projectID);
+						Mock.addExpenditure(info.projectID);
 					}	) ;
 	}
 	
@@ -196,5 +199,54 @@ Mock.checkComment = function(commentID, approve) {
 				console.log("checkComment ok:"+commentID+", "+approve);
 			}); 
 };
+
+Mock.addMilestone = function(projectID) {
+	var j;
+	for (j = 0; j < 5; j++) {
+		var date = new Date();
+		date.setDate(date.getDate() + j);
+		var milestone = {
+			date: date,
+			title: "title"+j,
+			desc: "desc"+j
+		};
+
+		service.addMilestone(projectID, milestone, function(info)
+			{
+				assert.equal(info.success, true);
+				console.log("addMilestone ok:"+projectID);
+			});
+
+
+	}
+
+}
+
+
+Mock.addExpenditure = function(projectID) {
+
+	var j;
+	for (j = 0; j < 5; j++) {
+		var date = new Date();
+		date.setDate(date.getDate() + j);
+		var milestone = {
+			date: date,
+			expense: 100*j,
+			usage: "buy food"
+		};
+
+		service.addExpenditure(projectID, milestone, function(info)
+			{
+				assert.equal(info.success, true);
+				console.log("addExpenditure ok:"+projectID);
+			});
+
+
+	}
+
+
+
+
+}
 
 module.exports = Mock;

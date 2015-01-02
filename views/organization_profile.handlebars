@@ -27,8 +27,9 @@
 					<input id="search-box" type="search">
 					<img id="search-icon" src="/img/search.png" placeholder="搜索..." autocomplete="off">
 				</div>
-				<a id="login-entry">登录</a>
-				<a id="register-entry">注册</a>
+				<label>您好，<a id="user-entry-organization">{{curUser.username}}</a></label>
+				<a id="dashboard-entry">Dashboard</a>
+				<a id="logout-entry">登出</a>
 			</div>
 		</div>
 	</header>
@@ -38,9 +39,10 @@
 		<div class="wrapper profile-edit-wrapper" id="organization-profile">
 			<section class="container">
 				<h1 class="section-title">
-					个人信息
+					机构信息
 				</h1>
 				<section class="form-container">
+					<div class="for-id">{{organization._id}}</div>
 					<div class="form-row">
 						<label>用户名</label>
 						<b>{{organization.username}}</b>
@@ -51,11 +53,11 @@
 					</div>
 					<div class="form-row">
 						<label>机构名称</label>
-						<b>{{organization.detail.orgName}}</b>
+						<b>{{organization.detail.instituteName}}</b>
 					</div>
 					<div class="form-row">
 						<label>机构号码</label>
-						<b>{{organization.detail.orgNum}}</b>
+						<b>{{organization.detail.instituteNumber}}</b>
 					</div>
 					<div class="form-row">
 						<label>电话</label>
@@ -72,8 +74,7 @@
 					<div class="form-row">
 						<label></label>
 						<b>
-							<button class="rounded-button" id="save">保存</button>
-							<button class="rounded-button" id="cancel">取消</button>
+							<button class="rounded-button" id="save">修改</button>
 						</b>
 					</div>
 				</section>

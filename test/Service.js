@@ -14,6 +14,22 @@ Service.registerSuperUser = function (callback) {
 			console.log(err);
 		}
 		else {
+
+
+			var user = new go.database.User({
+				username: "superUser",
+				password: MD5("password"),
+				email: "super@super.com",
+				userType: "superUser",
+				detail: superUser._id
+			});
+			user.save(function (err) {
+				if (err) {
+					console.log(err);
+				}
+			});
+
+
 			callback({
 				success: true,
 				superUserID: superUser._id
@@ -75,7 +91,7 @@ Service.registerUser = function (username, password, email, mobile, callback) {
 
 
 
-Service.registerOrg = function (username, password, email, phone, orgName, orgNumber, callback) {
+Service.registerOrg = function (username, password, email, phone, desc, orgName, orgNumber, callback) {
 	//check if user exists
 	go.database.User.findOne({username: username}, function(err, user){
 		if(err){
@@ -89,6 +105,7 @@ Service.registerOrg = function (username, password, email, phone, orgName, orgNu
 		} else{
 			var organization = new go.database.Organization({
 				phone: phone,
+				desc: desc,
 				instituteName: orgName,
 				instituteNumber: orgNumber
 			});
@@ -335,7 +352,7 @@ Service.donateProject = function (username, donateInfo, callback) {
 		}else{
 			var donation = new go.database.Donation(
 				{
-					user: user._id,
+					user: user.detail,
 					project: donateInfo.project, 
 					date: donateInfo.date, 
 					amount: donateInfo.amount, 
@@ -406,7 +423,7 @@ Service.commentProject = function (username, commentInfo, callback) {
 		}else{
 			var comment = new go.database.Comment(
 				{
-					user: user._id,
+					user: user.detail,
 					project: commentInfo.project, 
 					date: commentInfo.date, 
 					comment: commentInfo.comment, 
@@ -604,7 +621,7 @@ Service.addMilestone = function (projectID, milestone, callback) {
  * } expenditure
  * @return {Boolean} success
  */
-Service.addExpenditure = function (username, projectID, expenditure, callback) {
+Service.addExpenditure = function (projectID, expenditure, callback) {
 	go.database.Project.findByIdAndUpdate(
 		{
 			_id:projectID

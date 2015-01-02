@@ -193,13 +193,13 @@ $(function() {
 		var type = parseInt($(this).children("i").text());
 		switch(type) {
 			case 1:
-				var html = "<img src='img/passed-flag.png' class='status-flag'>";
+				var html = "<img src='/img/passed-flag.png' class='status-flag'>";
 				break;
 			case 2:
-				var html = "<img src='img/pending-flag.png' class='status-flag'>";
+				var html = "<img src='/img/pending-flag.png' class='status-flag'>";
 				break;
 			case 3:
-				var html = "<img src='img/failed-flag.png' class='status-flag'>";
+				var html = "<img src='/img/failed-flag.png' class='status-flag'>";
 				break;
 			default:
 				var html = "";
@@ -214,15 +214,15 @@ $(function() {
 		var type = parseInt($(this).children("i").text());
 		switch(type) {
 			case 1:
-				var html = "<img src='img/passed-flag.png' class='status-flag'>";
+				var html = "<img src='/img/passed-flag.png' class='status-flag'>";
 				html += "<div class='project-operate'><button class='rounded-button'>EDIT</button></div>";
 				break;
 			case 2:
-				var html = "<img src='img/pending-flag.png' class='status-flag'>";
+				var html = "<img src='/img/pending-flag.png' class='status-flag'>";
 				html += "<div class='project-operate'><button class='rounded-button'>EDIT</button></div>";
 				break;
 			case 3:
-				var html = "<img src='img/failed-flag.png' class='status-flag'>";
+				var html = "<img src='/img/failed-flag.png' class='status-flag'>";
 				html += "<div class='project-operate'><button class='rounded-button disable-button' disabled='disabled'>EDIT</button></div>";
 				break;
 			default:

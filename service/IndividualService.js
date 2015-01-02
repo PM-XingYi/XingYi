@@ -116,6 +116,7 @@ IndividualService.updateUser = function (username, newUserInfo, callback) {
 			}
 			console.log("test");
 			console.log(newUserInfo["mobile"]);
+      var success = true;
 			if(newUserInfo["mobile"] !== undefined){
 				individual.mobile = newUserInfo["mobile"];
 				//console.log(newUserInfo["mobile"]);
@@ -125,6 +126,7 @@ IndividualService.updateUser = function (username, newUserInfo, callback) {
 							success: false,
 							message: "update fail"
 						});
+            success = false;
 					}
 					console.log("ok");
 				});
@@ -138,13 +140,16 @@ IndividualService.updateUser = function (username, newUserInfo, callback) {
 							success: false,
 							message: "update fail"
 						});
+            success = false;
 					}
 				});
 			}
-			callback({
-				success: true,
-				message: "update successfully"
-			});						
+      if (success) {
+        callback({
+          success: true,
+          message: "update successfully"
+        });						
+      }
 		});
 	});
 };
@@ -250,6 +255,7 @@ IndividualService.getWatchProjectList = function (username, callback) {
 				callback({
 					success: false
 				});
+        return;
 			}
 			var answer = [];
 			if(individual === null || individual === undefined){
@@ -358,7 +364,7 @@ IndividualService.joinProject = function (username, projectID, joinReason, callb
  * @param {String} username
  * @return {Array of Application} application list
  */
-IndividualService.getJoinProjectList = function (username, callback) {
+IndividualService.getJoinApplicationList = function (username, callback) {
 	go.database.User.findOne({username: username},function(err, user){
 		if(err){
 			callback({
@@ -532,7 +538,6 @@ IndividualService.getDonateProjectList = function (username, callback) {
  * @param {String} username
  * @param {
  *   @param {ObjectId} project id
- *   @param {Date} date
  *   @param {String} comment
  * } comment info
  * @return {Boolean} success
@@ -549,7 +554,7 @@ IndividualService.commentProject = function (username, commentInfo, callback) {
 				{
 					user: user.detail,
 					project: commentInfo.project, 
-					date: commentInfo.date, 
+					date: Date.now(), 
 					comment: commentInfo.comment, 
 				});
 			comment.save(function(err){

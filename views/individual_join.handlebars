@@ -28,8 +28,8 @@
 					<input id="search-box" type="search">
 					<img id="search-icon" src="/img/search.png" placeholder="搜索..." autocomplete="off">
 				</div>
-				<label>您好，<a id="user-entry">{{curUser.username}}</a></label>
-				<a id="dashboard-entry">Dashboard</a>
+				<label>您好，<a id="user-entry-individual">{{curUser.username}}</a></label>
+				<a id="dashboard-entry" href="/individual/home">管理面板</a>
 				<a id="logout-entry">登出</a>
 			</div>
 		</div>
@@ -42,9 +42,6 @@
 				<h1 class="section-title">
 					参加项目
 				</h1>
-				<a class="section-title-more" id="go-back-dashboard">
-					Back to DashBoard>
-				</a>
 				<section class='flag-note'>
 					<h1>申请参与状态</h1>
 					<a><i></i>申请通过</a>
@@ -53,22 +50,22 @@
 				</section>
 				<section class="show">
 					<div class="collection">
-						{{#each project}}
+						{{#each application}}
 						<div class="project-wrapper">
 							<article>
-								<div class="for-id">{{_id}}</div>
+								<div class="for-id">{{project._id}}</div>
 								<section class="project-image">
-									<img src="/img/pj_{{_id}.png">
+                  <img src="/img/pj_{{project._id}}.png">
 								</section>
 								<section class="project-info">
 									<section class="project-title relative">
-										{{name}}
+										{{project.name}}
 									</section>
 									{{#ifEq ratio -1}}
 									{{else}}
 									<section class="project-progress">
 										<span class="project-progress-flag">已完成</span>
-										<span class="project-progress-complete">{{ratio}}</span>
+										<span class="project-progress-complete">{{project.ratio}}</span>
 										<div class="progress-bar">
 											<div class="progress-done"></div>
 											<div class="progress-undone"></div>

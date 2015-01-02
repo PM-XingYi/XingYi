@@ -27,8 +27,8 @@
 					<input id="search-box" type="search">
 					<img id="search-icon" src="/img/search.png" placeholder="搜索..." autocomplete="off">
 				</div>
-				<label>您好，<a id="user-entry">{{user.username}}</a></label>
-				<a id="dashboard-entry">Dashboard</a>
+				<label>您好，<a id="user-entry-individual">{{user.username}}</a></label>
+				<a id="dashboard-entry" href="/individual/home">管理面板</a>
 				<a id="logout-entry">登出</a>
 			</div>
 		</div>
@@ -61,8 +61,7 @@
 					<div class="form-row">
 						<label></label>
 						<b>
-							<button class="rounded-button" id="save">保存</button>
-							<button class="rounded-button" id="cancel">取消</button>
+							<button class="rounded-button" id="save">修改</button>
 						</b>
 					</div>
 				</section>
