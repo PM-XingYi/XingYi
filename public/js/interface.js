@@ -502,17 +502,15 @@ $(function() {
 		For Create New Project Manager
 	**/
 	$("#create-new-project-manager-wrapper #publish-project").bind("click", function() {
-		var name_of_project = $("#name-of-project").val();
-		var intro_of_project = $("#intro-of-project").val();
-		var filename = $("input[type='file']").val();
-		var reason_of_project = $("#reason-of-project").val();
-		var title_of_copy = $("#title-of-copy").val();
-		var content_of_copy = $("#content-of-copy").val();
-		var inform_of_join = $("#inform-of-join").val();
-		var goal_of_kick = $("#goal-of-kick").val();
-		var explain_of_goal = $("#explain-of-goal").val();
-		var content_of_intro = $("#content-of-intro").val();
-		//TODO,  for the server
+		var name = $("#name-of-project").val();
+		var desc = $("#intro-of-project").val();
+		var longDesc = $("#content-of-copy").val();
+		var notice = $("#inform-of-join").val();
+		var moneyNeeded = parseInt($("#goal-of-kick").val());
+		
+		var data = {
+			
+		}
 	});
 
 	/**

@@ -47,7 +47,7 @@ IndividualService.register = function (username, password, email, mobile, callba
 					}
 					else {
 						callback({
-							success: true
+							success: true,
 							message:"register successfully"
 						});
 					}

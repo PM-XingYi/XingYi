@@ -110,6 +110,8 @@ router.get('/:id', function (req, res) {
 			project.ratio = project.moneyRaised / project.moneyNeeded;
 		}
 
+		console.log(project);
+
 		if (result.success) {
 			res.render('project_detail', {
 				curUser: req.user,

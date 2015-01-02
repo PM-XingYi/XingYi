@@ -121,7 +121,7 @@
 						{{/ifEq}}
 
 					</section>
-					{{#ifEq ratio -1}}
+					{{#ifEq project.ratio -1}}
 					{{else}}
 					<section class="tab-bar-content">
 						<h2>
@@ -167,7 +167,7 @@
 										{{#each project.expenditure}}
 										<div class="row">
 											<div class="col-1">
-												{{date}}
+												{{dateStr}}
 											</div>
 											<div class="col-2">
 												<i>{{expense}}</i>
@@ -205,7 +205,7 @@
 								<div class="certain-comment">
 									<div class="time-author">
 										<i>{{username}}</i>
-										<i>{{date}}</i>
+										<i>{{dateStr}}</i>
 									</div>
 									<div class="comment-content">
 										{{comment}}
