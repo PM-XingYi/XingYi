@@ -182,7 +182,7 @@ router.get('/project/:id/milestone', function(req, res) {
 		ProjectService.getProjectById(req.params.id, function (result) {
 			var ans = {
 				curUser: req.user,
-				project: result.message[0]
+				project: result.message
 			};
 
 			if (result.success) {
@@ -213,7 +213,7 @@ router.get('/project/:id/expenditure', function(req, res) {
 		ProjectService.getProjectById(req.params.id, function (result) {
 			var ans = {
 				curUser: req.user,
-				project: result.message[0]
+				project: result.message
 			};
 
 			if (result.success) {

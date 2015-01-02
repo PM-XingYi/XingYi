@@ -57,17 +57,17 @@ router.get('/search', function (req, res) {
 		// no result, render search_nofound page
 		if (result.message.length === 0) {
 			ProjectService.latestProject(3, function(latest) {
-        var project = latest.message;
-        project.forEach(function(projectModel){
-          if (projectModel.moneyNeeded === -1) {
-            projectModel.ratio = -1;
-          }
-          else {
-            projectModel.ratio = (projectModel.moneyRaised / projectModel.moneyNeeded).toFixed(2);
-          }
-        });
+		var project = latest.message;
+		project.forEach(function(projectModel){
+		  if (projectModel.moneyNeeded === -1) {
+			projectModel.ratio = -1;
+		  }
+		  else {
+			projectModel.ratio = (projectModel.moneyRaised / projectModel.moneyNeeded).toFixed(2);
+		  }
+		});
 				var ans = {
-          curUser: req.user,
+		  curUser: req.user,
 					keyword: req.query.keyword,
 					total: latest.message.length,
 					latest: latest.message
@@ -77,17 +77,17 @@ router.get('/search', function (req, res) {
 		}
 		// result found
 		else {
-        var project = result.message;
-        project.forEach(function(projectModel){
-          if (projectModel.moneyNeeded === -1) {
-            projectModel.ratio = -1;
-          }
-          else {
-            projectModel.ratio = (projectModel.moneyRaised / projectModel.moneyNeeded).toFixed(2);
-          }
-        });
+		var project = result.message;
+		project.forEach(function(projectModel){
+		  if (projectModel.moneyNeeded === -1) {
+			projectModel.ratio = -1;
+		  }
+		  else {
+			projectModel.ratio = (projectModel.moneyRaised / projectModel.moneyNeeded).toFixed(2);
+		  }
+		});
 			var ans = {
-        curUser: req.user,
+		curUser: req.user,
 				keyword: req.query.keyword,
 				project: project
 			};
@@ -113,29 +113,30 @@ router.get('/:id', function (req, res) {
 			project.ratio = project.moneyRaised / project.moneyNeeded;
 		}
 
-		console.log(project);
-    function render( watched , mobile){
-      res.render('project_detail', {
-        curUser: req.user,
-        project: project,
-        watched: watched,
-        userMobile: mobile
-      });
-    }
+		function render( watched , mobile){
+			project.today = new Date().toISOString().substr(0, 10)
+			res.render('project_detail', {
+				today: new Date().toISOString().substr(0, 10),
+				curUser: req.user,
+				project: project,
+				watched: watched,
+				userMobile: mobile
+			});
+		}
 
-    if (result.success) {
-      if (req.user) {
-        IndividualService.getUser(req.user.username, function(data){
-          if (!data.success){
-            res.send(500);
-            return;
-          }
-          render(data.message.detail.watchedProject.indexOf(projectID) !== -1, data.message.detail.mobile);
-        });
-      } else {
-        render();
-      }
-    }
+		if (result.success) {
+			if (req.user && req.user.userType === "individual") {
+				IndividualService.getUser(req.user.username, function(data){
+					if (!data.success){
+						res.send(500);
+						return;
+					}
+					render(data.message.detail.watchedProject.indexOf(projectID) !== -1, data.message.detail.mobile);
+				});
+			} else {
+				render();
+			}
+		}
 	});
 });
 

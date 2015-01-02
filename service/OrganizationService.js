@@ -196,6 +196,7 @@ OrganizationService.publishProject = function (username, projectInfo, callback) 
 				desc: projectInfo.desc, 
 				longDesc: projectInfo.longDesc, 
 				notice: projectInfo.notice, 
+				moneyRaised: 0,
 				moneyNeeded: projectInfo.moneyNeeded,
 				mileStone: [{
 					date: Date.now(),

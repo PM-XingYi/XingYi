@@ -115,7 +115,7 @@ ProjectService.getProjectById = function(projectID, callback){
 						message: "internal error"
 					});
 				}
-				answer.owner = user;
+				answer.detail = user[0];
 
 				// format date
 				for (var i = 0; i < answer.expenditure.length; ++i) {
@@ -127,6 +127,11 @@ ProjectService.getProjectById = function(projectID, callback){
 					var temp = answer.mileStone[i].date.toISOString();
 					temp = temp.substr(0, 10);
 					answer.mileStone[i].dateStr = temp;
+				}
+				for (var i = 0; i < answer.comment.length; ++i) {
+					var temp = answer.comment[i].date.toISOString();
+					temp = temp.substr(0, 10);
+					answer.comment[i].dateStr = temp;
 				}
 
 				callback({

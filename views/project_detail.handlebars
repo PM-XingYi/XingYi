@@ -67,17 +67,17 @@
 						大事件
 					</h2>
 					<section class="project-timeline">
-						{{#each project.milestone}}
-						<label>{{title}}<i class="start-time">{{date}}</i></label>
+						{{#each project.mileStone}}
+						<label>{{title}}<i class="start-time">{{dateStr}}</i></label>
 						<div class="timeline">
 						</div>
 						{{/each}}
-						<label>TODAY<i class="end-time">12/22/14</i></label>
+						<label>今天<i class="end-time">{{today}}</i></label>
 					</section>
 					<section class="project-event-show">
-						{{#each project.milestone}}
+						{{#each project.mileStone}}
 						<section class="event">
-							<i>{{date}}</i>
+							<i>{{dateStr}}</i>
 							<article>
 								{{desc}}
 							</article>
@@ -108,23 +108,30 @@
 						<p>
 							{{project.notice}}
 						</p>
-						{{#ifEq project.approve 2}}
-						<label>
-							<input type="checkbox">
-							我已了解上述须知
-						</label>
-						<button class="rounded-button disable-button yellow-font">等待审核...</button>
-						{{else}}
-							{{#ifEq project.approve 1}}
-							<button class="rounded-button disable-button grey-font">已参加</button>
-							{{else}}
-								{{#ifEq project.approve 3}}
-								<button class="rounded-button disable-button red-font">申请未通过</button>
+							{{#if curUser}}
+								{{#ifEq curUser.userType "individual"}}
+									{{#ifEq project.approve 2}}
+									<label>
+										<input type="checkbox">
+										我已了解上述须知
+									</label>
+									<button class="rounded-button disable-button yellow-font">等待审核...</button>
+									{{else}}
+										{{#ifEq project.approve 1}}
+										<button class="rounded-button disable-button grey-font">已参加</button>
+										{{else}}
+											{{#ifEq project.approve 3}}
+											<button class="rounded-button disable-button red-font">申请未通过</button>
+											{{else}}
+											<button class="rounded-button" id="apply">申请参加</button>
+											{{/ifEq}}
+										{{/ifEq}}
+									{{/ifEq}}
 								{{else}}
-								<button class="rounded-button" id="apply">申请参加</button>
 								{{/ifEq}}
-							{{/ifEq}}
-						{{/ifEq}}
+							{{else}}
+								<label>参加前请先登录！</label>
+							{{/if}}
 
 					</section>
 					{{#ifEq project.ratio -1}}
@@ -147,7 +154,14 @@
 								<label>{{project.moneyNeeded}}</label>
 							</section>
 							<section>
+							{{#if curUser}}
+								{{#ifEq curUser.userType "individual"}}
 								<button class="rounded-button" id="donate">捐款</button>
+								{{else}}
+								{{/ifEq}}
+							{{else}}
+								<label>捐款前请先登录！</label>
+							{{/if}}
 							</section>
 						</section>
 						<h2>
@@ -199,8 +213,11 @@
 						</h2>
 						<section class="comment-form">
 							<textarea></textarea>
-							<input type="checkbox">匿名评论
+							{{#if curUser}}
 							<button class="rounded-button" id="make-comment">发表评论</button>
+							{{else}}
+							<label>评论前请先登录！</label>
+							{{/if}}
 						</section>
 						<h2>
 							项目评论
@@ -233,15 +250,15 @@
 							<section class="sponsor-other-info">
 								<div class="info-row">
 									<label>名称</label>
-									<i>{{project.owner.detail.instituteName}}</i>
+									<i>{{project.owner.instituteName}}</i>
 								</div>
 								<div class="info-row">
 									<label>邮箱</label>
-									<i>{{project.owner.email}}</i>
+									<i>{{project.detail.email}}</i>
 								</div>
 								<div class="info-row">
 									<label>电话</label>
-									<i>{{project.owner.detail.phone}}</i>
+									<i>{{project.owner.phone}}</i>
 								</div>
 							</section>
 						</section>

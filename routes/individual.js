@@ -105,10 +105,9 @@ router.get('/donate/:id', function(req, res) {
 	if (req.user) {
 		ProjectService.getProjectById(req.params.id, function (result) {
 			if (result.success) {
-				console.log(result.message);
 				res.render('individual_donate', {
 					curUser: req.user,
-					project: result.message[0]
+					project: result.message
 				});
 			}
 		});
@@ -127,9 +126,9 @@ router.get('/donate/:id', function(req, res) {
  */
 router.post('/project/join/:id', function(req, res) {
 	if (!req.user) {
-    res.send(403);
-    return;
-  }
+    	res.send(403);
+    	return;
+    }
 	IndividualService.joinProject(req.user.username, req.params.id.input ||req.params.id, req.body.reason, function(answer) {
 		res.send(answer);
 	});
@@ -139,9 +138,9 @@ router.post('/project/join/:id', function(req, res) {
  */
 router.post('/project/unjoin/:id', function(req, res) {
 	if (!req.user) {
-    res.send(403);
-    return;
-  }
+    	res.send(403);
+    	return;
+    }
 	IndividualService.cancelJoinProject(req.user.username, req.params.id.input ||req.params.id, function(answer) {
 		res.send(answer);
 	});
@@ -151,9 +150,9 @@ router.post('/project/unjoin/:id', function(req, res) {
  */
 router.post('/project/watch/:id', function(req, res) {
 	if (!req.user) {
-    res.send(403);
-    return;
-  }
+    	res.send(403);
+    	return;
+    }
 	IndividualService.watchProject(req.user.username, req.params.id.input ||req.params.id, function(answer) {
 		res.send(answer);
 	});
@@ -163,9 +162,9 @@ router.post('/project/watch/:id', function(req, res) {
  */
 router.post('/project/unwatch/:id', function(req, res) {
 	if (!req.user) {
-    res.send(403);
-    return;
-  }
+    	res.send(403);
+    	return;
+    }
 	IndividualService.cancelWatchProject(req.user.username, req.params.id.input ||req.params.id, function(answer) {
 		res.send(answer);
 	});
@@ -176,9 +175,9 @@ router.post('/project/unwatch/:id', function(req, res) {
  */
 router.post('/comment', function(req, res) {
 	if (!req.user) {
-    res.send(403);
-    return;
-  }
+    	res.send(403);
+    	return;
+    }
 	IndividualService.commentProject(req.user.username, req.body, function (result) {
 		res.send(result);
 	});

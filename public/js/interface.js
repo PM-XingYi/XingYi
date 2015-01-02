@@ -4,11 +4,11 @@ $(function() {
 	*/
 	// header login entry, go to login
 	$("#login-entry").bind("click", function() {
-		location.href = "login.html";
+		location.href = "/login.html";
 	});
 	// header register entry, go to register
 	$("#register-entry").bind("click", function() {
-		location.href = "register.html";
+		location.href = "/register.html";
 	});
 	// user entry, go to user profile view
 	$("#user-entry-individual").bind("click", function() {
@@ -455,14 +455,23 @@ $(function() {
 	});
 	//this is for comment button, just make comments
 	$("#view-details-wrapper #make-comment").bind("click", function() {
-		/*var isAnonymous = $(".comment-form input[type='checkbox']").is(':checked');
-		var comment = $(".comment-form textarea").val();*/
+		var projectID = $(".for-id").text();
+		var comment = $(".comment-form textarea").val();
 		$.ajax({
 			url: "/individual/comment",
 			type: "POST",
-			data: {comment:$(".comment-form textarea").val()},
-			error: function() {
-
+			data: {
+				project: projectID,
+				comment: comment
+			},
+			success: function (data) {
+				if (data && data.success) {
+					alert("评论成功！");
+					location.reload();
+				}
+				else {
+					alert("评论失败:( " + (data ? data.message : ""));
+				}
 			}
 		});
 	});
@@ -783,7 +792,7 @@ $(function() {
 	**/
 	// publish book
 	$("#bookkeeping-wrapper #publish-book").bind("click", function() {
-		var projectID = $(".for-id").text();
+		var projectID = location.pathname.split("/")[3];
 		var date = $("#book-date").val();
 		var number = parseInt($("#book-number").val());
 		var content = $("#book-content").val();

@@ -538,7 +538,6 @@ IndividualService.getDonateProjectList = function (username, callback) {
  * @param {String} username
  * @param {
  *   @param {ObjectId} project id
- *   @param {Date} date
  *   @param {String} comment
  * } comment info
  * @return {Boolean} success
@@ -555,7 +554,7 @@ IndividualService.commentProject = function (username, commentInfo, callback) {
 				{
 					user: user.detail,
 					project: commentInfo.project, 
-					date: commentInfo.date, 
+					date: Date.now(), 
 					comment: commentInfo.comment, 
 				});
 			comment.save(function(err){
