@@ -16,7 +16,10 @@ router.get('/', function(req, res) {
 					latest[i].ratio = latest[i].moneyRaised / latest[i].moneyNeeded;
 				}
 			}
-			res.render('index', {latest: latest});
+			res.render('index', {
+				curUser: req.user,
+				latest: latest
+			});
 		}
 		else {
 			console.log(ans.message);

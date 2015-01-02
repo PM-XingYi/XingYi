@@ -104,6 +104,7 @@ router.get('/:id', function (req, res) {
 	if (typeof(projectID) !== "string")
 		projectID = req.params.id[0];
 	ProjectService.getProjectById(projectID, function(result) {
+			console.dir(result);
 		var project = result.message;
 
 		if (project.moneyNeeded === -1) {
