@@ -55,21 +55,21 @@ router.post('/profile/edit', function (req, res) {
 
 router.get('/project/join', function (req, res) {
 	if (req.user) {
-		IndividualService.getJoinProjectList(req.user.username, function (result) {
+		IndividualService.getJoinApplicationList(req.user.username, function (result) {
 			if (result.success) {
 
-        result.message.forEach(function(projectModel){
-          if (projectModel.moneyNeeded === -1) {
-            projectModel.ratio = -1;
+        result.message.forEach(function(application){
+          if (application.project.moneyNeeded === -1) {
+            application.project.ratio = -1;
           }
           else {
-            projectModel.ratio = (projectModel.moneyRaised / projectModel.moneyNeeded).toFixed(2);
+            application.project.ratio = (application.project.moneyRaised / application.project.moneyNeeded).toFixed(2);
           }
         });
 
 				res.render('individual_join', {
 					curUser: req.user,
-					project: result.message
+          application: result.message
 				});
 			}
 		});

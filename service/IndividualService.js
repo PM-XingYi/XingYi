@@ -364,7 +364,7 @@ IndividualService.joinProject = function (username, projectID, joinReason, callb
  * @param {String} username
  * @return {Array of Application} application list
  */
-IndividualService.getJoinProjectList = function (username, callback) {
+IndividualService.getJoinApplicationList = function (username, callback) {
 	go.database.User.findOne({username: username},function(err, user){
 		if(err){
 			callback({

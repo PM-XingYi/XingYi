@@ -50,22 +50,22 @@
 				</section>
 				<section class="show">
 					<div class="collection">
-						{{#each project}}
+						{{#each application}}
 						<div class="project-wrapper">
 							<article>
-								<div class="for-id">{{_id}}</div>
+								<div class="for-id">{{project._id}}</div>
 								<section class="project-image">
-                  <img src="/img/pj_{{_id}}.png">
+                  <img src="/img/pj_{{project._id}}.png">
 								</section>
 								<section class="project-info">
 									<section class="project-title relative">
-										{{name}}
+										{{project.name}}
 									</section>
 									{{#ifEq ratio -1}}
 									{{else}}
 									<section class="project-progress">
 										<span class="project-progress-flag">已完成</span>
-										<span class="project-progress-complete">{{ratio}}</span>
+										<span class="project-progress-complete">{{project.ratio}}</span>
 										<div class="progress-bar">
 											<div class="progress-done"></div>
 											<div class="progress-undone"></div>
