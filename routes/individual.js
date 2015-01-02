@@ -130,7 +130,7 @@ router.post('/project/join/:id', function(req, res) {
     res.send(403);
     return;
   }
-	IndividualService.joinProject(req.user.username, req.params.id.input ||req.params.id, function(answer) {
+	IndividualService.joinProject(req.user.username, req.params.id.input ||req.params.id, req.body.reason, function(answer) {
 		res.send(answer);
 	});
 });

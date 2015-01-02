@@ -456,7 +456,21 @@ $(function() {
 	//this is for apply confirm
 	$("#view-details-wrapper #apply-form #confirm-apply").bind("click", function() {
 		var reason = $("#view-details-wrapper #apply-form textarea").val();
-		// TODO, the server
+		var id = $(this).parents("#view-details-wrapper").find(".for-id").text();
+		$.ajax({
+			url: "/individual/project/join/"+id,
+			type: "POST",
+      data: {reason: reason}
+		}).then(function(data){
+      if (data && data.success) {
+        location.reload();
+      }
+      else {
+        alert("失败 " + (data ? data.message : "!"));
+      }
+    }, function(xhr, errorText){
+      alert("网络故障： " + errorText);
+    });
 
 	});
 
