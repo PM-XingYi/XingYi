@@ -175,6 +175,8 @@ OrganizationService.updateUser = function (username, newUserInfo, callback) {
  * @param {
  *   @param {String} name
  *   @param {String} desc
+ *   @param {String} longDesc
+ *   @param {String} notice
  *   @param {Number} moneyNeeded
  * } project info
  * @return {Boolean} success
@@ -188,17 +190,19 @@ OrganizationService.publishProject = function (username, projectInfo, callback) 
 			});
 		}else {
 			var project = new go.database.Project({
-				name:projectInfo.name, 
-				desc:projectInfo.desc, 
+				name: projectInfo.name, 
+				desc: projectInfo.desc, 
+				longDesc: projectInfo.longDesc, 
+				notice: projectInfo.notice, 
 				moneyNeeded: projectInfo.moneyNeeded,
-				mileStone:[{
-					date: Date,
-					title: "startDay",
-					desc: "Our project is published"
+				mileStone: [{
+					date: Date.now(),
+					title: "项目发布日",
+					desc: "我们的项目开始了"
 				}],
 				owner: user.detail
 			});
-			project.save(function(err){
+			project.save(function(err, projectRes){
 				if(err){
 					callback({
 						success: false,
@@ -222,7 +226,7 @@ OrganizationService.publishProject = function (username, projectInfo, callback) 
 					}else{
 						callback({
 							success: true,
-							message: "publish successfully"
+							message: projectRes._id
 						});
 					}
 				});										

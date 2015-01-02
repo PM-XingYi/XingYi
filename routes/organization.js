@@ -158,7 +158,7 @@ router.post('/project/:id/edit', function(req, res) {
  */
 router.get('/publish', function(req, res) {
 	if (req.user && req.user.userType === 'organization') {
-		res.render('organization_publish');
+		res.render('organization_publish', req.user);
 	}
 	else {
 		res.status(203).end();

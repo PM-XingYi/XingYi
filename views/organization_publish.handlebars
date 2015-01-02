@@ -28,7 +28,7 @@
 					<input id="search-box" type="search">
 					<img id="search-icon" src="/img/search.png" placeholder="搜索..." autocomplete="off">
 				</div>
-				<label>您好，<a id="user-entry">Sheer</a></label>
+				<label>您好，<a id="user-entry">{{curUser.username}}</a></label>
 				<a id="dashboard-entry">Dashboard</a>
 				<a id="logout-entry">登出</a>
 			</div>
@@ -71,32 +71,16 @@
 							<textarea id="intro-of-project"></textarea>
 						</div>
 					</div>
-					<div class="row">
-						<div class="col-1">
-							<label class="needed">
-								项目图片
-							</label>
-						</div>
-						<div class="col-2">
-							<label class="input-file">
-								<input title="浏览文件" type="file" />浏览
-							</label>
-							<label></label>
-						</div>
-					</div>
 				</section>
 				<section class="project-part">
 					<div class="row">
 						<div class="col-1">
 							<h1>项目文案</h1>
 						</div>
-						<div class="col-2">
-							<button class="rounded-button fold">本项目需项目文案</button>
-						</div>
 					</div>
 					<div class="row">
 						<div class="col-1">
-							<label>
+							<label class="needed">
 								文案内容
 							</label>
 						</div>
@@ -151,6 +135,32 @@
 						</div>
 						<div class="col-2">
 							<button class="rounded-button" id="publish-project">发布</button>
+						</div>
+					</div>
+				</section>
+				<section class="project-part image" style="display:none">
+					<div class="row">
+						<div class="col-1">
+							<h1>项目图片</h1>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-1">
+							<label>
+								项目图片
+							</label>
+						</div>
+						<div class="col-2">
+							<label class="input_file">
+								<input id="edit-img" title="浏览文件" type="file" />
+							</label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-1">
+						</div>
+						<div class="col-2">
+							<button class="rounded-button" id="save-project-img">上传图片</button>
 						</div>
 					</div>
 				</section>

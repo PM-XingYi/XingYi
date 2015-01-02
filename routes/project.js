@@ -99,9 +99,11 @@ router.get('/search', function (req, res) {
  * get one available project
  */
 router.get('/:id', function (req, res) {
-	ProjectService.getProjectById(req.params.id, function(result) {
-		var project = result.message[0];
-		project.owner.detail = result.message[1];
+	var projectID = req.params.id;
+	if (typeof(projectID) !== "string")
+		projectID = req.params.id[0];
+	ProjectService.getProjectById(projectID, function(result) {
+		var project = result.message;
 
 		if (project.moneyNeeded === -1) {
 			project.ratio = -1;
@@ -109,6 +111,8 @@ router.get('/:id', function (req, res) {
 		else {
 			project.ratio = project.moneyRaised / project.moneyNeeded;
 		}
+
+		console.log(project);
 
 		if (result.success) {
 			res.render('project_detail', {

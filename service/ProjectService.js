@@ -89,6 +89,7 @@ ProjectService.latestProject = function (n, callback) {
 
 /*
  * return all info of a project
+ * @param {String} projectID
  * @return {project}
  */
 ProjectService.getProjectById = function(projectID, callback){
@@ -103,7 +104,7 @@ ProjectService.getProjectById = function(projectID, callback){
 			callback({
 				success: false,
 				message: "cannot find it"
-			});;
+			});
 		}else{
 			var answer = project;
 			go.database.User.find({detail: project.owner._id}).populate('detail').exec(function(err, user){
@@ -114,19 +115,20 @@ ProjectService.getProjectById = function(projectID, callback){
 						message: "internal error"
 					});
 				}
-				answer.detail = user;
+				answer.owner = user;
+
 				// format date
-				for (var i = 0; i < answer[0].expenditure.length; ++i) {
-					var temp = answer[0].expenditure[i].date.toISOString();
+				for (var i = 0; i < answer.expenditure.length; ++i) {
+					var temp = answer.expenditure[i].date.toISOString();
 					temp = temp.substr(0, 10);
-					answer[0].expenditure[i].dateStr = temp;
+					answer.expenditure[i].dateStr = temp;
 				}
-				console.log(answer[0]);
-				for (var i = 0; i < answer[0].mileStone.length; ++i) {
-					var temp = answer[0].mileStone[i].date.toISOString();
+				for (var i = 0; i < answer.mileStone.length; ++i) {
+					var temp = answer.mileStone[i].date.toISOString();
 					temp = temp.substr(0, 10);
-					answer[0].mileStone[i].dateStr = temp;
+					answer.mileStone[i].dateStr = temp;
 				}
+
 				callback({
 					success: true,
 					message: answer
