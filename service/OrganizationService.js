@@ -213,7 +213,6 @@ OrganizationService.publishProject = function (username, projectInfo, callback) 
 				}
 
 				// copy default img
-				console.log(path.join(__dirname, "../public/img/pj_default.jpg"));
 				var readable = fs.createReadStream(path.join(__dirname, "../public/img/pj_default.jpg"));
 				var writable = fs.createWriteStream(path.join(__dirname, "../public/img/pj_" + projectRes._id + ".jpg"));
 				readable.pipe(writable);
@@ -447,10 +446,9 @@ OrganizationService.getUncheckedApplicationForProject = function(projectID, call
 	});
 }
 
-/* @return {array of user}
- * 
+/*
+ * @return {array of user}
  * need to contain the info of (individual)
- *
  */
 OrganizationService.getVolunteerForProject = function(projectID, callback){
 	go.database.Application.find({project: projectID, status: 1}).populate('user').exec(function(err, applications){

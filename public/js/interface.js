@@ -77,7 +77,7 @@ $(function() {
 	//
 	$("#search-icon").bind("click", function() {	//important!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		if($("#search-box").val()!="") {	// go to search page
-      location.href="/project/search?keyword=" + encodeURIComponent($("#search-box").val());
+	  location.href="/project/search?keyword=" + encodeURIComponent($("#search-box").val());
 
 		}
 	});
@@ -120,11 +120,29 @@ $(function() {
 		Organization Profile Edit Page
 	*/
 	$("#organization-profile #save").bind("click", function() {
-		var phonenumber = $("#number").val();
+		var phone = $("#number").val();
 		var email = $("#email").val();
 		var desc = $("#intro").val();
-		console.log(gender+" "+nickname+" "+phonenumber+" "+email+" "+intro);
-		// TODO -- save the information
+		
+		var data = {
+			phone: phone,
+			email: email,
+			desc: desc
+		};
+		$.ajax({
+			type: "POST",
+			url: "/organization/profile/edit",
+			data: data,
+			success: function (data) {
+				if (data && data.success) {
+					alert("修改成功");
+					location.href = "/organization/home";
+				}
+				else {
+					alert("修改失败:( " + (data ? data.message : "!"));
+				}
+			}
+		})
 	});
 	$("#organization-profile #cancel").bind("click", function() {
 		// TODO-- cancel edit
@@ -133,11 +151,6 @@ $(function() {
 	/*
 		Login Page
 	*/
-	// forget password, go to forget_send
-	$("#login-wrapper #forget").bind("click", function() {
-		location.href = "forget_send.html";
-		// TODO
-	});
 	// register, go to register
 	$("#login-wrapper #register").bind("click", function() {
 		location.href = "register.html";
@@ -307,7 +320,7 @@ $(function() {
 	// just set it to be passed
 	$("#admin-comments-management-wrapper #all_project .preserve").bind("click", function() {
 		var row = $(this).parents(".row");
-    var commentId = row.children(".for-id").text()
+	var commentId = row.children(".for-id").text()
 
 		$.ajax({
 			url: "/superuser/examComment",
@@ -318,10 +331,10 @@ $(function() {
 				remark: ""
 			}
 		}).then(function(data){
-      if (data && data.success) {
-        row.remove();
-        $("#admin-comments-management-wrapper #star_project .collection").append(row);
-      }
+	  if (data && data.success) {
+		row.remove();
+		$("#admin-comments-management-wrapper #star_project .collection").append(row);
+	  }
 			else {
 				alert("失败 " + (data ? data.message : "!"));
 			}
@@ -332,7 +345,7 @@ $(function() {
 	// just set it to be unpassed.
 	$("#admin-comments-management-wrapper #all_project .delete").bind("click", function() {
 		var row = $(this).parents(".row");
-    var commentId = row.children(".for-id").text()
+	var commentId = row.children(".for-id").text()
 
 		$.ajax({
 			url: "/superuser/examComment",
@@ -343,10 +356,10 @@ $(function() {
 				remark: ""
 			}
 		}).then(function(data){
-      if (data && data.success) {
-        row.remove();
-        $("#admin-comments-management-wrapper #join_project .collection").append(row);
-      }
+	  if (data && data.success) {
+		row.remove();
+		$("#admin-comments-management-wrapper #join_project .collection").append(row);
+	  }
 			else {
 				alert("失败 " + (data ? data.message : "!"));
 			}
@@ -566,7 +579,7 @@ $(function() {
 			moneyNeeded: (moneyShow ? moneyNeeded : -1)
 		};
 		$.ajax({
-			method: "POST",
+			type: "POST",
 			url: "/organization/publish",
 			data: data,
 			success: function (data) {
@@ -701,7 +714,7 @@ $(function() {
 			desc: content
 		};
 		$.ajax({
-			method: "POST",
+			type: "POST",
 			url: "/organization/project/" + projectID + "/milestone/add",
 			data: data,
 			success: function (data) {
@@ -782,7 +795,7 @@ $(function() {
 		};
 		console.log(data);
 		$.ajax({
-			method: "POST",
+			type: "POST",
 			url: "/organization/project/" + projectID + "/expenditure/add",
 			data: data,
 			success: function (data) {
@@ -880,27 +893,55 @@ $(function() {
 	/**
 		For Page Volunteer Manage
 	**/
+	$(function(){
+		if (location.hash === "#examine") {
+			$(".filter").children(".active-tab").removeClass("active-tab");
+			$("#star_project_tab").addClass("active-tab");
+			$(".tab").css("display", "none");
+			$("#star_project").css("display", "block");
+		}
+	});
 	// accept the application of the volunteer
 	$("#volunteer-management-wrapper .show button.pass").bind("click", function() {
-		var row = $(this).parents(".card-part");
-		var username = row.find(".volunteer-username").text();
-		var nickname = row.find(".volunteer-nickname").text();
-		var number = row.find(".volunteer-number").text();
-		var mail = row.find(".volunteer-mail").text();
-		row.remove();
-		var html = "<div class='row'><div class='col-1'>"+
-					username+"</div><div class='col-2'>"+
-					nickname+"</div><div class='col-3'>"+
-					number+"</div><div class='col-4'>"+
-					mail+"</div><div class='col-5'></div><div class='col-6'><button class='rounded-button edit'>编辑</button></div></div>";
-		$("#volunteer-management-wrapper #all_project .show .collection").append(html);
-		// TODO, for the server
+		var applicationID = $(this).parents(".card-part").find(".for-id").text();
+		$.ajax({
+			type: "POST",
+			url: "/organization/examApp",
+			data: {
+				application: applicationID,
+				approve: 1
+			},
+			success: function (data) {
+				if (data && data.success) {
+					location.href = location.pathName + "#examine";
+					location.reload();
+				}
+				else {
+					alert("失败:( " + (data ? data.message : ""));
+				}
+			}
+		});
 	});
 	// or else, refuse
 	$("#volunteer-management-wrapper .show button.fail").bind("click", function() {
-		var row = $(this).parents(".card-part");
-		row.remove();
-		// TODO, for the server
+		var applicationID = $(this).parents(".card-part").find(".for-id").text();
+		$.ajax({
+			type: "POST",
+			url: "/organization/examApp",
+			data: {
+				application: applicationID,
+				approve: 3
+			},
+			success: function (data) {
+				if (data && data.success) {
+					location.href = location.pathName + "#examine";
+					location.reload();
+				}
+				else {
+					alert("失败:( " + (data ? data.message : ""));
+				}
+			}
+		});
 	});
 
 

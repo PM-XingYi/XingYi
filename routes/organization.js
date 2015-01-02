@@ -42,7 +42,8 @@ router.get('/profile', function(req, res) {
 		OrganizationService.getUser(req.user.username, function (answer) {
 			if (answer.success) {
 				res.render('organization_profile', {
-					user: answer.message
+					curUser: req.user,
+					organization: answer.message
 				});
 			}
 		});
@@ -53,9 +54,7 @@ router.get('/profile', function(req, res) {
 });
 /*
  * modify user profile
- * req.body.key is in []
  */
-var keySet = ['mobile', 'email'];
 router.post('/profile/edit', function (req, res) {
 	if (req.user && req.user.userType === 'organization') {
 		OrganizationService.updateUser(req.user.username, req.body, function(answer) {
@@ -242,14 +241,15 @@ router.post('/project/:id/expenditure/add', function(req, res) {
  */
 router.get('/project/:id/volunteer', function(req, res) {
 	if (req.user && req.user.userType === 'organization') {
-		ProjectService.getUncheckedApplicationForProject(req.params.id, function (unchecked) {
-			ProjectService.getVolunteerForProject(req.params.id, function (volunteer) {
+		OrganizationService.getUncheckedApplicationForProject(req.params.id[0], function (unchecked) {
+			OrganizationService.getVolunteerForProject(req.params.id[0], function (volunteer) {
 				if (unchecked.success && volunteer.success) {
 					var ans = {
-						volunteerNum: volunteer.length,
-						volunteer: volunteer,
-						candidateNum: unchecked.length,
-						candidate: unchecked
+						curUser: req.user,
+						volunteerNum: volunteer.message.length,
+						volunteer: volunteer.message,
+						candidateNum: unchecked.message.length,
+						candidate: unchecked.message
 					}
 					res.render('organization_project_volunteer', ans);
 				}
@@ -260,9 +260,9 @@ router.get('/project/:id/volunteer', function(req, res) {
 		res.status(203).end();
 	}
 });
-router.post('/project/:id/volunteer/add', function(req, res) {
+router.post('/examApp', function(req, res) {
 	if (req.user && req.user.userType === 'organization') {
-		OrganizationService.examineApplication(req.body.applicationID, req.body.approve, function (result) {
+		OrganizationService.examineApplication(req.body.application, req.body.approve, function (result) {
 			res.send(result);
 		});
 	}
