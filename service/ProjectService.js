@@ -128,12 +128,61 @@ ProjectService.getProjectById = function(projectID, callback){
 					temp = temp.substr(0, 10);
 					answer.mileStone[i].dateStr = temp;
 				}
-
-				callback({
-					success: true,
-					message: answer
-				});
 			});	
+			go.database.Comment.find({project: projectID}).populate('user').exec(function(err, comments){
+				if(err){
+					callback({
+						success: false,
+						message: "internal error"
+					});
+				}
+				if(comments === null || comments === undefined){
+					console.log(comments);
+				}else{
+					var commentList = [];
+					var ids = [];
+					for(var i = 0;i<comments.length;i++){
+						console.log(comments[i].user._id);
+						ids.push(comments[i].user._id.toString());
+					}
+					go.database.User.find({detail:{$in: ids}}, function(err,users){
+						if(err){
+							console.log(err);
+							callback({
+								success: false,
+								message: "internal error"
+							});
+						}
+						if(users === null || users === undefined){
+							console.log(users);
+							callback({
+								success: false,
+								message: answer
+							});
+						}else{
+							for(var i = 0;i<users.length;i++){
+								var temp;
+								for(var k = 0;k<ids.length;k++){
+									if(ids[k] == users[i].detail){
+										users[i].detail = comments[k].user;
+										comments[k].user = users[i];
+										temp = comments[k];
+										console.log(temp);
+										commentList.push(temp);
+										break;
+									}
+								}
+							}
+							console.log(commentList);
+							answer.comment = commentList;
+							callback({
+								success: true,
+								message: answer
+							});
+						}
+					});
+				}	
+			});
 		}		
 	});
 }
