@@ -48,7 +48,7 @@ IndividualService.register = function (username, password, email, mobile, callba
 					else {
 						callback({
 							success: true
-							message:"register successfully"
+							//message:"register successfully"
 						});
 					}
 				});
@@ -88,6 +88,7 @@ IndividualService.getUser = function (username, callback) {
 			});
 		}
 	});
+
 };
 
 /*
