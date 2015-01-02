@@ -11,8 +11,11 @@ $(function() {
 		location.href = "register.html";
 	});
 	// user entry, go to user profile view
-	$("#user-entry").bind("click", function() {
+	$("#user-entry-individual").bind("click", function() {
 		location.href = "/individual/profile";
+	});
+	$("#user-entry-organization").bind("click", function() {
+		location.href = "/organization/profile";
 	});
 	// dashboard entry, go to dashboard, here should be some types....
 	// Admin Dashboard
@@ -541,6 +544,30 @@ $(function() {
 				}
 			}
 		})
+	});
+	$("#create-new-project-manager-wrapper #save-project-img").bind("click", function() {
+		var projectID = $(".for-id").text();
+		var image = $("#edit-img")[0].files[0];
+
+		var data = new FormData();
+		data.append("image", image);
+
+		$.ajax({
+			type: "POST",
+			url: "/organization/project/" + projectID + "/editImg",
+			data: data,
+			contentType: false,
+			processData: false,
+			success: function (data) {
+				if (data && data.success) {
+					alert("修改图片成功！");
+					location.href = "/organization/project/" + projectID;
+				}
+				else {
+					alert("啊哦失败了:(");
+				}
+			}
+		});
 	});
 
 	/**

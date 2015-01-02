@@ -104,7 +104,7 @@ SuperUserService.examineComment = function (commentID, approve, remark, callback
  */
 
 SuperUserService.getAllCommentByStatus = function (approve, callback) {
-	go.database.Comment.find(/*{approved: approve}*/{}).populate('user project').exec(function(err, docs){d
+	go.database.Comment.find({approved: approve}).populate('user project').exec(function(err, docs){d
 		if(err){
 			callback({
 				success: false,

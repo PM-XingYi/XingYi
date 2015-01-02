@@ -1,5 +1,7 @@
 var go = require('../globalObjects'),
-	MD5 = require('MD5');
+	MD5 = require('MD5'),
+	fs = require('fs'),
+	path = require('path');
 var OrganizationService = function () {
 
 }
@@ -209,13 +211,20 @@ OrganizationService.publishProject = function (username, projectInfo, callback) 
 						message:"internal error"
 					});
 				}
+
+				// copy default img
+				console.log(path.join(__dirname, "../public/img/pj_default.jpg"));
+				var readable = fs.createReadStream(path.join(__dirname, "../public/img/pj_default.jpg"));
+				var writable = fs.createWriteStream(path.join(__dirname, "../public/img/pj_" + projectRes._id + ".jpg"));
+				readable.pipe(writable);
+
 				go.database.Organization.findByIdAndUpdate(
 				{
 					_id:user.detail
 				},{
 					$addToSet: 
 					{
-						project: project._id
+						project: projectRes._id
 					}
 				},function(err, result){
 					if(err){

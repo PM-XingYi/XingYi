@@ -94,7 +94,7 @@ router.get('/project/:id', function(req, res) {
 			if (result.success) {
 				res.render('organization_project_detail', {
 					curUser: req.user,
-					project: result.message[0]
+					project: result.message
 				});
 			}
 		});
@@ -112,7 +112,7 @@ router.get('/project/:id/edit', function(req, res) {
 			if (result.success) {
 				res.render('organization_project_edit', {
 					curUser: req.user,
-					project: result.message[0]
+					project: result.message
 				});
 			}
 		});
