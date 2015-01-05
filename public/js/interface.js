@@ -154,7 +154,16 @@ $(function() {
 	/*
 		Login Page
 	*/
-	// register, go to register
+	$("#login-wrapper input[name='identify']").change(function () {
+		var value = $("#login-wrapper input[name='identify']:checked").val();
+		if(value=="普通用户") {
+			$("#individual-login-form").show();
+			$("#organization-login-form").hide();
+		} else {
+			$("#individual-login-form").hide();
+			$("#organization-login-form").show();
+		}
+	});
 	$("#login-wrapper #register").bind("click", function() {
 		location.href = "register.html";
 		ev.preventDefault();
@@ -166,7 +175,21 @@ $(function() {
 		Register Page
 	*/
 	// register button, to register
-	$("#register-wrapper input[name='identify'][value='普通用户']").focus(function () {
+	$("#register-wrapper input[name='identify']").change(function () {
+		var value = $("#register-wrapper input[name='identify']:checked").val();
+		if(value=="普通用户") {
+			$("#mobile").show();
+			$("#phone").hide();
+			$("#orgNumber").hide();
+			$("#orgName").hide();
+		} else {
+			$("#mobile").hide();
+			$("#phone").show();
+			$("#orgNumber").show();
+			$("#orgName").show();
+		}
+	});
+	/*$("#register-wrapper input[name='identify'][value='普通用户']").focus(function () {
 		$("#mobile").show();
 		$("#phone").hide();
 		$("#orgNumber").hide();
@@ -177,7 +200,7 @@ $(function() {
 		$("#phone").show();
 		$("#orgNumber").show();
 		$("#orgName").show();
-	});
+	});*/
 	$("#register-wrapper #register").bind("click", function() {
 		if ($("#pwd").val() !== $("#pwd2").val()) {
 			alert("两次输入密码不一致");

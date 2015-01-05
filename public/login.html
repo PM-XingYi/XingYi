@@ -41,20 +41,28 @@
 					登录
 				</h1>
 				<section class="login-register-form">
-					<form method="POST" action="/login/individual">
-						<input name="username" type="text" id="username" class="outline" placeholder="用户名" required="required">
-						<input name="password" type="password" id="pwd" class="outline" placeholder="密码" required="required">
-						<a id="forget">忘记密码</a>
-						<button class="rounded-button" id="login">个人登录</button>
-						<button class="rounded-button" id="register">注册</button>
-					</form>
-					<!-- <form method="POST" action="/login/organization">
-						<input name="username" type="text" id="username" class="outline" placeholder="用户名" required="required">
-						<input name="password" type="password" id="pwd" class="outline" placeholder="密码" required="required">
-						<a id="forget">忘记密码</a>
-						<button class="rounded-button" id="login">组织登录</button>
-						<button class="rounded-button" id="register">注册</button>
-					</form> -->
+					<section id="login-forms">
+						<label class="inline-radio">
+							<input type="radio" name="identify" value="普通用户" checked="checked">普通用户
+						</label>
+						<label class="inline-radio">
+							<input type="radio" name="identify" value="项目管理者">项目管理者
+						</label>
+						<form method="POST" action="/login/individual" id="individual-login-form">
+							<input name="username" type="text" id="username" class="outline" placeholder="用户名" required="required">
+							<input name="password" type="password" id="pwd" class="outline" placeholder="密码" required="required">
+							<a id="forget">忘记密码</a>
+							<button class="rounded-button" id="login">个人登录</button>
+							<button class="rounded-button" id="register">注册</button>
+						</form>
+						<form method="POST" action="/login/organization" style="display:none" id="organization-login-form">
+							<input name="username" type="text" id="username" class="outline" placeholder="用户名" required="required">
+							<input name="password" type="password" id="pwd" class="outline" placeholder="密码" required="required">
+							<a id="forget">忘记密码</a>
+							<button class="rounded-button" id="login">组织登录</button>
+							<button class="rounded-button" id="register">注册</button>
+						</form>
+					</section>
 					<section class="slogan">
 						<h1>
 							“日行一益，

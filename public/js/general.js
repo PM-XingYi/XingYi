@@ -132,10 +132,10 @@ $(function() {
 		return (ey-sy)*360+(em-sm)*30+(ed-sd);
 	}
 	$(".project-event-show").children(".event").each(function() {
-		var starttime = $("i.start-time").text().split("/");
-		var endtime = $("i.end-time").text().split("/");
+		var starttime = $("i.start-time").text().split("-");
+		var endtime = $("i.end-time").text().split("-");
 		var total = days(starttime, endtime);
-		var currenttime = $(this).children("i").text().split("/");
+		var currenttime = $(this).children("i").text().split("-");
 		var diff = days(starttime, currenttime);
 		var width = $(".timeline").width();
 		var left = width*diff/total-20;		//the flag picture's width is 40..
@@ -280,6 +280,16 @@ $(function() {
 	$("#project-verify-wrapper #join_project_tab").bind("click", function() {
 		$("#project-verify-wrapper .show-result").css("display", "none");
 		$("#project-verify-wrapper .show-result").eq(2).css("display", "block");	
+	});
+
+
+
+	//////////////////////////////////////////////////////////////////////////////////////
+	/*
+		Fix Bugs
+	*/
+	$("#logo").bind("click", function() {
+		location.href = "/";
 	});
 
 });
