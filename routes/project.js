@@ -87,8 +87,9 @@ router.get('/search', function (req, res) {
 		  }
 		});
 			var ans = {
-		curUser: req.user,
+				curUser: req.user,
 				keyword: req.query.keyword,
+				total: project.length,
 				project: project
 			};
 			res.render('project_search_result', ans);
