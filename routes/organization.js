@@ -23,7 +23,6 @@ router.param(function(name, fn){
 router.param('id', /^\w+$/);
 
 router.get('/home', function(req, res) {
-	console.log(req.user);
 	if (req.user && req.user.userType === 'organization') {
 		res.render('organization_dashboard', {
 			curUser: req.user
