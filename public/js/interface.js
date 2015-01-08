@@ -25,11 +25,11 @@ $(function() {
 	$("#dashboard-entry-individual").bind("click", function() {
 		location.href = "/individual/home";
 	});
-	$("#usdashboarder-entry-organization").bind("click", function() {
+	$("#dashboard-entry-organization").bind("click", function() {
 		location.href = "/organization/home";
 	});
 	$("#dashboard-entry-superuser").bind("click", function() {
-		location.href = "/organization/home";
+		location.href = "/superuser/home";
 	});
 
 	// dashboard entry, go to dashboard, here should be some types....
