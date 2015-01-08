@@ -13,7 +13,6 @@ router.post('/individual', function (req, res) {
 								req.body.password,
 								req.body.email,
 								req.body.mobile, function(result){
-		// console.log(result);
 		res.send(result);
 	});
 });
@@ -28,6 +27,7 @@ router.post('/organization', function (req, res) {
 								req.body.phone,
 								req.body.orgName,
 								req.body.orgNum, function(result) {
+		console.log(result);
 		res.send(result);
 	});
 });
