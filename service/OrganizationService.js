@@ -57,6 +57,11 @@ OrganizationService.register = function (username, password, email, phone, orgNa
 						});
 					}
 					else {
+						// copy default img
+						var readable = fs.createReadStream(path.join(__dirname, "../public/img/pj_default.jpg"));
+						var writable = fs.createWriteStream(path.join(__dirname, "../public/img/pj_" + projectRes._id + ".jpg"));
+						readable.pipe(writable);
+						
 						callback({
 							success: true
 						});
