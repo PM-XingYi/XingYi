@@ -60,7 +60,6 @@ router.post('/examProject', function(req, res) {
  * get all comment including unavailable ones
  */
 router.get('/examComment', function(req, res) {
-	console.log(req.user.userType);
 	if (req.user && req.user.userType === 'superUser') {
 		SuperUserService.getAllCommentByStatus(2, function (unchecked) {
 			SuperUserService.getAllCommentByStatus(1, function (passed) {
