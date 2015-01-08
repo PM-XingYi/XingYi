@@ -104,7 +104,7 @@ SuperUserService.examineComment = function (commentID, approve, remark, callback
  */
 
 SuperUserService.getAllCommentByStatus = function (approve, callback) {
-	go.database.Comment.find({approved: approve}).populate('user project').exec(function(err, docs){
+	go.database.Comment.find({approved: approve}).populate('user project').exec(function(err, docs){d
 		if(err){
 			callback({
 				success: false,
@@ -151,6 +151,13 @@ SuperUserService.getAllCommentByStatus = function (approve, callback) {
 						}
 					}
 					console.log(answer);
+					// format date
+					for (var i = 0; i < answer.length; ++i) {
+						//date
+						var temp = answer[i].comment.date.toISOString();
+						temp = temp.substr(0, 10);
+						answer[i].comment.dateStr = temp;
+					}
 					callback({
 						success: true,
 						message: answer
