@@ -29,8 +29,8 @@
 					<img id="search-icon" src="/img/search.png" placeholder="搜索..." autocomplete="off">
 				</div>
 				{{#if curUser}}
-				<label>您好，<a id="user-entry">{{curUser.username}}</a></label>
-				<a id="dashboard-entry">Dashboard</a>
+				<label>您好，<a id="user-entry-{{curUser.type}}">{{curUser.username}}</a></label>
+				<a id="dashboard-entry-{{curUser.type}}">Dashboard</a>
 				<a id="logout-entry">登出</a>
 				{{else}}
 				<a id="login-entry">登录</a>

@@ -22,27 +22,13 @@ $(function() {
 	});
 	// dashboard entry, go to dashboard, here should be some types....
 	// Admin Dashboard
-	$("#admin-comments-management-wrapper #dashboard-entry").bind("click", function() {
-		location.href = "/superuser/home";
-	});
-	$("#project-verify-wrapper #dashboard-entry").bind("click", function() {
-		location.href = "/superuser/home";
-	});
-	// Dashboard Individual
-	$("#recent-operations-user-wrapper #dashboard-entry").bind("click", function() {
+	$("#dashboard-entry-individual").bind("click", function() {
 		location.href = "/individual/home";
 	});
-	$("#view-followedpjs-user-wrapper #dashboard-entry").bind("click", function() {
-		location.href = "/individual/home";
-	});
-	$("#view-participatingpjs-user-wrapper #dashboard-entry").bind("click", function() {
-		location.href = "/individual/home";
-	});
-	// Dashboard Organization
-	$("#view-all-project-manager-wrapper #dashboard-entry").bind("click", function() {
+	$("#usdashboarder-entry-organization").bind("click", function() {
 		location.href = "/organization/home";
 	});
-	$("#create-new-project-manager-wrapper #dashboard-entry").bind("click", function() {
+	$("#dashboard-entry-superuser").bind("click", function() {
 		location.href = "/organization/home";
 	});
 
