@@ -64,7 +64,7 @@ ProjectService.searchProject = function (keyword, callback) {
  * @return {Array of Project}
  */
 ProjectService.latestProject = function (n, callback) {
-	go.database.Project.find({}).sort({_id: -1}).limit(n).exec(function(err, projects){
+	go.database.Project.find({approved: 1}).sort({_id: -1}).limit(n).exec(function(err, projects){
 		if(err){
 			callback({
 				success: false,
