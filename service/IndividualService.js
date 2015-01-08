@@ -556,6 +556,7 @@ IndividualService.commentProject = function (username, commentInfo, callback) {
 					project: commentInfo.project, 
 					date: Date.now(), 
 					comment: commentInfo.comment, 
+					approved: 2
 				});
 			comment.save(function(err){
 				if(err){
