@@ -85,7 +85,7 @@
 				<div class="dispel"></div>
 				<section class="project-events">
 					<section class="project-timeline">
-						<label>START<i class="start-time">{{project.mileStone.[1].dateStr}}</i></label>
+						<label>START<i class="start-time">{{project.mileStone.[0].dateStr}}</i></label>
 						<div class="timeline">
 						</div>
 						<label>TODAY<i class="end-time">{{today}}</i></label>
@@ -93,7 +93,7 @@
 					<section class="project-event-show">
 						{{#each project.milestone}}
 						<section class="event">
-							<i>{{date}}</i>
+							<i>{{dateStr}}</i>
 							<article>
 								{{desc}}
 							</article>
