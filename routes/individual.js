@@ -23,8 +23,8 @@ router.get('/home', function(req, res) {
 	if (req.user && req.user.userType === 'individual') {
 		res.render('individual_dashboard', {curUser: req.user});
 	} else {
-	res.redirect("/superuserLogin.html");
-  }
+		res.redirect("/login.html");
+	}
 });
 
 /*
@@ -39,6 +39,8 @@ router.get('/profile', function(req, res) {
 				});
 			}
 		});
+	} else {
+		res.redirect("/login.html");
 	}
 });
 /*
@@ -50,6 +52,8 @@ router.post('/profile/edit', function (req, res) {
 		IndividualService.updateUser(req.user.username, req.body, function(answer) {
 			res.send(answer);
 		});
+	} else {
+		res.redirect("/login.html");
 	}
 });
 
@@ -73,6 +77,8 @@ router.get('/project/join', function (req, res) {
 				});
 			}
 		});
+	} else {
+		res.redirect("/login.html");
 	}
 });
 router.get('/project/watch', function (req, res) {
@@ -95,6 +101,8 @@ router.get('/project/watch', function (req, res) {
 				});
 			}
 		});
+	} else {
+		res.redirect("/login.html");
 	}
 });
 
@@ -129,10 +137,8 @@ router.post('/project/join/:id', function(req, res) {
 		IndividualService.joinProject(req.user.username, req.params.id.input ||req.params.id, req.body.reason, function(answer) {
 			res.send(answer);
 		});
-	}
-	else {
-		res.send(403);
-		return;
+	} else {
+		res.redirect("/login.html");
 	}
 });
 /*
@@ -143,10 +149,8 @@ router.post('/project/unjoin/:id', function(req, res) {
 		IndividualService.cancelJoinProject(req.user.username, req.params.id.input ||req.params.id, function(answer) {
 			res.send(answer);
 		});
-	}
-	else {
-		res.send(403);
-		return;
+	} else {
+		res.redirect("/login.html");
 	}
 });
 /*
@@ -157,10 +161,8 @@ router.post('/project/watch/:id', function(req, res) {
 		IndividualService.watchProject(req.user.username, req.params.id.input ||req.params.id, function(answer) {
 			res.send(answer);
 		});
-	}
-	else {
-		res.send(403);
-		return;
+	} else {
+		res.redirect("/login.html");
 	}
 });
 /*
@@ -171,10 +173,8 @@ router.post('/project/unwatch/:id', function(req, res) {
 		IndividualService.cancelWatchProject(req.user.username, req.params.id.input ||req.params.id, function(answer) {
 			res.send(answer);
 		});
-	}
-	else {
-		res.send(403);
-		return;
+	} else {
+		res.redirect("/login.html");
 	}
 });
 
@@ -186,10 +186,8 @@ router.post('/comment', function(req, res) {
 		IndividualService.commentProject(req.user.username, req.body, function (result) {
 			res.send(result);
 		});
-	}
-	else {
-		res.send(403);
-		return;
+	} else {
+		res.redirect("/login.html");
 	}
 });
 /*
@@ -201,10 +199,8 @@ router.post('/donate', function(req, res) {
 			console.log(result);
 			res.send(result);
 		});
-	}
-	else {
-		res.send(403);
-		return;
+	} else {
+		res.redirect("/login.html");
 	}
 });
 
