@@ -92,6 +92,7 @@ router.post('/examComment', function(req, res) {
 		SuperUserService.examineComment(req.body.commentID, req.body.approve, req.body.remark, function (result) {
 			res.send(result);
 		});
+	}
 	else {
 		res.redirect("/superuserLogin.html");
 	}
