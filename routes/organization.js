@@ -72,6 +72,14 @@ router.post('/profile/edit', function (req, res) {
 router.get('/project', function(req, res) {
 	if (req.user && req.user.userType === 'organization') {
 		ProjectService.getOrganizationProject(req.user.username, function (result) {
+			for (var i = 0; i < result.message.length; ++i) {
+				if (result.message[i].moneyNeeded === -1) {
+					result.message[i].ratio = -1;
+				}
+				else {
+					result.message[i].ratio = (result.message[i].moneyRaised / result.message[i].moneyNeeded).toFixed(2);
+				}
+			}
 			if (result.success) {
 				res.render('organization_project_all', {
 					curUser: req.user,
@@ -93,7 +101,8 @@ router.get('/project/:id', function(req, res) {
 			if (result.success) {
 				res.render('organization_project_detail', {
 					curUser: req.user,
-					project: result.message
+					project: result.message,
+					today: new Date().toISOString().substr(0, 10)
 				});
 			}
 		});
