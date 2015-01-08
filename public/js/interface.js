@@ -538,6 +538,7 @@ $(function() {
 			success: function(data) {
 				if (data && data.success) {
 					alert("捐款成功！谢谢您的爱心！");
+					location.href = "/project/" + $(".for-id").text();
 				}
 				else {
 					alert("啊哦失败了:( " + (data ? data.message : ""));
