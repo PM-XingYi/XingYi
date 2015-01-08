@@ -80,21 +80,21 @@
 						<div class="collection">
 							{{#each uncheckedComment}}
 							<div class="row">
-								<div class="for-id">{{_id}}</div>
+								<div class="for-id">{{comment._id}}</div>
 								<div class="col-1">
 									<input type="checkbox" class="check">
 								</div>
 								<div class="col-2">
-									{{date}}
+									{{comment.date}}
 								</div>
 								<div class="col-3">
-									{{project}}
+									{{comment.project.name}}
 								</div>
 								<div class="col-4">
-									{{username}}
+									{{user.username}}
 								</div>
 								<div class="col-5">
-									{{comment}}
+									{{comment.comment}}
 								</div>
 								<div class="col-6">
 									<button class="rounded-button light-button preserve">√</button>
@@ -116,28 +116,28 @@
 						<div class="collection">
 							{{#each passedComment}}
 							<div class="row">
-								<div class="for-id">{{_id}}</div>
+								<div class="for-id">{{comment._id}}</div>
 								<div class="col-1">
 									<input type="checkbox" class="check">
 								</div>
 								<div class="col-2">
-									{{date}}
+									{{comment.date}}
 								</div>
 								<div class="col-3">
-									{{project}}
+									{{comment.project.name}}
 								</div>
 								<div class="col-4">
-									{{username}}
+									{{user.username}}
 								</div>
 								<div class="col-5">
-									{{comment}}
+									{{comment.comment}}
 								</div>
 								<div class="col-6">
 									<button class="rounded-button light-button preserve">√</button>
 									<button class="rounded-button light-red-button delete">x</button>
 								</div>
 							</div>
-              {{/each}}
+							{{/each}}
 						</div>
 					</section>
 					<section class="page_navigation">
@@ -152,21 +152,21 @@
 						<div class="collection">
 							{{#each failedComment}}
 							<div class="row">
-								<div class="for-id">{{_id}}</div>
+								<div class="for-id">{{comment._id}}</div>
 								<div class="col-1">
 									<input type="checkbox" class="check">
 								</div>
 								<div class="col-2">
-									{{date}}
+									{{comment.date}}
 								</div>
 								<div class="col-3">
-									{{project}}
+									{{comment.project.name}}
 								</div>
 								<div class="col-4">
-									{{username}}
+									{{user.username}}
 								</div>
 								<div class="col-5">
-									{{comment}}
+									{{comment.comment}}
 								</div>
 								<div class="col-6">
 									<button class="rounded-button light-button preserve">√</button>
@@ -184,9 +184,9 @@
 				
 			</section>
 
-      <!-- <h1 class="back-nav" onclick="location.href='/superuser/home'" > -->
-      <!--   回到管理面板                                             -->
-      <!-- </h1>                                                            -->
+	  <!-- <h1 class="back-nav" onclick="location.href='/superuser/home'" > -->
+	  <!--   回到管理面板                                             -->
+	  <!-- </h1>                                                            -->
 		</div>
 	</div>
 

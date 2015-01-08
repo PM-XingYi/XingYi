@@ -208,7 +208,8 @@ OrganizationService.publishProject = function (username, projectInfo, callback) 
 					title: "项目发布日",
 					desc: "我们的项目开始了"
 				}],
-				owner: user.detail
+				owner: user.detail,
+				approved: 2
 			});
 			project.save(function(err, projectRes){
 				if(err){
