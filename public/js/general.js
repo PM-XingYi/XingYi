@@ -123,12 +123,13 @@ $(function() {
 	function days(starttime, endtime) {
 		// because here we don't need an exact result,
 		// so just suppose there are 30 days each month, and thus 360 days each year.
-		var sm = parseInt(starttime[0]);
-		var sd = parseInt(starttime[1]);
-		var sy = parseInt(starttime[2]);
-		var em = parseInt(endtime[0]);
-		var ed = parseInt(endtime[1]);
-		var ey = parseInt(endtime[2]);
+		var sm = parseInt(starttime[1],10);
+		var sd = parseInt(starttime[2],10);
+		var sy = parseInt(starttime[0],10);
+		var em = parseInt(endtime[1],10);
+		var ed = parseInt(endtime[2],10);
+		var ey = parseInt(endtime[0],10);
+		console.log("days: "+starttime+" "+endtime+" "+sd+" "+ed+" "+(endtime[2])+" "+(ed-sd));
 		return (ey-sy)*360+(em-sm)*30+(ed-sd);
 	}
 	$(".project-event-show").children(".event").each(function() {
@@ -142,6 +143,7 @@ $(function() {
 		var html = "<div class='flag' style='left:"+left+"px'></div>";
 		$(".timeline").append(html);
 		$(this).css("display","none");
+		console.log(currenttime+" "+diff+" "+width+" "+total);
 	});
 	$(".flag").bind("click", function() {
 		$(".flag").removeClass("flag-active");
