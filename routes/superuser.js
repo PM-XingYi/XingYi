@@ -6,7 +6,7 @@ var express = require('express'),
 	ProjectService = require('../service/ProjectService');
 
 router.get('/home', function(req, res) {
-	if (req.user && req.user.userType = 'superuser') {
+	if (req.user && req.user.userType === 'superUser') {
 		res.render('superuser_dashboard.handlebars');
 	}
 	else {
@@ -18,7 +18,7 @@ router.get('/home', function(req, res) {
  * get all project including unavailable ones
  */
 router.get('/examProject', function(req, res) {
-	if (req.user && req.user.userType = 'superuser') {
+	if (req.user && req.user.userType === 'superUser') {
 		ProjectService.getAllProjectByStatus(2, function (unchecked) {
 			ProjectService.getAllProjectByStatus(1, function (passed) {
 				ProjectService.getAllProjectByStatus(3, function (failed) {
@@ -46,7 +46,7 @@ router.get('/examProject', function(req, res) {
  * examine a project
  */
 router.post('/examProject', function(req, res) {
-	if (req.user && req.user.userType = 'superuser') {
+	if (req.user && req.user.userType === 'superUser') {
 		SuperUserService.examineProject(req.body.projectID, req.body.approve, req.body.remark, function (result) {
 			res.send(result);
 		});
@@ -60,7 +60,7 @@ router.post('/examProject', function(req, res) {
  * get all comment including unavailable ones
  */
 router.get('/examComment', function(req, res) {
-	if (req.user && req.user.userType = 'superuser') {
+	if (req.user && req.user.userType === 'superUser') {
 		SuperUserService.getAllCommentByStatus(2, function (unchecked) {
 			SuperUserService.getAllCommentByStatus(1, function (passed) {
 				SuperUserService.getAllCommentByStatus(3, function (failed) {
@@ -88,7 +88,7 @@ router.get('/examComment', function(req, res) {
  * examine a comment
  */
 router.post('/examComment', function(req, res) {
-	if (req.user && req.user.userType = 'superuser') {
+	if (req.user && req.user.userType === 'superUser') {
 		SuperUserService.examineComment(req.body.commentID, req.body.approve, req.body.remark, function (result) {
 			res.send(result);
 		});

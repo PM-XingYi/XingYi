@@ -20,7 +20,7 @@ router.param(function(name, fn){
 router.param('id', /^\w+$/);
 
 router.get('/home', function(req, res) {
-	if (req.user && req.user.userType == 'individual') {
+	if (req.user && req.user.userType === 'individual') {
 		res.render('individual_dashboard', {curUser: req.user});
 	} else {
 	res.redirect("/superuserLogin.html");
@@ -31,7 +31,7 @@ router.get('/home', function(req, res) {
  * PAGE: user PRIVATE profile
  */
 router.get('/profile', function(req, res) {
-	if (req.user && req.user.userType == 'individual') {
+	if (req.user && req.user.userType === 'individual') {
 		IndividualService.getUser(req.user.username, function (answer) {
 			if (answer.success) {
 				res.render('individual_profile', {
@@ -46,7 +46,7 @@ router.get('/profile', function(req, res) {
  * req.body.key is in []
  */
 router.post('/profile/edit', function (req, res) {
-	if (req.user && req.user.userType == 'individual') {
+	if (req.user && req.user.userType === 'individual') {
 		IndividualService.updateUser(req.user.username, req.body, function(answer) {
 			res.send(answer);
 		});
@@ -54,7 +54,7 @@ router.post('/profile/edit', function (req, res) {
 });
 
 router.get('/project/join', function (req, res) {
-	if (req.user && req.user.userType == 'individual') {
+	if (req.user && req.user.userType === 'individual') {
 		IndividualService.getJoinApplicationList(req.user.username, function (result) {
 			if (result.success) {
 
@@ -76,7 +76,7 @@ router.get('/project/join', function (req, res) {
 	}
 });
 router.get('/project/watch', function (req, res) {
-	if (req.user && req.user.userType == 'individual') {
+	if (req.user && req.user.userType === 'individual') {
 		IndividualService.getWatchProjectList(req.user.username, function (result) {
 			if (result.success) {
 
@@ -102,7 +102,7 @@ router.get('/project/watch', function (req, res) {
  * get donation page
  */
 router.get('/donate/:id', function(req, res) {
-	if (req.user && req.user.userType == 'individual') {
+	if (req.user && req.user.userType === 'individual') {
 		ProjectService.getProjectById(req.params.id, function (result) {
 			if (result.success) {
 				res.render('individual_donate', {
@@ -125,7 +125,7 @@ router.get('/donate/:id', function(req, res) {
  * join a project
  */
 router.post('/project/join/:id', function(req, res) {
-	if (req.user && req.user.userType == 'individual') {
+	if (req.user && req.user.userType === 'individual') {
 		IndividualService.joinProject(req.user.username, req.params.id.input ||req.params.id, req.body.reason, function(answer) {
 			res.send(answer);
 		});
@@ -139,7 +139,7 @@ router.post('/project/join/:id', function(req, res) {
  * unjoin a project
  */
 router.post('/project/unjoin/:id', function(req, res) {
-	if (req.user && req.user.userType == 'individual') {
+	if (req.user && req.user.userType === 'individual') {
 		IndividualService.cancelJoinProject(req.user.username, req.params.id.input ||req.params.id, function(answer) {
 			res.send(answer);
 		});
@@ -153,7 +153,7 @@ router.post('/project/unjoin/:id', function(req, res) {
  * watch a project
  */
 router.post('/project/watch/:id', function(req, res) {
-	if (req.user && req.user.userType == 'individual') {
+	if (req.user && req.user.userType === 'individual') {
 		IndividualService.watchProject(req.user.username, req.params.id.input ||req.params.id, function(answer) {
 			res.send(answer);
 		});
@@ -167,7 +167,7 @@ router.post('/project/watch/:id', function(req, res) {
  * unwatch a project
  */
 router.post('/project/unwatch/:id', function(req, res) {
-	if (req.user && req.user.userType == 'individual') {
+	if (req.user && req.user.userType === 'individual') {
 		IndividualService.cancelWatchProject(req.user.username, req.params.id.input ||req.params.id, function(answer) {
 			res.send(answer);
 		});
@@ -182,7 +182,7 @@ router.post('/project/unwatch/:id', function(req, res) {
  * add a comment to a project
  */
 router.post('/comment', function(req, res) {
-	if (req.user && req.user.userType == 'individual') {
+	if (req.user && req.user.userType === 'individual') {
 		IndividualService.commentProject(req.user.username, req.body, function (result) {
 			res.send(result);
 		});
@@ -196,7 +196,7 @@ router.post('/comment', function(req, res) {
  * donate to a project
  */
 router.post('/donate', function(req, res) {
-	if (req.user && req.user.userType == 'individual') {
+	if (req.user && req.user.userType === 'individual') {
 		IndividualService.donateProject(req.user.username, req.body, function (result) {
 			console.log(result);
 			res.send(result);
