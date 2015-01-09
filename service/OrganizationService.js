@@ -191,56 +191,72 @@ OrganizationService.publishProject = function (username, projectInfo, callback) 
 				message: "internal error"
 			});
 		}else {
-			var project = new go.database.Project({
-				name: projectInfo.name, 
-				desc: projectInfo.desc, 
-				longDesc: projectInfo.longDesc, 
-				notice: projectInfo.notice, 
-				moneyRaised: 0,
-				moneyNeeded: projectInfo.moneyNeeded,
-				mileStone: [{
-					date: Date.now(),
-					title: "项目发布日",
-					desc: "我们的项目开始了"
-				}],
-				owner: user.detail,
-				approved: 2
-			});
-			project.save(function(err, projectRes){
+			go.database.Project.find({name: projectInfo.name}, function(err, result)){
 				if(err){
 					callback({
 						success: false,
-						message:"internal error"
+						message: "internal error"
 					});
 				}
-
-				// copy default img
-				var readable = fs.createReadStream(path.join(__dirname, "../public/img/pj_default.jpg"));
-				var writable = fs.createWriteStream(path.join(__dirname, "../public/img/pj_" + projectRes._id + ".jpg"));
-				readable.pipe(writable);
-
-				go.database.Organization.findByIdAndUpdate(
-				{
-					_id:user.detail
-				},{
-					$addToSet: 
-					{
-						project: projectRes._id
-					}
-				},function(err, result){
-					if(err){
-						callback({
-							success: false,
-							message:"internal error"
-						});
-					}else{
-						callback({
-							success: true,
-							message: projectRes._id
-						});
-					}
-				});										
-			});
+				if(result !== null || result !== undefined){
+					callback({
+						success: false,
+						message:"project already exists"
+					});
+				}else{
+					var project = new go.database.Project({
+						name: projectInfo.name, 
+						desc: projectInfo.desc, 
+						longDesc: projectInfo.longDesc, 
+						notice: projectInfo.notice, 
+						moneyRaised: 0,
+						moneyNeeded: projectInfo.moneyNeeded,
+						mileStone: [{
+							date: Date.now(),
+							title: "项目发布日",
+							desc: "我们的项目开始了"
+						}],
+						owner: user.detail,
+						approved: 2
+					});
+					project.save(function(err, projectRes){
+						if(err){
+							callback({
+								success: false,
+								message:"internal error"
+							});
+						}
+		
+						// copy default img
+						var readable = fs.createReadStream(path.join(__dirname, "../public/img/pj_default.jpg"));
+						var writable = fs.createWriteStream(path.join(__dirname, "../public/img/pj_" + projectRes._id + ".jpg"));
+						readable.pipe(writable);
+		
+						go.database.Organization.findByIdAndUpdate(
+						{
+							_id:user.detail
+						},{
+							$addToSet: 
+							{
+								project: projectRes._id
+							}
+						},function(err, result){
+							if(err){
+								callback({
+									success: false,
+									message:"internal error"
+								});
+							}else{
+								callback({
+									success: true,
+									message: projectRes._id
+								});
+							}
+						});										
+					});	
+				}
+			}
+		
 		}
 	});
 }
