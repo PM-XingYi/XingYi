@@ -851,11 +851,21 @@ input.outline:focus {
 	background-color: rgba(255, 255, 255, 0.4);
 }
 
+#super-login-wrapper .login-register-form form {
+	text-align: center;
+	background-color: rgba(255, 255, 255, 0.4);
+}
+
+#super-login-wrapper .login-register-form,
 #login-wrapper .login-register-form {
 	background: url("../img/formbg.jpg");
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 } 
+
+#super-login-wrapper .login-register-form {
+	margin-top: 20px;
+}
 
 #login-wrapper h1.section-title {
 	margin-bottom: 20px;
@@ -1309,6 +1319,11 @@ button.disable-button:hover {
 /**
 	Page Admin Must Login --- SuperUser
 **/
+#super-login-wrapper .login-register-form form {
+	top: 80px;
+	left: 160px;
+}
+
 #superuser-login-wrapper .login-register-form {
 	background: url("../img/formbg3-r.jpg");
 	background-position: right;

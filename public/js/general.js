@@ -60,6 +60,11 @@ $(function() {
 	//render the progress bar
 	$(".project-progress-complete").each(function() {
 		var per = parseFloat($(this).text());
+		if(per>1) {
+			per = 1;
+		} else if(per<0) {
+			per = 0;
+		}
 		var bar = $(this).next();
 		var width = bar.width();
 		var done = bar.children(":first");
