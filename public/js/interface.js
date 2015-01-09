@@ -18,7 +18,7 @@ $(function() {
 		location.href = "/organization/profile";
 	});
 	$("#user-entry-superuser").bind("click", function() {
-		location.href = "/organization/home";
+		location.href = "/superuser/home";
 	});
 	// dashboard entry, go to dashboard, here should be some types....
 	// Admin Dashboard
