@@ -165,14 +165,22 @@ $(function() {
 		var value = $("#register-wrapper input[name='identify']:checked").val();
 		if(value=="普通用户") {
 			$("#mobile").show();
+			$("#mobile").attr("required", true);
 			$("#phone").hide();
+			$("#phone").attr("required", false);
 			$("#orgNumber").hide();
+			$("#orgNumber").attr("required", false);
 			$("#orgName").hide();
+			$("#mobile").attr("required", false);
 		} else {
 			$("#mobile").hide();
+			$("#mobile").attr("required", false);
 			$("#phone").show();
+			$("#phone").attr("required", true);
 			$("#orgNumber").show();
+			$("#orgNumber").attr("required", true);
 			$("#orgName").show();
+			$("#orgName").attr("required", true);
 		}
 	});
 	/*$("#register-wrapper input[name='identify'][value='普通用户']").focus(function () {
@@ -188,8 +196,14 @@ $(function() {
 		$("#orgName").show();
 	});*/
 	$("#register-wrapper #register").bind("click", function() {
+		if ($("#username").val()=="" || $("#pwd").val()=="" || $("#pwd2").val()=="" || $("#email").val()=="") {
+			return;
+		}
 		if ($("#pwd").val() !== $("#pwd2").val()) {
 			alert("两次输入密码不一致");
+			return;
+		}
+		if(!(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/).test($("#email").val())) {
 			return;
 		}
 		if ($('#agree').attr("checked") !== "checked") {
@@ -198,6 +212,13 @@ $(function() {
 		}
 		var identify = $("input[name='identify']:checked").val();
 		if(identify === "普通用户") {
+			if ($("#mobile").val()=="") {
+				return;
+			}
+			if (!(/^[0-9]*$/).test($("#mobile").val())) {
+				alert("请输入数字");
+				return;
+			}
 			$.ajax({
 				url: "/register/individual",
 				type: "POST",
@@ -217,6 +238,13 @@ $(function() {
 				}
 			});	
 		} else {
+			if ($("#phone").val()=="" || $("#orgNumber").val()=="" || $("#orgName").val()=="") {
+				return;
+			}
+			if (!((/^[0-9]*$/).test($("#phone").val())&&(/^[0-9]*$/).test($("#orgNumber").val()))) {
+				alert("请输入数字");
+				return;
+			}
 			$.ajax({
 				url: "/register/organization",
 				type: "POST",

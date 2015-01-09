@@ -191,7 +191,7 @@ OrganizationService.publishProject = function (username, projectInfo, callback) 
 				message: "internal error"
 			});
 		}else {
-			go.database.Project.find({name: projectInfo.name}, function(err, result)){
+			go.database.Project.find({name: projectInfo.name}, function(err, result){
 				if(err){
 					callback({
 						success: false,
@@ -255,7 +255,7 @@ OrganizationService.publishProject = function (username, projectInfo, callback) 
 						});										
 					});	
 				}
-			}
+			});
 		
 		}
 	});
