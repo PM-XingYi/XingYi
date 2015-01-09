@@ -1,123 +1,207 @@
 var express = require('express'),
 	router = express.Router(),
 	passport = require('passport'),
-	IndividualService = require('../service/IndividualService');
+	IndividualService = require('../service/IndividualService'),
+	ProjectService = require('../service/ProjectService');
 
 router.param(function(name, fn){
-  if (fn instanceof RegExp) {
-    return function(req, res, next, val){
-      var captures;
-      if (captures = fn.exec(String(val))) {
-        req.params[name] = captures;
-        next();
-      } else {
-        next('route');
-      }
-    }
-  }
+	if (fn instanceof RegExp) {
+		return function(req, res, next, val){
+			var captures;
+			if (captures = fn.exec(String(val))) {
+				req.params[name] = captures;
+				next();
+			} else {
+				next('route');
+			}
+		}
+	}
 });
-router.param('id', /^\d+$/);
+router.param('id', /^\w+$/);
 
-router.get('/home', passport.authenticate('local'), function(req, res) {
-	res.sendFile('');
+router.get('/home', function(req, res) {
+	if (req.user && req.user.userType === 'individual') {
+		res.render('individual_dashboard', {curUser: req.user});
+	} else {
+		res.redirect("/login.html");
+	}
 });
 
 /*
- * get user PRIVATE profile
+ * PAGE: user PRIVATE profile
  */
-router.get('/profile', passport.authenticate('local'), function(req, res) {
-	IndividualService.getUser(req.user.username, function (answer) {
-		res.send(answer);
-	});
+router.get('/profile', function(req, res) {
+	if (req.user && req.user.userType === 'individual') {
+		IndividualService.getUser(req.user.username, function (answer) {
+			if (answer.success) {
+				res.render('individual_profile', {
+					user: answer.message
+				});
+			}
+		});
+	} else {
+		res.redirect("/login.html");
+	}
 });
-
-
 /*
  * modify user profile
  * req.body.key is in []
  */
-var keySet = ['mobile'];
-router.post('/profile/edit', passport.authenticate('local'), function (req, res) {
-	go.database.User.findOne({username: req.user.username}, function (err, user) {
-		if (user.userType !== 'individual') {
-			res.send({
-				success: false,
-				message: "not an individual user"
-			});
-		}
-		go.database.Individual.findById(user.detail, function (err, individual) {
-			if (err) {
-				res.send({
-					success: false,
-					message: "internal error"
+router.post('/profile/edit', function (req, res) {
+	if (req.user && req.user.userType === 'individual') {
+		IndividualService.updateUser(req.user.username, req.body, function(answer) {
+			res.send(answer);
+		});
+	} else {
+		res.redirect("/login.html");
+	}
+});
+
+router.get('/project/join', function (req, res) {
+	if (req.user && req.user.userType === 'individual') {
+		IndividualService.getJoinApplicationList(req.user.username, function (result) {
+			if (result.success) {
+
+		result.message.forEach(function(application){
+		  if (application.project.moneyNeeded === -1) {
+			application.project.ratio = -1;
+		  }
+		  else {
+			application.project.ratio = (application.project.moneyRaised / application.project.moneyNeeded).toFixed(2);
+		  }
+		});
+
+				res.render('individual_join', {
+					curUser: req.user,
+		  application: result.message
 				});
 			}
-			for (var i = 0; i < keySet.length; ++i) {
-				if (keySet[i] === req.body.key) {
-					individual[keySet[i]] = req.body.value;
-					individual.save(function (err) {
-						if (err) {
-							res.send({
-								success: false,
-								message: "update fail"
-							});
-						}
-						res.send({
-							success: true,
-							message: "success"
-						});
-					});
-					return;
-				}
-			}
-			res.send({
-				success: false,
-				message: "illegal key"
-			});
 		});
-	});
+	} else {
+		res.redirect("/login.html");
+	}
 });
+router.get('/project/watch', function (req, res) {
+	if (req.user && req.user.userType === 'individual') {
+		IndividualService.getWatchProjectList(req.user.username, function (result) {
+			if (result.success) {
+
+		result.message.forEach(function(projectModel){
+		  if (projectModel.moneyNeeded === -1) {
+			projectModel.ratio = -1;
+		  }
+		  else {
+			projectModel.ratio = (projectModel.moneyRaised / projectModel.moneyNeeded).toFixed(2);
+		  }
+		});
+
+				res.render('individual_watch', {
+		  user: req.user,
+					project: result.message
+				});
+			}
+		});
+	} else {
+		res.redirect("/login.html");
+	}
+});
+
+/*
+ * get donation page
+ */
+router.get('/donate/:id', function(req, res) {
+	if (req.user && req.user.userType === 'individual') {
+		ProjectService.getProjectById(req.params.id, function (result) {
+			if (result.success) {
+				res.render('individual_donate', {
+					curUser: req.user,
+					project: result.message
+				});
+			}
+		});
+	}
+	else {
+		res.send({
+			success: false,
+			message: "not login yet"
+		});
+	}
+});
+
 
 /*
  * join a project
  */
-router.post('/project/join/:id', passport.authenticate('local'), function(req, res) {
+router.post('/project/join/:id', function(req, res) {
+	if (req.user && req.user.userType === 'individual') {
+		IndividualService.joinProject(req.user.username, req.params.id.input ||req.params.id, req.body.reason, function(answer) {
+			res.send(answer);
+		});
+	} else {
+		res.redirect("/login.html");
+	}
 });
-
 /*
  * unjoin a project
  */
-router.post('/project/unjoin/:id', passport.authenticate('local'), function(req, res) {
+router.post('/project/unjoin/:id', function(req, res) {
+	if (req.user && req.user.userType === 'individual') {
+		IndividualService.cancelJoinProject(req.user.username, req.params.id.input ||req.params.id, function(answer) {
+			res.send(answer);
+		});
+	} else {
+		res.redirect("/login.html");
+	}
 });
-
 /*
  * watch a project
  */
-router.post('/project/watch/:id', passport.authenticate('local'), function(req, res) {
+router.post('/project/watch/:id', function(req, res) {
+	if (req.user && req.user.userType === 'individual') {
+		IndividualService.watchProject(req.user.username, req.params.id.input ||req.params.id, function(answer) {
+			res.send(answer);
+		});
+	} else {
+		res.redirect("/login.html");
+	}
 });
-
 /*
  * unwatch a project
  */
-router.post('/project/unwatch/:id', passport.authenticate('local'), function(req, res) {
+router.post('/project/unwatch/:id', function(req, res) {
+	if (req.user && req.user.userType === 'individual') {
+		IndividualService.cancelWatchProject(req.user.username, req.params.id.input ||req.params.id, function(answer) {
+			res.send(answer);
+		});
+	} else {
+		res.redirect("/login.html");
+	}
 });
 
 /*
  * add a comment to a project
  */
-router.post('/comment', passport.authenticate('local'), function(req, res) {
+router.post('/comment', function(req, res) {
+	if (req.user && req.user.userType === 'individual') {
+		IndividualService.commentProject(req.user.username, req.body, function (result) {
+			res.send(result);
+		});
+	} else {
+		res.redirect("/login.html");
+	}
 });
-
-/*
- * get all donation of current user
- */
-router.get('/donate/all', passport.authenticate('local'), function(req, res) {
-});
-
 /*
  * donate to a project
  */
-router.post('/donate', passport.authenticate('local'), function(req, res) {
+router.post('/donate', function(req, res) {
+	if (req.user && req.user.userType === 'individual') {
+		IndividualService.donateProject(req.user.username, req.body, function (result) {
+			console.log(result);
+			res.send(result);
+		});
+	} else {
+		res.redirect("/login.html");
+	}
 });
 
 module.exports = router;

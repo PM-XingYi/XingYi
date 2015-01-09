@@ -4,12 +4,12 @@ var mongoose = require('mongoose'),
 var SuperUserSchema = new Schema({
 	commentExamine: [{
 		comment: {type: Schema.Types.ObjectId, ref: 'Comment'},
-		approve: Boolean,
+		approve: Number,
 		remark: String
 	}],
 	projectExamine: [{
 		project: {type: Schema.Types.ObjectId, ref: 'Project'},
-		approve: Boolean,
+		approve: Number,
 		remark: String
 	}]
 });

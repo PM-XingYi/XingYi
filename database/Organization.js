@@ -3,6 +3,7 @@ var mongoose = require('mongoose'),
 
 var OrganizationSchema = new Schema({
 	phone: String,
+	desc: String,
 	instituteName: String,
 	instituteNumber: String,
 	project: [{type: Schema.Types.ObjectId, ref: 'Project'}]

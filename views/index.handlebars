@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset=utf-8>
+	<title>行益网</title>
+	<link rel="stylesheet" type="text/css" href="/css/general.css">
+	<script type="text/javascript" src="/js/jquery-1.11.1.js"></script>
+	<script type="text/javascript" src="/js/general.js"></script>
+	<script type="text/javascript" src="/js/interface.js"></script>
+</head>
+<body>
+	
+	<!-- the header, including logo, search input, login and register entries -->
+	<header>
+		<div class="wrapper" id="header-wrapper">
+			<div id="logo">
+				<div id="logo-img">
+					<img src="/img/logo.png">
+				</div>
+				<div id="logo-name">
+					<img src="/img/name.png">
+				</div>
+			</div>
+			<!-- the search input, login and register entries -->
+			<div id="entry">
+				<div id="search">
+					<input id="search-box" type="search">
+					<img id="search-icon" src="/img/search.png" placeholder="搜索..." autocomplete="off">
+				</div>
+				{{#if curUser}}
+				<label>您好，<a id="user-entry-{{curUser.userType}}">{{curUser.username}}</a></label>
+				<a id="dashboard-entry-{{curUser.userType}}">Dashboard</a>
+				<a id="logout-entry">登出</a>
+				{{else}}
+				<a id="login-entry">登录</a>
+				<a id="register-entry">注册</a>
+				{{/if}}
+			</div>
+		</div>
+	</header>
+
+	<!-- the container -->
+	<div id="content">
+		<!-- the banner -->
+		<section class="banner sliders">
+			<div id="slider-1" class="slider">
+				<div class="wrapper relative">
+					<div id="slider-text-1" class="absolute">
+						行走的意义
+					</div>
+				</div>
+			</div>
+			<div id="slider-2" class="slider">
+				<div class="wrapper relative">
+					<div id="slider-text-2" class="absolute">
+						行走的意义
+					</div>
+				</div>
+			</div>
+			<div id="slider-3" class="slider">
+				<div class="wrapper relative">
+					<div id="slider-text-3" class="absolute">
+						行走的意义
+					</div>
+				</div>
+			</div>
+			<a class="arrow showleft"></a>
+			<a class="arrow showright"></a>
+		</section>
+		<!-- the project show -->
+		<section class="show">
+			<div class='wrapper'>
+				<h1 class="section-title">
+					近期项目
+				</h1>
+				<a class="section-title-more" href="/project/all">
+					更多
+				</a>
+				<div class="collection">
+					{{#each latest}}
+					<article>
+						<div class="for-id">{{_id}}</div>
+						<section class="project-image">
+							<img src="/img/pj_{{_id}}.jpg">
+						</section>
+						<section class="project-info">
+							<section class="project-title public">
+								{{name}}
+							</section>
+							{{#ifEq ratio -1}}
+							{{else}}
+							<section class="project-progress">
+								<span class="project-progress-flag">已完成</span>
+								<span class="project-progress-complete">{{ratio}}</span>
+								<div class="progress-bar">
+									<div class="progress-done"></div>
+									<div class="progress-undone"></div>
+								</div>
+							</section>
+							{{/ifEq}}
+						</section>
+					</article>
+					{{/each}}
+				</div>
+				<div class="dispel"></div><!-- This one is used to dispel the effect of float -->
+			</div>
+		</section>
+	</div>
+
+	<!-- the footer -->
+	<footer>
+		<div class="wrapper">
+			<h1 class="section-title">
+				关于我们
+			</h1>
+			<section id="author-gallery">
+				<img src="/img/p1.gif">
+				<img src="/img/p2.gif">
+				<img src="/img/p3.gif">
+				<img src="/img/p4.gif">
+				<img src="/img/p5.gif">
+				<img src="/img/p6.gif">
+				<img src="/img/p7.gif">
+			</section>
+			
+			<section id="site-info">
+				<ul class="nav">
+					<li>
+						<h1>A</h1>
+						<b>TEL</b>
+						<i>188-1736-2313</i>
+					</li>
+					<li>
+						<h1>B</h1>
+						<b>MAIL</b>
+						<a href="mailto:sheer.linnan@outlook.com"><i>sheer.linnan@outlook.com</i></a>
+					</li>
+					<li>
+						<h1>C</h1>
+						<b>&copy;2014</b>
+						<i>行益网 版权所有</i>
+					</li>
+				</ul>
+			</section>
+		</div>
+	</footer>
+
+</body>
+</html>

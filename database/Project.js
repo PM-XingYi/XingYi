@@ -4,9 +4,12 @@ var mongoose = require('mongoose'),
 var ProjectSchema = new Schema({
 	name: String,
 	desc: String,
+	longDesc: String,
+	notice: String,
 	moneyNeeded: Number,
+	moneyRaised: Number,
 	owner: {type: Schema.Types.ObjectId, ref: 'Organization'},
-	joinedIndividual: [{type: Schema.Types.ObjectId, ref: 'Individual'}],
+	joinedIndividual: [{type: Schema.Types.ObjectId, ref: 'Application'}],
 	comment: [{type: Schema.Types.ObjectId, ref: 'Comment'}],
 	donation: [{type: Schema.Types.ObjectId, ref: 'Donation'}],
 	mileStone: [{
@@ -19,7 +22,8 @@ var ProjectSchema = new Schema({
 		expense: Number,
 		usage: String
 	}],
-	approved: Boolean
+	approved: Number,
+	remark: String
 });
 
 var Project  = mongoose.model('Project', ProjectSchema);

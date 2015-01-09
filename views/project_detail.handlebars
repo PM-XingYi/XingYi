@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset=utf-8>
+	<title>行益网-Details</title>
+	<link rel="stylesheet" type="text/css" href="/css/general.css">
+	<script type="text/javascript" src="/js/jquery-1.11.1.js"></script>
+	<script type="text/javascript" src="/js/general.js"></script>
+	<script type="text/javascript" src="/js/interface.js"></script>
+	<script type="text/javascript" src="/js/pager.js"></script>
+</head>
+<body>
+	
+	<!-- the header, including logo, search input, login and register entries -->
+	<header>
+		<div class="wrapper" id="header-wrapper">
+			<div id="logo">
+				<div id="logo-img">
+					<img src="/img/logo.png">
+				</div>
+				<div id="logo-name">
+					<img src="/img/name.png">
+				</div>
+			</div>
+			<!-- the search input, login and register entries -->
+			<div id="entry">
+				<div id="search">
+					<input id="search-box" type="search">
+					<img id="search-icon" src="/img/search.png" placeholder="搜索..." autocomplete="off">
+				</div>
+				{{#if curUser}}
+				<label>您好，<a id="user-entry-{{curUser.userType}}">{{curUser.username}}</a></label>
+				<a id="dashboard-entry-{{curUser.userType}}">Dashboard</a>
+				<a id="logout-entry">登出</a>
+				{{else}}
+				<a id="login-entry">登录</a>
+				<a id="register-entry">注册</a>
+				{{/if}}
+			</div>
+		</div>
+	</header>
+
+	<!-- the container -->
+	<div id="content">
+		<div class="wrapper" id="view-details-wrapper">
+			<section class="container">
+				<div class="for-id">{{project._id}}</div>
+				<h1 class="section-title">
+					项目概况
+				</h1>
+				<section class="project-details">
+					<h1>
+						{{project.name}}
+					</h1>
+          {{#if curUser}}
+          {{#if watched}}
+					<button class="rounded-button" id="unstar">-取消关注</button>
+          {{else}}
+          <button class="rounded-button" id="star">+关注</button>
+          {{/if}}
+          {{/if}}
+					<p>{{project.desc}}</p>
+					<img src="/img/pj_{{project._id}}.jpg">
+				</section>
+				<section class="project-events">
+					<h2>
+						大事件
+					</h2>
+					<section class="project-timeline">
+						<label>START<i class="start-time">{{project.mileStone.[0].dateStr}}</i></label>
+						<div class="timeline">
+						</div>
+						<label>TODAY<i class="end-time">{{today}}</i></label>
+					</section>
+					<section class="project-event-show">
+						{{#each project.mileStone}}
+						<section class="event">
+							<i>{{dateStr}}</i>
+							<article>
+								{{desc}}
+							</article>
+						</section>
+						{{/each}}
+					</section>
+				</section>
+				<section class="project-detail-tab">
+					<a class="tab-bar">项目文案</a>
+					<a class="tab-bar">我想参与</a>
+					<a class="tab-bar">我想捐款</a>
+					<a class="tab-bar">我想评价</a>
+					<a class="tab-bar">发起者信息</a>
+				</section>
+				<section class="about-project">
+					<section class="tab-bar-content">
+						<h2>
+							{{project.name}}
+						</h2>
+						<p>
+							{{project.longDesc}}
+						</p>
+					</section>
+					<section class="tab-bar-content">
+						<h2>
+							参与须知
+						</h2>
+						<p>
+							{{project.notice}}
+						</p>
+							{{#if curUser}}
+								{{#ifEq curUser.userType "individual"}}
+									{{#ifEq project.approve 2}}
+									<label>
+										<input type="checkbox">
+										我已了解上述须知
+									</label>
+									<button class="rounded-button disable-button yellow-font">等待审核...</button>
+									{{else}}
+										{{#ifEq project.approve 1}}
+										<button class="rounded-button disable-button grey-font">已参加</button>
+										{{else}}
+											{{#ifEq project.approve 3}}
+											<button class="rounded-button disable-button red-font">申请未通过</button>
+											{{else}}
+											<button class="rounded-button" id="apply">申请参加</button>
+											{{/ifEq}}
+										{{/ifEq}}
+									{{/ifEq}}
+								{{else}}
+								{{/ifEq}}
+							{{else}}
+								<label>参加前请先登录！</label>
+							{{/if}}
+
+					</section>
+					{{#ifEq project.ratio -1}}
+					<section class="tab-bar-content"></section>
+					{{else}}
+					<section class="tab-bar-content">
+						<h2>
+							众筹进展
+						</h2>
+						<section class="donate-status">
+							<section>
+								<label>完成度：<i></i></label>
+							</section>
+							<section class="donate-progress">
+								<label>0</label>
+								<span class="project-progress-complete">{{project.ratio}}</span>
+								<div class="progress-bar">
+									<div class="progress-done"></div>
+									<div class="progress-undone"></div>
+								</div>
+								<label>{{project.moneyNeeded}}</label>
+							</section>
+							<section>
+							{{#if curUser}}
+								{{#ifEq curUser.userType "individual"}}
+								<button class="rounded-button" id="donate">捐款</button>
+								{{else}}
+								{{/ifEq}}
+							{{else}}
+								<label>捐款前请先登录！</label>
+							{{/if}}
+							</section>
+						</section>
+						<h2>
+							开支明细
+						</h2>
+						<section class="expenses">
+							<section class="table-header">
+								<article class="row">
+									<div class="col-1">
+										日期
+									</div>
+									<div class="col-2">
+										金额
+									</div>
+									<div class="col-3">
+										内容
+									</div>
+								</article>
+							</section>
+							<section class="expenses-record">
+								<section class="show">
+									<div class="collection">
+										{{#each project.expenditure}}
+										<div class="row">
+											<div class="col-1">
+												{{dateStr}}
+											</div>
+											<div class="col-2">
+												<i>{{expense}}</i>
+											</div>
+											<div class="col-3">
+												{{usage}}
+											</div>
+										</div>
+										{{/each}}
+									</div>
+								</section>	
+								<section class="page_navigation">
+									<input type='hidden' class='current_page' />
+									<input type='hidden' class='show_per_page' value='10' />
+								</section>	
+							</section>				
+						</section>
+					</section>
+					{{/ifEq}}
+					<section class="tab-bar-content">
+						<h2>
+							发表评论
+						</h2>
+						<section class="comment-form">
+							<textarea></textarea>
+							{{#if curUser}}
+							<button class="rounded-button" id="make-comment">发表评论</button>
+							{{else}}
+							<label>评论前请先登录！</label>
+							{{/if}}
+						</section>
+						<h2>
+							项目评论
+						</h2>
+						<section class="show">
+							<div class="collection">
+								{{#each project.comment}}
+								<div class="certain-comment">
+									<div class="time-author">
+										<i>{{user.username}}</i>
+										<i>{{dateStr}}</i>
+									</div>
+									<div class="comment-content">
+										{{comment}}
+									</div>
+								</div>
+								{{/each}}				
+							</div>
+						</section>
+						<section class="page_navigation">
+							<input type='hidden' class='current_page' />
+							<input type='hidden' class='show_per_page' value='5' />
+						</section>
+					</section>
+					<section class="tab-bar-content">
+						<section class="sponsor-info">
+							<section class="sponsor-photo">
+								<img src="/img/organization.jpg">
+							</section>
+							<section class="sponsor-other-info">
+								<div class="info-row">
+									<label>名称</label>
+									<i>{{project.owner.instituteName}}</i>
+								</div>
+								<div class="info-row">
+									<label>邮箱</label>
+									<i>{{project.detail.email}}</i>
+								</div>
+								<div class="info-row">
+									<label>电话</label>
+									<i>{{project.owner.phone}}</i>
+								</div>
+							</section>
+						</section>
+						<div class="dispel"></div>
+						<h2>
+							发起方简介
+						</h2>
+						<section class="sponsor-intro">
+							<p>
+								{{project.owner.desc}}
+							</p>
+						</section>
+					</section>
+				</section>
+			</section>
+
+			<!-- Here is information for pop up -->
+			<section id="apply-form">
+				<h2>参与申请表</h2>
+				<div class="form-row">
+					<label>项目名称</label>
+					<i>{{project.name}}</i>
+				</div>
+				<div class="form-row">
+					<label>用户名</label>
+					<i>{{curUser.username}}</i>
+				</div>
+				<div class="form-row">
+					<label>手机号</label>
+					<i>{{userMobile}}</i>
+				</div>
+				<div class="form-row">
+					<label>邮箱</label>
+					<i>{{curUser.email}}</i>
+				</div>
+				<div class="form-row">
+					<label>申请理由</label>
+					<i>
+						<textarea></textarea>
+					</i>
+				</div>
+				<div class="form-row">
+					<label></label>
+					<i>
+						<button class="rounded-button" id="confirm-apply">确认递交</button>
+						<button class="rounded-button disable-button" id="cancel-apply">退出</button>
+					</i>
+				</div>
+				
+			</section>
+			<!-- -->
+
+		</div>
+	</div>
+
+	<!-- the footer -->
+	<footer>
+		<div class="wrapper">
+			<h1 class="section-title">
+				关于我们
+			</h1>
+			<section id="author-gallery">
+				<img src="/img/p1.gif">
+				<img src="/img/p2.gif">
+				<img src="/img/p3.gif">
+				<img src="/img/p4.gif">
+				<img src="/img/p5.gif">
+				<img src="/img/p6.gif">
+				<img src="/img/p7.gif">
+			</section>
+			
+			<section id="site-info">
+				<ul class="nav">
+					<li>
+						<h1>A</h1>
+						<b>TEL</b>
+						<i>188-1736-2313</i>
+					</li>
+					<li>
+						<h1>B</h1>
+						<b>MAIL</b>
+						<a href="mailto:sheer.linnan@outlook.com"><i>sheer.linnan@outlook.com</i></a>
+					</li>
+					<li>
+						<h1>C</h1>
+						<b>&copy;2014</b>
+						<i>行益网 版权所有</i>
+					</li>
+				</ul>
+			</section>
+		</div>
+	</footer>
+
+</body>
+</html>

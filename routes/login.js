@@ -4,20 +4,18 @@ var express = require('express'),
 
 router.post('/individual', passport.authenticate('local', {
 	successRedirect: '/individual/home',
-	failureRedirect: '/login.html',
-	failureFlash: true
+	failureRedirect: '/login.html'
+	
 }));
 
 router.post('/organization', passport.authenticate('local', {
 	successRedirect: '/organization/home',
-	failureRedirect: '/login.html',
-	failureFlash: true
+	failureRedirect: '/login.html'
 }));
 
 router.post('/superuser', passport.authenticate('local', {
 	successRedirect: '/superuser/home',
-	failureRedirect: '/login.html',
-	failureFlash: true
+	failureRedirect: '/superuserLogin.html'
 }));
 
 router.get('/logout', function(req, res) {

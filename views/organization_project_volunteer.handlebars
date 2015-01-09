@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset=utf-8>
+	<title>行益网-Volunteer Manage</title>
+	<link rel="stylesheet" type="text/css" href="/css/general.css">
+	<script type="text/javascript" src="/js/jquery-1.11.1.js"></script>
+	<script type="text/javascript" src="/js/general.js"></script>
+	<script type="text/javascript" src="/js/interface.js"></script>
+	<script type="text/javascript" src="/js/pager.js"></script>
+</head>
+<body>
+	
+	<!-- the header, including logo, search input, login and register entries -->
+	<header>
+		<div class="wrapper" id="header-wrapper">
+			<div id="logo">
+				<div id="logo-img">
+					<img src="/img/logo.png">
+				</div>
+				<div id="logo-name">
+					<img src="/img/name.png">
+				</div>
+			</div>
+			<!-- the search input, login and register entries -->
+			<div id="entry">
+				<div id="search">
+					<input id="search-box" type="search">
+					<img id="search-icon" src="/img/search.png" placeholder="搜索..." autocomplete="off">
+				</div>
+				<label>您好，<a id="user-entry-organization">{{curUser.username}}</a></label>
+				<a id="dashboard-entry-organization">Dashboard</a>
+				<a id="logout-entry">登出</a>
+			</div>
+		</div>
+	</header>
+
+	<!-- the container -->
+	<div id="content">
+		<div class="wrapper" id="volunteer-management-wrapper">
+			<section class="container">
+				<h1 class="section-title">
+					人员管理
+				</h1>
+				<section class="show-result">
+					 共有{{volunteerNum}}名志愿者
+				</section>
+				<section class="show-result">
+					共有{{candidateNum}}个未处理的申请
+				</section>
+				<section class="filter">
+					<label>显示条件</label>
+					<a id="all_project_tab">志愿者</a>
+					<a id="star_project_tab">未处理的申请</a>
+				</section>
+				<!-- Tab 1 -->
+				<section id="all_project" class="tab table-3">
+					<div class="row">
+						<div class="col-1">名字
+						</div>
+						<div class="col-2">手机号
+						</div>
+						<div class="col-3">邮箱
+						</div>
+					</div>
+					<section class="show">
+						<div class="collection">
+							{{#each volunteer}}
+							<div class="row">
+								<div class="for-id">{{_id}}</div>
+								<div class="col-1">{{user.username}}</div>
+								<div class="col-2">{{detail.mobile}}</div>
+								<div class="col-3">{{user.email}}</div>
+							</div>
+							{{/each}}		
+						</div>
+					</section>
+					<section class="page_navigation">
+						<input type='hidden' class='current_page' />
+						<input type='hidden' class='show_per_page' value='10' />
+					</section>
+				</section>
+
+				<!-- Tab 2 -->
+				<section id="star_project" class="tab">
+					<section class="show">
+						<div class="collection">
+							{{#each candidate}}
+							<div class="card-part">
+								<div class="for-id">{{application._id}}</div>
+								<div class="top-part">
+									<div class="left-part">
+										<h1>基础信息</h1>
+										<div class="row">
+											<div class="col-1">
+												<label>用户名</label>
+											</div>
+											<div class="col-2 volunteer-username">
+												{{user.username}}
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-1">
+												<label>手机号</label>
+											</div>
+											<div class="col-2 volunteer-number">
+												{{application.user.mobile}}
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-1">
+												<label>邮箱</label>
+											</div>
+											<div class="col-2 volunteer-mail">
+												{{user.email}}
+											</div>
+										</div>
+									</div>
+									<div class="right-part">
+										<h1>
+											申请理由
+										</h1>
+										<div class="volunteer-reason">
+											{{application.reason}}
+										</div>
+									</div>
+								</div>
+								<div class="bottom-part">
+									<button class="rounded-button light-button pass">通过</button>
+									<button class="rounded-button light-red-button fail">不通过</button>
+								</div>
+							</div>
+							{{/each}}
+						</div>
+					</section>
+					<section class="page_navigation">
+						<input type='hidden' class='current_page' />
+						<input type='hidden' class='show_per_page' value='3' />
+					</section>
+				</section>				
+			</section>
+		</div>
+	</div>
+
+	<!-- the footer -->
+	<footer>
+		<div class="wrapper">
+			<h1 class="section-title">
+				关于我们
+			</h1>
+			<section id="author-gallery">
+				<img src="/img/p1.gif">
+				<img src="/img/p2.gif">
+				<img src="/img/p3.gif">
+				<img src="/img/p4.gif">
+				<img src="/img/p5.gif">
+				<img src="/img/p6.gif">
+				<img src="/img/p7.gif">
+			</section>
+			
+			<section id="site-info">
+				<ul class="nav">
+					<li>
+						<h1>A</h1>
+						<b>TEL</b>
+						<i>188-1736-2313</i>
+					</li>
+					<li>
+						<h1>B</h1>
+						<b>MAIL</b>
+						<a href="mailto:sheer.linnan@outlook.com"><i>sheer.linnan@outlook.com</i></a>
+					</li>
+					<li>
+						<h1>C</h1>
+						<b>&copy;2014</b>
+						<i>行益网 版权所有</i>
+					</li>
+				</ul>
+			</section>
+		</div>
+	</footer>
+
+</body>
+</html>

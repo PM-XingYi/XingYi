@@ -1,0 +1,211 @@
+	<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset=utf-8>
+	<title>行益网-Create</title>
+	<link rel="stylesheet" type="text/css" href="/css/general.css">
+	<script type="text/javascript" src="/js/jquery-1.11.1.js"></script>
+	<script type="text/javascript" src="/js/general.js"></script>
+	<script type="text/javascript" src="/js/interface.js"></script>
+	<script type="text/javascript" src="/js/pager.js"></script>
+</head>
+<body>
+	
+	<!-- the header, including logo, search input, login and register entries -->
+	<header>
+		<div class="wrapper" id="header-wrapper">
+			<div id="logo">
+				<div id="logo-img">
+					<img src="/img/logo.png">
+				</div>
+				<div id="logo-name">
+					<img src="/img/name.png">
+				</div>
+			</div>
+			<!-- the search input, login and register entries -->
+			<div id="entry">
+				<div id="search">
+					<input id="search-box" type="search">
+					<img id="search-icon" src="/img/search.png" placeholder="搜索..." autocomplete="off">
+				</div>
+				<label>您好，<a id="user-entry-organization">{{curUser.username}}</a></label>
+				<a id="dashboard-entry-organization">Dashboard</a>
+				<a id="logout-entry">登出</a>
+			</div>
+		</div>
+	</header>
+
+	<!-- the container -->
+	<div id="content">
+		<div class="wrapper" id="create-new-project-manager-wrapper">
+			<section class="container">
+				<h1 class="section-title">
+					创建项目
+				</h1>
+				<a class="section-title-more" id="go-back-dashboard">
+					Back to DashBoard>
+				</a>
+				<section class="project-part">
+					<div class="row">
+						<div class="col-1">
+							<h1>基础信息</h1>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-1">
+							<label class="needed">
+								项目名称
+							</label>
+						</div>
+						<div class="col-2">
+							<input type="text" id="name-of-project">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-1">
+							<label class="needed">
+								项目简介
+							</label>
+						</div>
+						<div class="col-2">
+							<textarea id="intro-of-project"></textarea>
+						</div>
+					</div>
+				</section>
+				<section class="project-part">
+					<div class="row">
+						<div class="col-1">
+							<h1>项目文案</h1>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-1">
+							<label class="needed">
+								文案内容
+							</label>
+						</div>
+						<div class="col-2">
+							<textarea id="content-of-copy"></textarea>
+						</div>
+					</div>
+				</section>
+				<section class="project-part">
+					<div class="row">
+						<div class="col-1">
+							<h1>参与须知</h1>
+						</div>
+						<div class="col-2">
+							<button class="rounded-button fold">本项目需志愿者</button>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-1">
+							<label>
+								参与需知
+							</label>
+						</div>
+						<div class="col-2">
+							<textarea id="inform-of-join"></textarea>
+						</div>
+					</div>
+				</section>
+				<section class="project-part">
+					<div class="row">
+						<div class="col-1">
+							<h1>众筹目标</h1>
+						</div>
+						<div class="col-2">
+							<button class="rounded-button fold">本项目需众筹</button>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-1">
+							<label>
+								众筹目标
+							</label>
+						</div>
+						<div class="col-2">
+							<input type="number" id="goal-of-kick">元
+						</div>
+					</div>
+				</section>
+				<section class="project-part">
+					<div class="row">
+						<div class="col-1">
+						</div>
+						<div class="col-2">
+							<button class="rounded-button" id="publish-project">发布</button>
+						</div>
+					</div>
+				</section>
+				<section class="project-part image" style="display:none">
+					<div class="row">
+						<div class="col-1">
+							<h1>项目图片</h1>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-1">
+							<label>
+								项目图片
+							</label>
+						</div>
+						<div class="col-2">
+							<label class="input_file">
+								<input id="edit-img" title="浏览文件" type="file" />
+							</label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-1">
+						</div>
+						<div class="col-2">
+							<button class="rounded-button" id="save-project-img">上传图片</button>
+						</div>
+					</div>
+				</section>
+				<div class="dispel"></div>
+			</section>
+		</div>
+	</div>
+
+	<!-- the footer -->
+	<footer>
+		<div class="wrapper">
+			<h1 class="section-title">
+				关于我们
+			</h1>
+			<section id="author-gallery">
+				<img src="/img/p1.gif">
+				<img src="/img/p2.gif">
+				<img src="/img/p3.gif">
+				<img src="/img/p4.gif">
+				<img src="/img/p5.gif">
+				<img src="/img/p6.gif">
+				<img src="/img/p7.gif">
+			</section>
+			
+			<section id="site-info">
+				<ul class="nav">
+					<li>
+						<h1>A</h1>
+						<b>TEL</b>
+						<i>188-1736-2313</i>
+					</li>
+					<li>
+						<h1>B</h1>
+						<b>MAIL</b>
+						<a href="mailto:sheer.linnan@outlook.com"><i>sheer.linnan@outlook.com</i></a>
+					</li>
+					<li>
+						<h1>C</h1>
+						<b>&copy;2014</b>
+						<i>行益网 版权所有</i>
+					</li>
+				</ul>
+			</section>
+		</div>
+	</footer>
+
+</body>
+</html>

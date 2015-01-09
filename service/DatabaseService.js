@@ -1,4 +1,5 @@
-var mongoose = require('mongoose');
+var config = require('../config.json'),
+	mongoose = require('mongoose');
 
 var db = null;
 
@@ -11,23 +12,23 @@ var DatabaseService = function (dbUrl) {
 	this.Project = require('../database/Project');
 	this.Comment = require('../database/Comment');
 	this.Donation = require('../database/Donation');
+	this.Application = require('../database/Application');
 }
-	mongoose.connect('mongodb://localhost/test');
 
 var DatabaseConnector = function (dbUrl) {
 	if (db === null) {
 		db = new DatabaseService(dbUrl);
+		db.connect();
 	}
 	return db;
 }
 
-DatabaseService.prototype.connect = function(succ, fail) {
-	mongoose.connect(this.dbUrl, function(e) {
-		if (e){
-			fail(e.message);
+DatabaseService.prototype.connect = function() {
+	mongoose.connect(this.dbUrl, function(err) {
+		if (err){
+			console.log(err.message);
 		} else {
-			var msg = "connect success!";
-			succ(msg);
+			console.log("connect success!");
 		}
 	});
 };

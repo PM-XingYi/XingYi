@@ -11,6 +11,7 @@ var UserSchema = new Schema({
 });
 
 UserSchema.methods.validPassword = function(password) {
+	// return true;
     return (md5(password) === this.password);
 };
 
