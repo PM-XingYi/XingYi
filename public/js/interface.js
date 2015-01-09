@@ -220,8 +220,9 @@ $(function() {
 				return;
 			}
 			$.ajax({
-				url: "/register/individual",
 				type: "POST",
+				url: "/register/individual",	
+				async: false,			
 				data: {
 					username: $("#username").val(),
 					password: $("#pwd").val(),
@@ -248,6 +249,7 @@ $(function() {
 			$.ajax({
 				url: "/register/organization",
 				type: "POST",
+				async: false,
 				data: {
 					username: $("#username").val(),
 					password: $("#pwd").val(),
