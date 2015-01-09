@@ -758,6 +758,16 @@ $(function() {
 		var title = $("#news-title").val();
 		var content = $("#news-content").val();
 
+		if (date=="" || title=="" || content=="") {
+			alert("内容不能为空");
+			return;
+		}
+
+		if (!(/^(\d{4})-(\d{2})-(\d{2})$/).test(date)) {
+			alert("日期格式错误，应为yyyy-mm-dd");
+			return;
+		}
+
 		var data = {
 			date: date,
 			title: title,
